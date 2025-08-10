@@ -31,7 +31,12 @@ public class WeComService {
         this.weComProperties = weComProperties;
     }
 
-    @Cacheable(cacheNames = "we-com:access-token")
+    /**
+     * Get WeCom access token.
+     *
+     * @return WeCom access token
+     */
+    @Cacheable(cacheNames = "we-com", key = "'access-token'")
     public WeComAccessTokenResponse getAccessToken() {
         return fetchAccessToken().block();
     }
