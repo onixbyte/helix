@@ -7,24 +7,38 @@ package com.onixbyte.onixboot.model;
  */
 public class User {
 
-    /** User ID. */
+    /**
+     * User ID.
+     */
     private Long id;
 
-    /** Username. */
+    /**
+     * Username.
+     */
     private String username;
 
-    /** Real name. */
+    /**
+     * Real name.
+     */
     private String name;
 
-    /** Password */
+    /**
+     * Password.
+     */
     private String password;
 
-    /** Microsoft Entra ID Open ID */
+    /**
+     * Microsoft Entra ID Open ID.
+     */
     private String msalOpenId;
 
-    /** DingTalk Open ID */
+    /**
+     * DingTalk Open ID.
+     */
     private String dingTalkOpenId;
 
-    /** WeCom Open ID */
+    /**
+     * WeCom Open ID.
+     */
     private String weComOpenId;
 }
