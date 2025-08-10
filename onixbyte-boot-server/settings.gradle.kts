@@ -1,0 +1,1 @@
+rootProject.name = "onixbyte-boot-server"

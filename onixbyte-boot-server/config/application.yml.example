@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: onixbyte-boot-server
+  cache:
+    type: redis
+    redis:
+      time-to-live: PT1H30M
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 2
+
+app:
+  authentication:
+    we-com:
+      corporation-id: we-com-corporation-id
+      secret: we-com-app-secret
