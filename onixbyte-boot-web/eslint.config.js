@@ -20,9 +20,17 @@ export default tseslint.config([
       ecmaVersion: 2020,
       globals: globals.browser,
       parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
         tsconfigRootDir: import.meta.dirname,
       },
+    },
+    rules: {
+      "@typescript-eslint/no-unused-vars": 0,
+      "@typescript-eslint/no-non-null-assertion": 0,
+      "@typescript-eslint/restrict-template-expressions": 0,
+      "@typescript-eslint/no-unsafe-assignment": 0,
+      "@typescript-eslint/no-unsafe-call": 0,
+      "no-empty": 0
     },
   },
 ])
