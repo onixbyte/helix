@@ -3,6 +3,11 @@ package com.onixbyte.onixboot.utils;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Encoding utility.
+ *
+ * @author zihluwang
+ */
 public class EncodeUtil {
 
     /**

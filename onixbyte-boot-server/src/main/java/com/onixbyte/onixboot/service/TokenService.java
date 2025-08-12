@@ -9,6 +9,11 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
+/**
+ * Token service.
+ *
+ * @author zihluwang
+ */
 @Service
 public class TokenService {
 
@@ -23,6 +28,12 @@ public class TokenService {
         this.tokenProperties = tokenProperties;
     }
 
+    /**
+     * Create token.
+     *
+     * @param user user receiving the token
+     * @return the token
+     */
     public String createToken(User user) {
         var issuedAt = LocalDateTime.now();
         var expiresAt = issuedAt.plus(tokenProperties.getValidTime());

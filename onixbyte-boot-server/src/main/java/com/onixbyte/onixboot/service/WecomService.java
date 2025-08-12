@@ -76,7 +76,12 @@ public class WecomService {
         return response.wecomOpenId();
     }
 
-    public void sendRegisterMessage(List<String> audiences) {
+    /**
+     * Send a direct message to the register user.
+     *
+     * @param audience the user who will receive this direct message
+     */
+    public void sendRegisterMessage(String audience) {
         // Compose request URI.
         var uri = UriComponentsBuilder.fromUriString(ExternalHost.WECOM_HOST + "/cgi-bin/message/send")
                 .queryParam("access_token", wecomCache.getAccessToken().accessToken())
@@ -94,7 +99,7 @@ public class WecomService {
                 .toUriString() + "#wechat_redirect";
 
         var messageBody = new WecomSendTextCardRequest(
-                String.join("|", audiences),
+                audience,
                 null,
                 null,
                 "textcard",
@@ -110,13 +115,12 @@ public class WecomService {
                 null
         );
 
-        var sendMessageResponse = webClient.post()
+        webClient.post()
                 .uri(uri)
                 .bodyValue(messageBody)
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<HashMap<String, Object>>() {
                 })
                 .block();
-        return;
     }
 }
