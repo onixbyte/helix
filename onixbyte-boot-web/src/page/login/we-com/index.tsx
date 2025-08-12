@@ -8,7 +8,6 @@ import {
 } from "@wecom/jssdk"
 import { WeComConfig } from "@/config"
 import * as AuthApi from "@/api/auth"
-import { AxiosError } from "axios"
 
 export default function WeComLogin() {
   const weComLoginPanel = useMemo(
@@ -27,7 +26,8 @@ export default function WeComLogin() {
         },
         onLoginSuccess({ code }) {
           AuthApi.weComLogin(code)
-            .then(({ user, jsonWebToken }) => {})
+            .then((response) => {})
+            .catch((error: unknown) => {})
         },
         onLoginFail({ errCode, errMsg }) {
           console.log("error", errCode, errMsg)
