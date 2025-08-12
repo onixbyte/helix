@@ -30,7 +30,8 @@ export default tseslint.config([
       "@typescript-eslint/restrict-template-expressions": 0,
       "@typescript-eslint/no-unsafe-assignment": 0,
       "@typescript-eslint/no-unsafe-call": 0,
-      "no-empty": 0
+      "no-empty": 0,
+      "@typescript-eslint/no-unsafe-member-access": 0
     },
   },
 ])
