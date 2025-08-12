@@ -1,3 +1,7 @@
-import WeComConfig from "./we-com-config.ts"
+import wecomConfig from "./wecom-config"
 
-export { WeComConfig }
+const config = {
+  wecom: wecomConfig
+}
+
+export default config

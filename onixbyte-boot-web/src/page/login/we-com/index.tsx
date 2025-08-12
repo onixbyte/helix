@@ -6,18 +6,18 @@ import {
   WWLoginRedirectType,
   WWLoginType,
 } from "@wecom/jssdk"
-import { WeComConfig } from "@/config"
+import config from "@/config"
 import * as AuthApi from "@/api/auth"
 
 export default function WeComLogin() {
-  const weComLoginPanel = useMemo(
+  const loginPanel = useMemo(
     () =>
       wecom.createWWLoginPanel({
         el: "#ww_login",
         params: {
           login_type: WWLoginType.corpApp,
-          appid: WeComConfig.corpId,
-          agentid: WeComConfig.agentId,
+          appid: config.wecom.corpId,
+          agentid: config.wecom.agentId,
           redirect_uri: "https://boot.onixbyte.dev/api/auth/we-com",
           state: "",
           redirect_type: WWLoginRedirectType.callback,
@@ -25,7 +25,7 @@ export default function WeComLogin() {
           lang: WWLoginLangType.zh,
         },
         onLoginSuccess({ code }) {
-          AuthApi.weComLogin(code)
+          AuthApi.wecomLogin(code)
             .then((response) => {})
             .catch((error: unknown) => {})
         },
@@ -37,18 +37,17 @@ export default function WeComLogin() {
   )
 
   // Create a reference to hold the DOM element
-  const weComLoginPanelRef = useRef<HTMLDivElement>(null)
+  const loginPanelRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    // Access the DOM element after the component has mounted
-    if (weComLoginPanelRef.current) {
-      weComLoginPanelRef.current.appendChild(weComLoginPanel.el)
+    if (loginPanelRef.current) {
+      loginPanelRef.current.appendChild(loginPanel.el)
     }
-  }, [weComLoginPanel]) // Empty dependency array ensures this runs only once after mount
+  }, [loginPanel])
 
   return (
     <div>
-      <div id="weComLoginPanel" ref={weComLoginPanelRef}></div>
+      <div id="weComLoginPanel" ref={loginPanelRef}></div>
     </div>
   )
 }

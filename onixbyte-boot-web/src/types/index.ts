@@ -4,10 +4,22 @@ export interface User {
   name: string
   msalOpenId: string
   dingTalkOpenId: string
-  weComOpenId: string
+  wecomOpenId: string
 }
 
 export interface UserResponse {
   user: User
-  jsonWebToken: string
+  token: string
+}
+
+export type WecomConfig = {
+  /**
+   * Corporation ID
+   */
+  corpId: string
+
+  /**
+   * Application ID
+   */
+  agentId: string
 }
