@@ -28,12 +28,23 @@ public class MsalAuthenticationProvider implements AuthenticationProvider {
     private final MsalProperties msalProperties;
     private final UserService userService;
 
-    public MsalAuthenticationProvider(MsalCache msalCache, MsalProperties msalProperties, UserService userService) {
+    public MsalAuthenticationProvider(
+            MsalCache msalCache,
+            MsalProperties msalProperties,
+            UserService userService
+    ) {
         this.msalCache = msalCache;
         this.msalProperties = msalProperties;
         this.userService = userService;
     }
 
+    /**
+     * Perform Microsoft Entra ID authentication.
+     *
+     * @param authentication the authentication request object
+     * @return authenticated user information
+     * @throws AuthenticationException if authentication failed
+     */
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         if (!(authentication instanceof MsalAuthentication msalAuthentication)) {
@@ -93,6 +104,14 @@ public class MsalAuthenticationProvider implements AuthenticationProvider {
         }
     }
 
+    /**
+     * Returns {@code true} if this {@code AuthenticationProvider} supports the indicated
+     * {@code Authentication} object.
+     *
+     * @param authentication authentication information
+     * @return <code>true</code> if the implementation can more closely evaluate the
+     * code>Authentication</code> class presented
+     */
     @Override
     public boolean supports(Class<?> authentication) {
         return MsalAuthentication.class.isAssignableFrom(authentication);

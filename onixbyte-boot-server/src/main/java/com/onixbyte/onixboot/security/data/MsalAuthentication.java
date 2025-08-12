@@ -1,24 +1,39 @@
 package com.onixbyte.onixboot.security.data;
 
-import com.onixbyte.onixboot.exception.BizException;
 import com.onixbyte.onixboot.model.User;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
+/**
+ * Microsoft authentication.
+ *
+ * @author zihluwang
+ */
 public class MsalAuthentication implements Authentication {
 
-    private String msalToken;
+    /**
+     * Identity tokens issued by Microsoft to users.
+     */
+    private final String msalToken;
 
+    /**
+     * Users who receive identity tokens issued by Microsoft.
+     */
     private User user;
 
+    /**
+     * A flag indicating whether the user has completed identity authentication.
+     */
     private boolean authenticated;
 
-    public MsalAuthentication(String msalToken, User user, boolean authenticated) {
+    public MsalAuthentication(
+            String msalToken,
+            User user,
+            boolean authenticated
+    ) {
         this.msalToken = msalToken;
         this.user = user;
         this.authenticated = authenticated;
@@ -69,12 +84,5 @@ public class MsalAuthentication implements Authentication {
 
     public static MsalAuthentication unauthenticated(String msalToken) {
         return new MsalAuthentication(msalToken, null, false);
-    }
-
-    public static MsalAuthentication authenticated(User user) {
-        if (Objects.isNull(user)) {
-            throw new BizException(HttpStatus.BAD_REQUEST, "User cannot be null.");
-        }
-        return new MsalAuthentication(null, user, true);
     }
 }

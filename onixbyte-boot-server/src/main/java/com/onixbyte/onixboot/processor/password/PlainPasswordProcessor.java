@@ -8,6 +8,14 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
+/**
+ * Plain password processor. If a user registered with a username and password, then encode his
+ * password with <b>bcrypt</b> algorithm.
+ * <p>
+ * This is also a fallback password processor.
+ *
+ * @author zihluwang
+ */
 @Component
 @Order(Ordered.LOWEST_PRECEDENCE)
 public class PlainPasswordProcessor implements PasswordProcessor {

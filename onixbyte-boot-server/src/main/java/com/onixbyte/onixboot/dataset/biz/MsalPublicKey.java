@@ -15,6 +15,14 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.Base64;
 
+/**
+ * A data class that represents a Microsoft RSA public key. This key is used to verify the tokens
+ * issued by Microsoft.
+ *
+ * @param keyId    ID of the key
+ * @param modulus  the RSA modulus component of the public key
+ * @param exponent the RSA public exponent component of the public key
+ */
 public record MsalPublicKey(
         @JsonProperty("kid") String keyId,
         @JsonProperty("n") String modulus,

@@ -10,12 +10,26 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Wecom authentication.
+ *
+ * @author zihluwang
+ */
 public class WecomAuthentication implements Authentication {
 
-    private String code;
+    /**
+     * One-Time authentication code issued by Wecom to users.
+     */
+    private final String code;
 
+    /**
+     * Users who receive One-Time authentication code issued by Microsoft.
+     */
     private User user;
 
+    /**
+     * A flag indicating whether the user has completed identity authentication.
+     */
     private boolean authenticated;
 
     @Override
@@ -57,27 +71,17 @@ public class WecomAuthentication implements Authentication {
         this.user = user;
     }
 
-    public WecomAuthentication(User user) {
-        this.code = null;
-        this.user = user;
-        this.authenticated = Objects.nonNull(user);
-    }
-
-    public WecomAuthentication(String code) {
+    public WecomAuthentication(
+            String code,
+            User user,
+            boolean authenticated
+    ) {
         this.code = code;
-        this.user = null;
-        this.authenticated = false;
+        this.user = user;
+        this.authenticated = authenticated;
     }
 
     public static WecomAuthentication unauthenticated(String code) {
-        return new WecomAuthentication(code);
-    }
-
-    public static WecomAuthentication authenticated(User user) {
-        if (Objects.isNull(user)) {
-            throw new BizException(HttpStatus.INTERNAL_SERVER_ERROR, "User cannot be null for an authenticated token.");
-        }
-
-        return new WecomAuthentication(user);
+        return new WecomAuthentication(code, null, false);
     }
 }

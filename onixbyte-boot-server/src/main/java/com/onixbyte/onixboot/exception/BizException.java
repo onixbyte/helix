@@ -2,6 +2,11 @@ package com.onixbyte.onixboot.exception;
 
 import org.springframework.http.HttpStatus;
 
+/**
+ * Business exception.
+ *
+ * @author zihluwang
+ */
 public class BizException extends RuntimeException {
 
     private final HttpStatus status;

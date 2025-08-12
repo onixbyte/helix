@@ -11,6 +11,11 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * Password processor manager, who holds all password processors and test the user one by one.
+ *
+ * @author zihluwang
+ */
 @Component
 public class PasswordProcessorManager {
 
@@ -23,9 +28,11 @@ public class PasswordProcessorManager {
     }
 
     /**
-     * Process user's password. If user uses any third party authentication service such as
-     * Microsoft Entra ID, DingTalk or Wecom, the password will be to a empty string({@code "")},
-     * if user uses plain password (username and password) to register, the password will be encoded
+     * Process user's password.
+     * <p>
+     * If user uses any third party authentication service such as Microsoft Entra ID, DingTalk
+     * or Wecom, the password will be to a empty string({@code "")}, if user uses plain password
+     * (username and password) to register, the password will be encoded
      * with {@code BCryptPasswordEncoder}.
      *
      * @param user password holder

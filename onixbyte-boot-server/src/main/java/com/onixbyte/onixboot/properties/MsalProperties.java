@@ -2,6 +2,11 @@ package com.onixbyte.onixboot.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+/**
+ * Microsoft Entra ID properties, used to assist authenticate users who are linked to MSAL.
+ *
+ * @author zihluwang
+ */
 @ConfigurationProperties(prefix = "app.authentication.msal")
 public class MsalProperties {
 
