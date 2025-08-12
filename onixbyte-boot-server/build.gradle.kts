@@ -29,6 +29,9 @@ repositories {
 }
 
 dependencies {
+    implementation(libs.onixbyte.tuple)
+    implementation(libs.onixbyte.commonToolbox)
+    implementation(libs.onixbyte.identityGenerator)
     implementation(libs.jwt.core)
     implementation(libs.spring.boot.configurationProcessor)
     implementation(libs.spring.boot.starter.web)

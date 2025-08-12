@@ -1,0 +1,100 @@
+package com.onixbyte.onixboot.security.providers;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.onixbyte.onixboot.cache.MsalCache;
+import com.onixbyte.onixboot.exception.BizException;
+import com.onixbyte.onixboot.model.User;
+import com.onixbyte.onixboot.properties.MsalProperties;
+import com.onixbyte.onixboot.security.data.MsalAuthentication;
+import com.onixbyte.onixboot.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.stereotype.Component;
+
+import java.util.Objects;
+
+@Component
+public class MsalAuthenticationProvider implements AuthenticationProvider {
+
+    private static final Logger log = LoggerFactory.getLogger(MsalAuthenticationProvider.class);
+    private final MsalCache msalCache;
+    private final MsalProperties msalProperties;
+    private final UserService userService;
+
+    public MsalAuthenticationProvider(MsalCache msalCache, MsalProperties msalProperties, UserService userService) {
+        this.msalCache = msalCache;
+        this.msalProperties = msalProperties;
+        this.userService = userService;
+    }
+
+    @Override
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        if (!(authentication instanceof MsalAuthentication msalAuthentication)) {
+            throw new IllegalStateException("Cannot process non-msal authentication.");
+        }
+
+        // Decode Json Web Token.
+        var decodedToken = JWT.decode(msalAuthentication.getPrincipal());
+
+        // Get public key ID.
+        var keyId = decodedToken.getKeyId();
+
+        if (keyId == null) {
+            throw new BizException(HttpStatus.BAD_REQUEST, "Missing key ID.");
+        }
+
+        // Get public key.
+        var publicKey = msalCache.getMsalPublicKey(keyId).generateRSAPublicKey();
+
+        // Generate algorithm with public key.
+        var algorithm = Algorithm.RSA256(publicKey, null);
+
+        // Construct token verifier.
+        var tenantId = msalProperties.getTenantId();
+        var verifier = JWT.require(algorithm)
+                .withIssuer("https://login.microsoft.com/" + tenantId + "/v2.0")
+                .withAudience(msalProperties.getClientId())
+                .build();
+
+        try {
+            // Do verify.
+            verifier.verify(msalAuthentication.getPrincipal());
+
+            // Get Microsoft Entra ID Open ID from token.
+            var msalOpenId = decodedToken.getClaim("oid").asString();
+            var user = userService.getUserByMsalOpenId(msalOpenId);
+
+            if (Objects.isNull(user)) {
+                // If user does not exist, register automatically.
+                var name = decodedToken.getClaim("name").asString();
+                // var email = decodedToken.getClaim("preferred_username").asString();
+
+                user = new User();
+                user.setUsername(name);
+                user.setName(name);
+                user.setMsalOpenId(msalOpenId);
+                user = userService.register(user);
+            }
+
+            msalAuthentication.setAuthenticated(true);
+            msalAuthentication.setUser(user);
+
+            return msalAuthentication;
+        } catch (JWTVerificationException e) {
+            log.error("Cannot verify MSAL Identification Token.", e);
+            throw new BizException(HttpStatus.BAD_REQUEST, "MSAL Identification invalid.");
+        }
+    }
+
+    @Override
+    public boolean supports(Class<?> authentication) {
+        return MsalAuthentication.class.isAssignableFrom(authentication);
+    }
+}

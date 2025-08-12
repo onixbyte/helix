@@ -1,5 +1,9 @@
 package com.onixbyte.onixboot.model;
 
+import com.onixbyte.onixboot.validation.group.OnCreate;
+import com.onixbyte.onixboot.validation.group.OnUpdate;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.Objects;
 
 /**
@@ -12,16 +16,19 @@ public class User {
     /**
      * User ID.
      */
+    @NotNull(groups = {OnUpdate.class}, message = "ID cannot be empty.")
     private Long id;
 
     /**
      * Username.
      */
+    @NotNull(groups = {OnCreate.class}, message = "Username cannot be empty.")
     private String username;
 
     /**
      * Real name.
      */
+    @NotNull(groups = {OnCreate.class}, message = "Username cannot be empty.")
     private String name;
 
     /**
