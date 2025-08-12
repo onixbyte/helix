@@ -1,0 +1,53 @@
+package com.onixbyte.onixboot.utils;
+
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
+public class EncodeUtil {
+
+    /**
+     * Encodes a string to be used in a URI component, precisely replicating JavaScript's
+     * {@code encodeURIComponent} function.
+     *
+     * @param content the string component to encode
+     * @return URI-component-safe encoded string
+     */
+    public static String encodeUriComponent(String content) {
+        String encodedComponent;
+
+        // 1. First, we use the standard Java URLEncoder.
+        //
+        //    It's crucial to specify the character encoding, with UTF-8 being the web standard.
+        encodedComponent = URLEncoder.encode(content, StandardCharsets.UTF_8);
+
+        // 2. Next, we must manually correct the output of URLEncoder to match encodeURIComponent's
+        //    behaviour.
+        //
+        //    JavaScript's encodeURIComponent does not encode these characters: - _ . ! ~ * ' ( )
+        //    URLEncoder, however, does encode some of them.
+
+        // Replace "+" with "%20" (space character)
+        encodedComponent = encodedComponent.replace("+", "%20");
+
+        // URLEncoder encodes "*" as "%2A", but encodeURIComponent does not, so we decode it back.
+        encodedComponent = encodedComponent.replace("%2A", "*");
+
+        // URLEncoder encodes "'" as "%27", but encodeURIComponent does not.
+        encodedComponent = encodedComponent.replace("%27", "'");
+
+        // URLEncoder encodes "(" as "%28", but encodeURIComponent does not.
+        encodedComponent = encodedComponent.replace("%28", "(");
+
+        // URLEncoder encodes ")" as "%29", but encodeURIComponent does not.
+        encodedComponent = encodedComponent.replace("%29", ")");
+
+        // Note: The characters '!', '~' are also not encoded by encodeURIComponent.
+        //
+        // Modern versions of URLEncoder (in recent JDKs) correctly leave '!' and '~' unencoded,
+        // so explicit replacements for "%21" and "%7E" are typically no longer necessary.
+        //
+        // However, if compatibility with very old Java versions is a concern, you might add them.
+        // encodedComponent = encodedComponent.replace("%7E", "~");
+        return encodedComponent;
+    }
+}

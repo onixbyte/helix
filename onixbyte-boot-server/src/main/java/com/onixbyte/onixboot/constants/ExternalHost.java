@@ -11,4 +11,9 @@ public final class ExternalHost {
      * WeCom Host
      */
     public static final String WE_COM_HOST = "https://qyapi.weixin.qq.com";
+
+    /**
+     * WeChat Open Platform Host
+     */
+    public static final String WECHAT_OPEN_PLATFORM_HOST = "https://open.weixin.qq.com";
 }

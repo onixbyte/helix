@@ -29,14 +29,20 @@ repositories {
 }
 
 dependencies {
+    implementation(libs.jwt.core)
     implementation(libs.spring.boot.configurationProcessor)
     implementation(libs.spring.boot.starter.web)
     implementation(libs.spring.boot.starter.webFlux)
     implementation(libs.spring.boot.starter.validation)
     implementation(libs.spring.boot.starter.redis)
     implementation(libs.spring.boot.starter.cache)
+    implementation(libs.spring.boot.starter.security)
+    implementation(libs.spring.boot.starter.mybatis)
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.reactor.test)
+    testImplementation(libs.spring.security.test)
+    testImplementation(libs.spring.boot.starter.mybatisTest)
+    runtimeOnly(libs.postgres.driver)
     testRuntimeOnly(libs.junit.launcher)
 }
 

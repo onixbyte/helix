@@ -17,6 +17,11 @@ public class WeComProperties {
     private String corporationId;
 
     /**
+     * WeCom application ID.
+     */
+    private Long agentId;
+
+    /**
      * WeCom application secret. Reference <a href="https://developer.work.weixin.qq.com/document/path/90665"
      * >WeCom Developers' Centre</a> for details.
      */
@@ -44,6 +49,14 @@ public class WeComProperties {
      */
     public void setCorporationId(String corporationId) {
         this.corporationId = corporationId;
+    }
+
+    public Long getAgentId() {
+        return agentId;
+    }
+
+    public void setAgentId(Long agentId) {
+        this.agentId = agentId;
     }
 
     /**
