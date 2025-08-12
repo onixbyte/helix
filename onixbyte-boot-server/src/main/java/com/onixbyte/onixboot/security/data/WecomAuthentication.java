@@ -1,7 +1,6 @@
-package com.onixbyte.onixboot.security.token;
+package com.onixbyte.onixboot.security.data;
 
 import com.onixbyte.onixboot.exception.BizException;
-import com.onixbyte.onixboot.exception.WeComException;
 import com.onixbyte.onixboot.model.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -11,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-public class WeComAuthenticationToken implements Authentication {
+public class WecomAuthentication implements Authentication {
 
     private String code;
 
@@ -58,27 +57,27 @@ public class WeComAuthenticationToken implements Authentication {
         this.user = user;
     }
 
-    public WeComAuthenticationToken(User user) {
+    public WecomAuthentication(User user) {
         this.code = null;
         this.user = user;
         this.authenticated = Objects.nonNull(user);
     }
 
-    public WeComAuthenticationToken(String code) {
+    public WecomAuthentication(String code) {
         this.code = code;
         this.user = null;
         this.authenticated = false;
     }
 
-    public static WeComAuthenticationToken unauthenticated(String code) {
-        return new WeComAuthenticationToken(code);
+    public static WecomAuthentication unauthenticated(String code) {
+        return new WecomAuthentication(code);
     }
 
-    public static WeComAuthenticationToken authenticated(User user) {
+    public static WecomAuthentication authenticated(User user) {
         if (Objects.isNull(user)) {
             throw new BizException(HttpStatus.INTERNAL_SERVER_ERROR, "User cannot be null for an authenticated token.");
         }
 
-        return new WeComAuthenticationToken(user);
+        return new WecomAuthentication(user);
     }
 }

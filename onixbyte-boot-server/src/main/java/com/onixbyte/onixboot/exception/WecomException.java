@@ -2,9 +2,9 @@ package com.onixbyte.onixboot.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class WeComException extends BizException {
+public class WecomException extends BizException {
 
-    public WeComException(String message) {
+    public WecomException(String message) {
         super(HttpStatus.REQUEST_TIMEOUT, message);
     }
 }

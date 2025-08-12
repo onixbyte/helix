@@ -10,11 +10,11 @@ public record UserView(
         String name,
         String msalOpenId,
         String dingTalkOpenId,
-        String weComOpenId
+        String wecomOpenId
 ) implements Serializable {
 
     public static UserView of(User user) {
         return new UserView(user.getId(), user.getUsername(), user.getName(), user.getMsalOpenId(),
-                user.getDingTalkOpenId(), user.getWeComOpenId());
+                user.getDingTalkOpenId(), user.getWecomOpenId());
     }
 }

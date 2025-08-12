@@ -2,9 +2,9 @@ package com.onixbyte.onixboot.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class WeComUserNotFoundException extends BizException {
+public class WecomUserNotFoundException extends BizException {
 
-    public WeComUserNotFoundException(String message) {
+    public WecomUserNotFoundException(String message) {
         super(HttpStatus.NOT_FOUND, message);
     }
 }

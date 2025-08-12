@@ -13,6 +13,6 @@ spring:
 
 app:
   authentication:
-    we-com:
-      corporation-id: we-com-corporation-id
-      secret: we-com-app-secret
+    wecom:
+      corporation-id: wecom-corporation-id
+      secret: wecom-app-secret

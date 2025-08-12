@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.time.Duration;
 
 @ConfigurationProperties(prefix = "app.jwt")
-public class JsonWebTokenProperties {
+public class TokenProperties {
 
     private String issuer;
 
@@ -13,7 +13,7 @@ public class JsonWebTokenProperties {
 
     private Duration validTime;
 
-    public JsonWebTokenProperties() {
+    public TokenProperties() {
     }
 
     public String getIssuer() {

@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
-public record WeComAccessTokenResponse(
-        @JsonProperty("errcode") String errorCode,
+public record WecomUserResponse(
+        @JsonProperty("errcode") Integer errorCode,
         @JsonProperty("errmsg") String errorMessage,
-        @JsonProperty("access_token") String accessToken,
-        @JsonProperty("expires_in") Integer expiresAfter
+        @JsonProperty("userid") String wecomOpenId,
+        @JsonProperty("name") String name
 ) implements Serializable {
 }

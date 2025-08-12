@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository {
 
-    @Select("SELECT * FROM users WHERE we_com_open_id = #{weComOpenId}")
-    User selectByWeComOpenId(@Param("weComOpenId") String weComOpenId);
+    @Select("SELECT * FROM users WHERE wecom_open_id = #{wecomOpenId}")
+    User selectByWecomOpenId(@Param("wecomOpenId") String wecomOpenId);
 }

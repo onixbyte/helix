@@ -1,14 +1,12 @@
 package com.onixbyte.onixboot.web.request;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public record WeComSendTextCardRequest(
+public record WecomSendTextCardRequest(
         @JsonProperty("touser") String recipients,
         @JsonProperty("toparty") String recipientDepartments,
         @JsonProperty("totag") String recipientTags,

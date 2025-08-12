@@ -2,9 +2,8 @@ package com.onixbyte.onixboot.controller;
 
 import com.onixbyte.onixboot.dataset.view.UserView;
 import com.onixbyte.onixboot.exception.BizException;
-import com.onixbyte.onixboot.model.User;
-import com.onixbyte.onixboot.security.token.WeComAuthenticationToken;
-import com.onixbyte.onixboot.service.JsonWebTokenService;
+import com.onixbyte.onixboot.security.data.WecomAuthentication;
+import com.onixbyte.onixboot.service.TokenService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,38 +17,31 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
-    private final JsonWebTokenService jsonWebTokenService;
+    private final TokenService tokenService;
 
-    public AuthController(AuthenticationManager authenticationManager, JsonWebTokenService jsonWebTokenService) {
+    public AuthController(AuthenticationManager authenticationManager, TokenService tokenService) {
         this.authenticationManager = authenticationManager;
-        this.jsonWebTokenService = jsonWebTokenService;
+        this.tokenService = tokenService;
     }
 
-    @GetMapping("/we-com/login")
-    public ResponseEntity<UserView> weComLogin(
+    @GetMapping("/wecom/login")
+    public ResponseEntity<UserView> wecomLogin(
             @RequestParam String code
     ) {
-        var _authenticatedToken = authenticationManager.authenticate(WeComAuthenticationToken
+        var _authenticatedToken = authenticationManager.authenticate(WecomAuthentication
                 .unauthenticated(code));
 
-        if (!(_authenticatedToken instanceof WeComAuthenticationToken authenticationToken)) {
+        if (!(_authenticatedToken instanceof WecomAuthentication authenticationToken)) {
             throw new BizException(HttpStatus.INTERNAL_SERVER_ERROR, "Server error, type mismatching.");
         }
 
         var user = authenticationToken.getDetails();
 
-        var userToken = jsonWebTokenService.createToken(authenticationToken.getDetails());
+        var userToken = tokenService.createToken(authenticationToken.getDetails());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("Authorization", userToken)
                 .body(UserView.of(user));
     }
-
-    // @GetMapping("/we-com/register")
-    // public ResponseEntity<UserView> weComRegister(
-    //         @RequestParam String code
-    // ) {
-    //
-    // }
 }

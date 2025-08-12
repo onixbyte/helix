@@ -1,7 +1,7 @@
 package com.onixbyte.onixboot.controller;
 
 import com.onixbyte.onixboot.service.UserService;
-import com.onixbyte.onixboot.service.WeComService;
+import com.onixbyte.onixboot.service.WecomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
-    private final WeComService weComService;
+    private final WecomService wecomService;
 
     @Autowired
     public UserController(
             UserService userService,
-            WeComService weComService
+            WecomService wecomService
     ) {
         this.userService = userService;
-        this.weComService = weComService;
+        this.wecomService = wecomService;
     }
 }

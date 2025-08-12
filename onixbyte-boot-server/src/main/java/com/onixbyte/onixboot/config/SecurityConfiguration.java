@@ -1,10 +1,8 @@
 package com.onixbyte.onixboot.config;
 
 import com.auth0.jwt.algorithms.Algorithm;
-import com.onixbyte.onixboot.properties.JsonWebTokenProperties;
-import com.onixbyte.onixboot.security.providers.WeComAuthenticationProvider;
-import io.lettuce.core.dynamic.annotation.Value;
-import jakarta.validation.Valid;
+import com.onixbyte.onixboot.properties.TokenProperties;
+import com.onixbyte.onixboot.security.providers.WecomAuthenticationProvider;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +19,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
-@EnableConfigurationProperties(JsonWebTokenProperties.class)
+@EnableConfigurationProperties(TokenProperties.class)
 public class SecurityConfiguration {
 
     @Bean
@@ -52,15 +50,15 @@ public class SecurityConfiguration {
     @Bean
     public AuthenticationManager authenticationManager(
             HttpSecurity httpSecurity,
-            WeComAuthenticationProvider weComAuthenticationProvider
+            WecomAuthenticationProvider wecomAuthenticationProvider
     ) throws Exception {
         var authenticationManagerBuilder = httpSecurity.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.authenticationProvider(weComAuthenticationProvider);
+        authenticationManagerBuilder.authenticationProvider(wecomAuthenticationProvider);
         return authenticationManagerBuilder.build();
     }
 
     @Bean
-    public Algorithm jwtAlgorithm(JsonWebTokenProperties properties) {
+    public Algorithm jwtAlgorithm(TokenProperties properties) {
         return Algorithm.HMAC256(properties.getSecret());
     }
 }

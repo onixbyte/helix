@@ -40,9 +40,9 @@ public class User {
     private String dingTalkOpenId;
 
     /**
-     * WeCom Open ID.
+     * Wecom Open ID.
      */
-    private String weComOpenId;
+    private String wecomOpenId;
 
     public User() {
     }
@@ -95,24 +95,31 @@ public class User {
         this.dingTalkOpenId = dingTalkOpenId;
     }
 
-    public String getWeComOpenId() {
-        return weComOpenId;
+    public String getWecomOpenId() {
+        return wecomOpenId;
     }
 
-    public void setWeComOpenId(String weComOpenId) {
-        this.weComOpenId = weComOpenId;
+    public void setWecomOpenId(String wecomOpenId) {
+        this.wecomOpenId = wecomOpenId;
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(getId(), user.getId()) && Objects.equals(getUsername(), user.getUsername()) && Objects.equals(getName(), user.getName()) && Objects.equals(getPassword(), user.getPassword()) && Objects.equals(getMsalOpenId(), user.getMsalOpenId()) && Objects.equals(getDingTalkOpenId(), user.getDingTalkOpenId()) && Objects.equals(getWeComOpenId(), user.getWeComOpenId());
+        return Objects.equals(getId(), user.getId()) &&
+                Objects.equals(getUsername(), user.getUsername()) &&
+                Objects.equals(getName(), user.getName()) &&
+                Objects.equals(getPassword(), user.getPassword()) &&
+                Objects.equals(getMsalOpenId(), user.getMsalOpenId()) &&
+                Objects.equals(getDingTalkOpenId(), user.getDingTalkOpenId()) &&
+                Objects.equals(getWecomOpenId(), user.getWecomOpenId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getUsername(), getName(), getPassword(), getMsalOpenId(), getDingTalkOpenId(), getWeComOpenId());
+        return Objects.hash(getId(), getUsername(), getName(), getPassword(), getMsalOpenId(),
+                getDingTalkOpenId(), getWecomOpenId());
     }
 
     @Override
@@ -124,7 +131,7 @@ public class User {
                 ", password='" + password + '\'' +
                 ", msalOpenId='" + msalOpenId + '\'' +
                 ", dingTalkOpenId='" + dingTalkOpenId + '\'' +
-                ", weComOpenId='" + weComOpenId + '\'' +
+                ", wecomOpenId='" + wecomOpenId + '\'' +
                 '}';
     }
 }
