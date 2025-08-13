@@ -10,9 +10,21 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
+/**
+ * Cache configuration.
+ *
+ * @author zihluwang
+ */
 @Configuration
 public class CacheConfiguration {
 
+    /**
+     * Create a custom redis cache manager with generic jackson serialiser.
+     *
+     * @param connectionFactory redis connection factory
+     * @return a {@link RedisCacheManager} that serialise keys with string serialiser and serialise
+     * value with generic jackson serialiser
+     */
     @Bean
     public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
         var _keySerializer = RedisSerializer.string();
@@ -30,6 +42,13 @@ public class CacheConfiguration {
                 .build();
     }
 
+    /**
+     * Redis template that serialise key with string serialiser and value with generic
+     * jackson serialiser.
+     *
+     * @param connectionFactory redis connection factory
+     * @return a redis template
+     */
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
         var redisTemplate = new RedisTemplate<String, Object>();

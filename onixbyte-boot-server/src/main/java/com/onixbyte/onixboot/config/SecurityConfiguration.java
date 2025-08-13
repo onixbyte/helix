@@ -19,11 +19,24 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+/**
+ * Spring security configuration.
+ *
+ * @author zihluwang
+ */
 @Configuration
 @EnableWebSecurity
-@EnableConfigurationProperties({TokenProperties.class, MsalProperties.class})
+@EnableConfigurationProperties({TokenProperties.class})
 public class SecurityConfiguration {
 
+    /**
+     * Spring security filter chain.
+     *
+     * @param httpSecurity            HTTP security context
+     * @param corsConfigurationSource cross-origin configuration
+     * @return built security filter chain
+     * @throws Exception if any exception occurred while building HTTP security filter chain
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity httpSecurity,
@@ -44,11 +57,23 @@ public class SecurityConfiguration {
                 .build();
     }
 
+    /**
+     * Register a password encoder that helps encode plain text password in Spring context.
+     *
+     * @return a {@link BCryptPasswordEncoder} instance
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Build an authentication manager with custom authentication providers.
+     *
+     * @param msalAuthenticationProvider  authentication provider of Microsoft Entra ID
+     * @param wecomAuthenticationProvider authentication provider of Wecom
+     * @return an {@link ProviderManager} instance with given authentication providers
+     */
     @Bean
     public AuthenticationManager authenticationManager(
             MsalAuthenticationProvider msalAuthenticationProvider,
@@ -60,8 +85,14 @@ public class SecurityConfiguration {
         );
     }
 
+    /**
+     * The algorithm to sign tokens.
+     *
+     * @param properties token properties
+     * @return built algorithm
+     */
     @Bean
-    public Algorithm jwtAlgorithm(TokenProperties properties) {
+    public Algorithm algorithm(TokenProperties properties) {
         return Algorithm.HMAC256(properties.getSecret());
     }
 }

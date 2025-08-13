@@ -8,6 +8,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
+/**
+ * Wecom cache.
+ * <p>
+ * Caches all data that will be used for Wecom.
+ *
+ * @author zihluwang
+ */
 @Component
 public class WecomCache {
 

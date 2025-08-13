@@ -13,32 +13,54 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
+/**
+ * Global exception handler.
+ *
+ * @author zihluwang
+ */
 @RestControllerAdvice
 public class ExceptionController {
 
+    /**
+     * Catch all {@link BizException}.
+     *
+     * @param ex a {@link BizException} instance
+     * @return response entity with custom HTTP status and detailed message
+     */
     @ExceptionHandler(BizException.class)
-    public ResponseEntity<BizExceptionResponse> handleBizException(BizException e) {
-        return ResponseEntity.status(e.getStatus())
+    public ResponseEntity<BizExceptionResponse> handleBizException(BizException ex) {
+        return ResponseEntity.status(ex.getStatus())
                 .body(new BizExceptionResponse(
                         LocalDateTime.now(),
-                        e.getMessage())
+                        ex.getMessage())
                 );
     }
 
+    /**
+     * Catch all {@link WecomUserNotFoundException}.
+     *
+     * @param ex a {@link WecomUserNotFoundException} instance
+     * @return business exception response with detailed message
+     */
     @ExceptionHandler(WecomUserNotFoundException.class)
-    public ResponseEntity<BizExceptionResponse> handleBizException(WecomUserNotFoundException e) {
-        return ResponseEntity.status(e.getStatus())
-                .body(new BizExceptionResponse(
-                        LocalDateTime.now(),
-                        e.getMessage()
-                ));
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public BizExceptionResponse handleBizException(WecomUserNotFoundException ex) {
+        return new BizExceptionResponse(
+                LocalDateTime.now(),
+                ex.getMessage()
+        );
     }
 
+    /**
+     * Catch all {@link ConstraintViolationException}.
+     *
+     * @param ex a {@link ConstraintViolationException} instance
+     * @return business exception response with detailed message
+     */
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public BizExceptionResponse handleConstraintViolation(ConstraintViolationException ex) {
-        // You can format the response nicely here,
-        // collecting all violation messages.
+        // Collecting all violation messages.
         var errorMessage = ex.getConstraintViolations().stream()
                 .map((violation) -> violation.getPropertyPath() + ": " + violation.getMessage())
                 .collect(Collectors.joining(", "));

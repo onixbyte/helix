@@ -8,12 +8,12 @@ package com.onixbyte.onixboot.constants;
 public final class ExternalHost {
 
     /**
-     * Wecom Host
+     * Wecom host.
      */
     public static final String WECOM_HOST = "https://qyapi.weixin.qq.com";
 
     /**
-     * WeChat Open Platform Host
+     * WeChat open platform host.
      */
     public static final String WECHAT_OPEN_PLATFORM_HOST = "https://open.weixin.qq.com";
 }

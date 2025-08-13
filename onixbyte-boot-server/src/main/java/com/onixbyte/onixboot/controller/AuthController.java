@@ -11,6 +11,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Authentication and authorisation controller.
+ *
+ * @author zihluwang
+ */
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -18,11 +23,21 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
 
-    public AuthController(AuthenticationManager authenticationManager, TokenService tokenService) {
+    public AuthController(
+            AuthenticationManager authenticationManager,
+            TokenService tokenService
+    ) {
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
     }
 
+    /**
+     * Login with Wecom account.
+     *
+     * @param code a string of code used to obtain user IDs in Wecom
+     * @return login success response
+     * @throws BizException if authentication process fails, see logs for detailed message
+     */
     @GetMapping("/login/wecom")
     public ResponseEntity<UserView> wecomLogin(
             @RequestParam String code
@@ -44,6 +59,13 @@ public class AuthController {
                 .body(UserView.of(user));
     }
 
+    /**
+     * Login with Microsoft account.
+     *
+     * @param request a request contains the token issued by Microsoft
+     * @return login success response
+     * @throws BizException if authentication process fails, see logs for detailed message
+     */
     @GetMapping("/login/msal")
     public ResponseEntity<UserView> msalLogin(
             @RequestBody MsalLoginRequest request

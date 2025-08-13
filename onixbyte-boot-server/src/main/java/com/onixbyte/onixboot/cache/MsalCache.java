@@ -13,6 +13,13 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * Microsoft Entra ID cache.
+ * <p>
+ * Caches all data that will be used for Microsoft Entra ID.
+ *
+ * @author zihluwang
+ */
 @Component
 public class MsalCache {
 
@@ -23,12 +30,21 @@ public class MsalCache {
     public MsalCache(
             WebClient webClient,
             MsalProperties msalProperties,
-            RedisTemplate<Object, Object> redisTemplate) {
+            RedisTemplate<Object, Object> redisTemplate
+    ) {
         this.webClient = webClient;
         this.msalProperties = msalProperties;
         this.redisTemplate = redisTemplate;
     }
 
+    /**
+     * Get the verification key from Microsoft.
+     * <p>
+     * This method will cache all public keys.
+     *
+     * @param keyId ID of the key
+     * @return public key provided by Microsoft
+     */
     @Cacheable(cacheNames = "msal::public-key", key = "#keyId")
     public MsalPublicKey getMsalPublicKey(String keyId) {
         // Prepare tenant ID.
