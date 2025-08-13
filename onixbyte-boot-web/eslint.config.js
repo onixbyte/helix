@@ -34,7 +34,9 @@ export default tseslint.config([
       "@typescript-eslint/no-unsafe-member-access": 0,
       "no-empty-pattern": 0,
       "@typescript-eslint/no-unnecessary-condition": 0,
-      "@typescript-eslint/no-confusing-void-expression": 0
+      "@typescript-eslint/no-confusing-void-expression": 0,
+      "@typescript-eslint/no-empty-object-type": 0,
+      "react-refresh/only-export-components": 0
     },
   },
 ])

@@ -46,7 +46,7 @@ export default function WeComLogin() {
   }, [loginPanel])
 
   return (
-    <div>
+    <div className="flex justify-center">
       <div id="weComLoginPanel" ref={loginPanelRef}></div>
     </div>
   )
