@@ -8,7 +8,7 @@ export default function MsalLogin() {
   const navigate = useNavigate()
 
   return (
-    <div className="bg-[#D0D0D0]">
+    <div className="flex justify-center">
       <button
         onClick={() => {
           // void doMsalLogin(instance, dispatch, () => void navigate("/"))
