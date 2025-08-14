@@ -46,11 +46,6 @@ public class User {
      */
     private String dingTalkOpenId;
 
-    /**
-     * Wecom Open ID.
-     */
-    private String wecomOpenId;
-
     public User() {
     }
 
@@ -102,14 +97,6 @@ public class User {
         this.dingTalkOpenId = dingTalkOpenId;
     }
 
-    public String getWecomOpenId() {
-        return wecomOpenId;
-    }
-
-    public void setWecomOpenId(String wecomOpenId) {
-        this.wecomOpenId = wecomOpenId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -119,14 +106,13 @@ public class User {
                 Objects.equals(getName(), user.getName()) &&
                 Objects.equals(getPassword(), user.getPassword()) &&
                 Objects.equals(getMsalOpenId(), user.getMsalOpenId()) &&
-                Objects.equals(getDingTalkOpenId(), user.getDingTalkOpenId()) &&
-                Objects.equals(getWecomOpenId(), user.getWecomOpenId());
+                Objects.equals(getDingTalkOpenId(), user.getDingTalkOpenId());
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(getId(), getUsername(), getName(), getPassword(), getMsalOpenId(),
-                getDingTalkOpenId(), getWecomOpenId());
+                getDingTalkOpenId());
     }
 
     @Override
@@ -138,7 +124,6 @@ public class User {
                 ", password='" + password + '\'' +
                 ", msalOpenId='" + msalOpenId + '\'' +
                 ", dingTalkOpenId='" + dingTalkOpenId + '\'' +
-                ", wecomOpenId='" + wecomOpenId + '\'' +
                 '}';
     }
 }

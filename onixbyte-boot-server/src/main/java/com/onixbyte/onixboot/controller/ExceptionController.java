@@ -1,7 +1,6 @@
 package com.onixbyte.onixboot.controller;
 
 import com.onixbyte.onixboot.exception.BizException;
-import com.onixbyte.onixboot.exception.WecomUserNotFoundException;
 import com.onixbyte.onixboot.web.response.BizExceptionResponse;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -34,21 +33,6 @@ public class ExceptionController {
                         LocalDateTime.now(),
                         ex.getMessage())
                 );
-    }
-
-    /**
-     * Catch all {@link WecomUserNotFoundException}.
-     *
-     * @param ex a {@link WecomUserNotFoundException} instance
-     * @return business exception response with detailed message
-     */
-    @ExceptionHandler(WecomUserNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public BizExceptionResponse handleBizException(WecomUserNotFoundException ex) {
-        return new BizExceptionResponse(
-                LocalDateTime.now(),
-                ex.getMessage()
-        );
     }
 
     /**

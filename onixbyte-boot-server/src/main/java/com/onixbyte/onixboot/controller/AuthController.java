@@ -3,7 +3,6 @@ package com.onixbyte.onixboot.controller;
 import com.onixbyte.onixboot.dataset.view.UserView;
 import com.onixbyte.onixboot.exception.BizException;
 import com.onixbyte.onixboot.security.data.MsalAuthentication;
-import com.onixbyte.onixboot.security.data.WecomAuthentication;
 import com.onixbyte.onixboot.service.TokenService;
 import com.onixbyte.onixboot.web.request.MsalLoginRequest;
 import org.springframework.http.HttpStatus;
@@ -29,34 +28,6 @@ public class AuthController {
     ) {
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
-    }
-
-    /**
-     * Login with Wecom account.
-     *
-     * @param code a string of code used to obtain user IDs in Wecom
-     * @return login success response
-     * @throws BizException if authentication process fails, see logs for detailed message
-     */
-    @GetMapping("/login/wecom")
-    public ResponseEntity<UserView> wecomLogin(
-            @RequestParam String code
-    ) {
-        var _authenticatedToken = authenticationManager.authenticate(WecomAuthentication
-                .unauthenticated(code));
-
-        if (!(_authenticatedToken instanceof WecomAuthentication authenticationToken)) {
-            throw new BizException(HttpStatus.INTERNAL_SERVER_ERROR, "Server error, type mismatching.");
-        }
-
-        var user = authenticationToken.getDetails();
-
-        var token = tokenService.createToken(authenticationToken.getDetails());
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .header("Authorization", "Bearer " + token)
-                .body(UserView.of(user));
     }
 
     /**

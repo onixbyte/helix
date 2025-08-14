@@ -1,10 +1,8 @@
 package com.onixbyte.onixboot.config;
 
 import com.auth0.jwt.algorithms.Algorithm;
-import com.onixbyte.onixboot.properties.MsalProperties;
 import com.onixbyte.onixboot.properties.TokenProperties;
 import com.onixbyte.onixboot.security.providers.MsalAuthenticationProvider;
-import com.onixbyte.onixboot.security.providers.WecomAuthenticationProvider;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -71,17 +69,14 @@ public class SecurityConfiguration {
      * Build an authentication manager with custom authentication providers.
      *
      * @param msalAuthenticationProvider  authentication provider of Microsoft Entra ID
-     * @param wecomAuthenticationProvider authentication provider of Wecom
      * @return an {@link ProviderManager} instance with given authentication providers
      */
     @Bean
     public AuthenticationManager authenticationManager(
-            MsalAuthenticationProvider msalAuthenticationProvider,
-            WecomAuthenticationProvider wecomAuthenticationProvider
+            MsalAuthenticationProvider msalAuthenticationProvider
     ) {
         return new ProviderManager(
-                msalAuthenticationProvider,
-                wecomAuthenticationProvider
+                msalAuthenticationProvider
         );
     }
 
