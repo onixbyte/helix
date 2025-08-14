@@ -2,6 +2,7 @@ package com.onixbyte.onixboot.model;
 
 import com.onixbyte.onixboot.validation.group.OnCreate;
 import com.onixbyte.onixboot.validation.group.OnUpdate;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.Objects;
@@ -16,20 +17,26 @@ public class User {
     /**
      * User ID.
      */
-    @NotNull(groups = {OnUpdate.class}, message = "ID cannot be empty.")
+    @NotNull(groups = {OnUpdate.class}, message = "User ID cannot be located without an ID.")
     private Long id;
 
     /**
      * Username.
      */
-    @NotNull(groups = {OnCreate.class}, message = "Username cannot be empty.")
+    @NotEmpty(groups = {OnCreate.class}, message = "Username cannot be empty.")
     private String username;
 
     /**
      * Real name.
      */
-    @NotNull(groups = {OnCreate.class}, message = "Username cannot be empty.")
+    @NotEmpty(groups = {OnCreate.class}, message = "Username cannot be empty.")
     private String name;
+
+    /**
+     * Email address.
+     */
+    @NotEmpty(groups = {OnCreate.class}, message = "Email cannot be empty.")
+    private String email;
 
     /**
      * Password.
@@ -40,11 +47,6 @@ public class User {
      * Microsoft Entra ID Open ID.
      */
     private String msalOpenId;
-
-    /**
-     * DingTalk Open ID.
-     */
-    private String dingTalkOpenId;
 
     public User() {
     }
@@ -73,6 +75,14 @@ public class User {
         this.name = name;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -89,14 +99,6 @@ public class User {
         this.msalOpenId = msalOpenId;
     }
 
-    public String getDingTalkOpenId() {
-        return dingTalkOpenId;
-    }
-
-    public void setDingTalkOpenId(String dingTalkOpenId) {
-        this.dingTalkOpenId = dingTalkOpenId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -104,15 +106,15 @@ public class User {
         return Objects.equals(getId(), user.getId()) &&
                 Objects.equals(getUsername(), user.getUsername()) &&
                 Objects.equals(getName(), user.getName()) &&
+                Objects.equals(getEmail(), user.getEmail()) &&
                 Objects.equals(getPassword(), user.getPassword()) &&
-                Objects.equals(getMsalOpenId(), user.getMsalOpenId()) &&
-                Objects.equals(getDingTalkOpenId(), user.getDingTalkOpenId());
+                Objects.equals(getMsalOpenId(), user.getMsalOpenId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getUsername(), getName(), getPassword(), getMsalOpenId(),
-                getDingTalkOpenId());
+        return Objects.hash(getId(), getUsername(), getName(), getEmail(), getPassword(),
+                getMsalOpenId());
     }
 
     @Override
@@ -121,9 +123,9 @@ public class User {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", msalOpenId='" + msalOpenId + '\'' +
-                ", dingTalkOpenId='" + dingTalkOpenId + '\'' +
                 '}';
     }
 }
