@@ -71,13 +71,22 @@ public class UserService {
     }
 
     /**
-     * Check the database for duplicate usernames, Microsoft Entra ID Open IDs, Wecom Open IDs, and
-     * DingTalk Open IDs.
+     * Check the database for duplicate usernames and Microsoft Entra ID Open IDs.
      *
      * @param user the user who wants to register
      * @return {@code true} indicates this user can register, otherwise {@code false}
      */
     public boolean canRegister(User user) {
         return userRepository.canRegister(user);
+    }
+
+    /**
+     * Get user by username.
+     *
+     * @param username username
+     * @return found user
+     */
+    public User getUserByUsername(String username) {
+        return userRepository.selectByUsername(username);
     }
 }

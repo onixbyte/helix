@@ -1,8 +1,8 @@
 package com.onixbyte.onixboot.repository;
 
 import com.onixbyte.onixboot.model.User;
-import io.lettuce.core.dynamic.annotation.Param;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
@@ -14,18 +14,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository {
 
-    /**
-     * Find user by Wecom open ID.
-     *
-     * @param wecomOpenId Wecom open ID
-     * @return found user
-     */
     @Select("""
-            SELECT id, username, name, msal_open_id, ding_talk_open_id, wecom_open_id
+            SELECT *
             FROM users
-            WHERE wecom_open_id = #{wecomOpenId}
+            WHERE username = #{username}
             """)
-    User selectByWecomOpenId(@Param("wecomOpenId") String wecomOpenId);
+    User selectByUsername(@Param("username") String username);
 
     /**
      * Find user by Microsoft Entra ID open ID.
@@ -54,14 +48,9 @@ public interface UserRepository {
             <where>
                  username = #{user.username}
                  OR name = #{user.name}
+                 OR email = #{user.email}
                  <if test="user.msalOpenId != null and user.msalOpenId != ''">
                      OR msal_open_id = #{user.msalOpenId}
-                 </if>
-                 <if test="user.wecomOpenId != null and user.wecomOpenId != ''">
-                     OR wecom_open_id = #{user.wecomOpenId}
-                 </if>
-                 <if test="user.dingTalkOpenId != null and user.dingTalkOpenId != ''">
-                     OR ding_talk_open_id = #{user.dingTalkOpenId}
                  </if>
             </where>
             </script>
