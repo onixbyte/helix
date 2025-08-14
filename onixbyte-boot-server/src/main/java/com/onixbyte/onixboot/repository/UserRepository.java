@@ -1,6 +1,6 @@
 package com.onixbyte.onixboot.repository;
 
-import com.onixbyte.onixboot.model.User;
+import com.onixbyte.onixboot.entities.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;

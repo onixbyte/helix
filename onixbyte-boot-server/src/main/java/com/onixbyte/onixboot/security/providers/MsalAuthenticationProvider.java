@@ -1,12 +1,11 @@
 package com.onixbyte.onixboot.security.providers;
 
 import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.onixbyte.onixboot.cache.MsalCache;
 import com.onixbyte.onixboot.exception.BizException;
-import com.onixbyte.onixboot.model.User;
+import com.onixbyte.onixboot.entities.User;
 import com.onixbyte.onixboot.properties.MsalProperties;
 import com.onixbyte.onixboot.security.data.MsalAuthentication;
 import com.onixbyte.onixboot.service.UserService;
@@ -89,8 +88,9 @@ public class MsalAuthenticationProvider implements AuthenticationProvider {
 
                 user = new User();
                 user.setUsername(name);
-                user.setName(name);
-                user.setMsalOpenId(msalOpenId);
+                user.setFullName(name);
+                // user.setMsalOpenId(msalOpenId);
+                // todo add user identities
                 user = userService.register(user);
             }
 

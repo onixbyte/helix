@@ -2,7 +2,7 @@ package com.onixbyte.onixboot.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.onixbyte.onixboot.model.User;
+import com.onixbyte.onixboot.entities.User;
 import com.onixbyte.onixboot.properties.TokenProperties;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
 package com.onixbyte.onixboot.processor.password;
 
-import com.onixbyte.onixboot.model.User;
+import com.onixbyte.onixboot.entities.User;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -18,18 +18,8 @@ public class ThirdPartyPasswordProcessor implements PasswordProcessor {
 
     @Override
     public boolean supports(User user) {
-        var msalOpenId = user.getMsalOpenId();
-        if (Objects.isNull(msalOpenId) || msalOpenId.isBlank()) {
-            return false;
-        }
-
-        var dingTalkOpenId = user.getDingTalkOpenId();
-        if (Objects.isNull(dingTalkOpenId) || dingTalkOpenId.isBlank()) {
-            return false;
-        }
-
-        var wecomOpenId = user.getWecomOpenId();
-        return Objects.nonNull(wecomOpenId) && !wecomOpenId.isBlank();
+        // todo update supports for third parties
+        throw new RuntimeException("This feature has not implemented yet.");
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.onixbyte.onixboot.processor.password;
 
-import com.onixbyte.onixboot.model.User;
+import com.onixbyte.onixboot.entities.User;
 
 /**
  * The password processor handles user passwords.

@@ -1,6 +1,6 @@
 package com.onixbyte.onixboot.processor.password;
 
-import com.onixbyte.onixboot.model.User;
+import com.onixbyte.onixboot.entities.User;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;

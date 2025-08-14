@@ -1,7 +1,7 @@
 package com.onixbyte.onixboot.manager;
 
 import com.onixbyte.onixboot.exception.BizException;
-import com.onixbyte.onixboot.model.User;
+import com.onixbyte.onixboot.entities.User;
 import com.onixbyte.onixboot.processor.password.PasswordProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

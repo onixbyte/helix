@@ -3,7 +3,7 @@ package com.onixbyte.onixboot.service;
 import com.onixbyte.identitygenerator.IdentityGenerator;
 import com.onixbyte.onixboot.exception.BizException;
 import com.onixbyte.onixboot.manager.PasswordProcessorManager;
-import com.onixbyte.onixboot.model.User;
+import com.onixbyte.onixboot.entities.User;
 import com.onixbyte.onixboot.repository.UserRepository;
 import com.onixbyte.onixboot.validation.group.OnCreate;
 import org.springframework.http.HttpStatus;

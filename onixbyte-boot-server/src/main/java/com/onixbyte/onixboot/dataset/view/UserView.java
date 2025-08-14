@@ -1,6 +1,6 @@
 package com.onixbyte.onixboot.dataset.view;
 
-import com.onixbyte.onixboot.model.User;
+import com.onixbyte.onixboot.entities.User;
 
 import java.io.Serializable;
 
@@ -23,7 +23,7 @@ public record UserView(
 ) implements Serializable {
 
     public static UserView of(User user) {
-        return new UserView(String.valueOf(user.getId()), user.getUsername(), user.getName(),
-                user.getMsalOpenId(), user.getDingTalkOpenId());
+        // todo update view object
+        throw new RuntimeException("This feature is not implemented yet.");
     }
 }

@@ -1,6 +1,6 @@
 package com.onixbyte.onixboot.security.data;
 
-import com.onixbyte.onixboot.model.User;
+import com.onixbyte.onixboot.entities.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -79,7 +79,7 @@ public class MsalAuthentication implements Authentication {
 
     @Override
     public String getName() {
-        return user.getName();
+        return user.getFullName();
     }
 
     public static MsalAuthentication unauthenticated(String msalToken) {
