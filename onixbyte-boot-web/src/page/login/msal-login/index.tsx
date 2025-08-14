@@ -13,7 +13,7 @@ export default function MsalLogin() {
         onClick={() => {
           // void doMsalLogin(instance, dispatch, () => void navigate("/"))
         }}
-        className="bg-[#00A3EE] text-white px-4 py-2 rounded hover:bg-[#00ADFF]">
+        className="btn btn-outline btn-primary">
         Login with Microsoft Entra ID
       </button>
     </div>

@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router"
 import store from "@/store"
 import "./index.css"
 import ProtectedRoute from "@/components/protected-route"
-import Login, { UsernameAndPasswordLogin, MsalLogin, WeComLogin, DingTalkLogin } from "@/page/login"
+import Login, { MsalLogin, UsernameAndPasswordLogin } from "@/page/login"
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -14,9 +14,7 @@ createRoot(document.getElementById("root")!).render(
         <Routes>
           <Route path="login" element={<Login />}>
             <Route index element={<UsernameAndPasswordLogin />} />
-            <Route path="we-com" element={<WeComLogin />}></Route>
             <Route path="msal" element={<MsalLogin />}></Route>
-            <Route path="ding-talk" element={<DingTalkLogin />}></Route>
           </Route>
           <Route path="/" element={<ProtectedRoute />}></Route>
         </Routes>
