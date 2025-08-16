@@ -25,12 +25,12 @@ public class MsalCache {
 
     private final WebClient webClient;
     private final MsalProperties msalProperties;
-    private final RedisTemplate<Object, Object> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     public MsalCache(
             WebClient webClient,
             MsalProperties msalProperties,
-            RedisTemplate<Object, Object> redisTemplate
+            RedisTemplate<String, Object> redisTemplate
     ) {
         this.webClient = webClient;
         this.msalProperties = msalProperties;

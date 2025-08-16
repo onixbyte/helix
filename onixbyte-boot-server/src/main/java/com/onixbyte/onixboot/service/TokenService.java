@@ -2,7 +2,7 @@ package com.onixbyte.onixboot.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.onixbyte.onixboot.entities.User;
+import com.onixbyte.onixboot.dataset.biz.BizUser;
 import com.onixbyte.onixboot.properties.TokenProperties;
 import org.springframework.stereotype.Service;
 
@@ -31,10 +31,10 @@ public class TokenService {
     /**
      * Create token.
      *
-     * @param user user receiving the token
+     * @param bizUser user receiving the token
      * @return the token
      */
-    public String createToken(User user) {
+    public String createToken(BizUser bizUser) {
         var issuedAt = LocalDateTime.now();
         var expiresAt = issuedAt.plus(tokenProperties.getValidTime());
 
@@ -52,7 +52,7 @@ public class TokenService {
 
         return JWT.create()
                 .withAudience("OnixByte Boot Admin")
-                .withSubject(String.valueOf(user.getId()))
+                .withSubject(String.valueOf(bizUser.getId()))
                 .withIssuer(tokenProperties.getIssuer())
                 .withIssuedAt(issuedAtInstant)
                 .withNotBefore(issuedAtInstant)

@@ -10,7 +10,10 @@ import com.onixbyte.onixboot.web.request.UsernamePasswordLoginRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Authentication and authorisation controller.
@@ -68,7 +71,6 @@ public class AuthController {
         }
 
         var user = authentication.getDetails();
-
         var token = tokenService.createToken(authentication.getDetails());
 
         return ResponseEntity

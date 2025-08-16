@@ -1,6 +1,6 @@
 package com.onixbyte.onixboot.security.data;
 
-import com.onixbyte.onixboot.entities.User;
+import com.onixbyte.onixboot.dataset.biz.BizUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -22,7 +22,7 @@ public class MsalAuthentication implements Authentication {
     /**
      * Users who receive identity tokens issued by Microsoft.
      */
-    private User user;
+    private BizUser user;
 
     /**
      * A flag indicating whether the user has completed identity authentication.
@@ -31,7 +31,7 @@ public class MsalAuthentication implements Authentication {
 
     public MsalAuthentication(
             String msalToken,
-            User user,
+            BizUser user,
             boolean authenticated
     ) {
         this.msalToken = msalToken;
@@ -50,15 +50,15 @@ public class MsalAuthentication implements Authentication {
     }
 
     @Override
-    public User getDetails() {
+    public BizUser getDetails() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(BizUser user) {
         this.user = user;
     }
 
-    public User getUser() {
+    public BizUser getUser() {
         return user;
     }
 

@@ -1,14 +1,22 @@
 package com.onixbyte.onixboot.service;
 
 import com.onixbyte.identitygenerator.IdentityGenerator;
-import com.onixbyte.onixboot.exception.BizException;
-import com.onixbyte.onixboot.manager.PasswordProcessorManager;
+import com.onixbyte.onixboot.dataset.biz.BizUser;
 import com.onixbyte.onixboot.entities.User;
+import com.onixbyte.onixboot.entities.UserIdentity;
+import com.onixbyte.onixboot.enums.IdentityProvider;
+import com.onixbyte.onixboot.mapper.UserIdentityMapper;
+import com.onixbyte.onixboot.mapper.UserMapper;
+import com.onixbyte.onixboot.repository.UserIdentityRepository;
 import com.onixbyte.onixboot.repository.UserRepository;
 import com.onixbyte.onixboot.validation.group.OnCreate;
-import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+
+import java.util.List;
+import java.util.Objects;
 
 /**
  * User service.
@@ -20,26 +28,30 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final IdentityGenerator<Long> userIdentityGenerator;
-    private final PasswordProcessorManager passwordProcessorManager;
+    private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
+    private final UserIdentityMapper userIdentityMapper;
+    private final UserIdentityRepository userIdentityRepository;
 
     public UserService(
             UserRepository userRepository,
             IdentityGenerator<Long> userIdentityGenerator,
-            PasswordProcessorManager passwordProcessorManager
-    ) {
+            PasswordEncoder passwordEncoder, UserMapper userMapper, UserIdentityMapper userIdentityMapper, UserIdentityRepository userIdentityRepository) {
         this.userRepository = userRepository;
         this.userIdentityGenerator = userIdentityGenerator;
-        this.passwordProcessorManager = passwordProcessorManager;
+        this.passwordEncoder = passwordEncoder;
+        this.userMapper = userMapper;
+        this.userIdentityMapper = userIdentityMapper;
+        this.userIdentityRepository = userIdentityRepository;
     }
 
     /**
-     * Use Microsoft Entra ID's Open ID to look up users in the database.
+     * Get user by third party account.
      *
-     * @param msalOpenId Microsoft Entra ID's Open ID
      * @return found user
      */
-    public User getUserByMsalOpenId(String msalOpenId) {
-        return userRepository.selectByMsalOpenId(msalOpenId);
+    public BizUser getUserByIdentity(IdentityProvider provider, String externalId) {
+        return userRepository.selectBizUserByIdentity(provider, externalId);
     }
 
     /**
@@ -48,36 +60,23 @@ public class UserService {
      * @param user the user who wants to register to our service
      * @return the user's information after registration
      */
-    public User register(@Validated(OnCreate.class) User user) {
-        // Check whether the user can register.
-        if (!canRegister(user)) {
-            throw new BizException(
-                    HttpStatus.CONFLICT,
-                    "Username, name, Microsoft Entra ID, Wecom Open ID or DingTalk Open ID is registered."
-            );
+    @Transactional(rollbackFor = Throwable.class)
+    public BizUser register(@Validated(OnCreate.class) User user, UserIdentity userIdentity) {
+        if (Objects.isNull(userIdentity)) {
+            var encodedPassword = passwordEncoder.encode(user.getPassword());
+            user.setPassword(encodedPassword);
         }
 
-        // Process password.
-        passwordProcessorManager.process(user);
-
         // Set user ID.
-        var id = userIdentityGenerator.nextId();
-        user.setId(id);
+        var userId = userIdentityGenerator.nextId();
+        user.setId(userId);
+        userIdentity.setUserId(userId);
 
         // Execute insert.
         userRepository.insert(user);
+        userIdentityRepository.insert(userIdentity);
 
-        return user;
-    }
-
-    /**
-     * Check the database for duplicate usernames and Microsoft Entra ID Open IDs.
-     *
-     * @param user the user who wants to register
-     * @return {@code true} indicates this user can register, otherwise {@code false}
-     */
-    public boolean canRegister(User user) {
-        return userRepository.canRegister(user);
+        return userMapper.ofBusiness(user, List.of(userIdentity));
     }
 
     /**
@@ -86,7 +85,11 @@ public class UserService {
      * @param username username
      * @return found user
      */
-    public User getUserByUsername(String username) {
+    public BizUser getUserByUsername(String username) {
         return userRepository.selectByUsername(username);
+    }
+
+    public String getPasswordByUsername(String username) {
+        return userRepository.selectPasswordByUsername(username);
     }
 }

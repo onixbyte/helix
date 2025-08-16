@@ -1,7 +1,8 @@
 package com.onixbyte.onixboot.repository;
 
+import com.onixbyte.onixboot.dataset.biz.BizUser;
 import com.onixbyte.onixboot.entities.User;
-import org.apache.ibatis.annotations.Insert;
+import com.onixbyte.onixboot.enums.IdentityProvider;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
@@ -14,58 +15,31 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository {
 
-    @Select("""
-            SELECT *
-            FROM users
-            WHERE username = #{username}
-            """)
-    User selectByUsername(@Param("username") String username);
+    BizUser selectByUsername(@Param("username") String username);
 
     /**
-     * Find user by Microsoft Entra ID open ID.
+     * Find user by third party account.
      *
-     * @param msalOpenId Microsoft Entra ID open ID
+     * @param provider   account provider
+     * @param externalId account ID provided by the provider
      * @return found user
      */
-    @Select("""
-            SELECT id, username, name, msal_open_id, ding_talk_open_id, wecom_open_id
-            FROM users
-            WHERE msal_open_id = #{msalOpenId}
-            """)
-    User selectByMsalOpenId(@Param("msalOpenId") String msalOpenId);
-
-    /**
-     * Check whether user can register.
-     *
-     * @param user user to be registered
-     * @return {@code true} if no duplicated username, name, Microsoft Entra ID open ID, DingTalk
-     * open ID and Wecom open ID
-     */
-    @Select("""
-            <script>
-            SELECT COUNT(*) = 0
-            FROM users
-            <where>
-                 username = #{user.username}
-                 OR name = #{user.name}
-                 OR email = #{user.email}
-                 <if test="user.msalOpenId != null and user.msalOpenId != ''">
-                     OR msal_open_id = #{user.msalOpenId}
-                 </if>
-            </where>
-            </script>
-            """)
-    boolean canRegister(@Param("user") User user);
+    BizUser selectBizUserByIdentity(
+            @Param("provider") IdentityProvider provider,
+            @Param("externalId") String externalId
+    );
 
     /**
      * Insert user data into database.
      *
      * @param user user to be added to database
      */
-    @Insert("""
-            INSERT INTO users
-            VALUES (#{user.id}, #{user.username}, #{user.name}, #{user.password},
-                    #{user.msalOpenId}, #{user.dingTalkOpenId}, #{user.wecomOpenId})
-            """)
     void insert(@Param("user") User user);
+
+    @Select("""
+            SELECT password
+            FROM users
+            WHERE username = #{username}
+            """)
+    String selectPasswordByUsername(String username);
 }

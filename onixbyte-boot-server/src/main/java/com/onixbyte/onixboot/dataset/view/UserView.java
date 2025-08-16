@@ -1,29 +1,34 @@
 package com.onixbyte.onixboot.dataset.view;
 
-import com.onixbyte.onixboot.entities.User;
+import com.onixbyte.onixboot.dataset.biz.BizUser;
+import com.onixbyte.onixboot.dataset.biz.BizUserIdentity;
+import com.onixbyte.onixboot.enums.UserStatus;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * A response sent to the frontend.
  *
- * @param id             user's ID
- * @param username       username
- * @param name           user's real name
- * @param msalOpenId     Microsoft Entra ID open ID
- * @param dingTalkOpenId DingTalk open ID
  * @author zihluwang
  */
 public record UserView(
         String id,
         String username,
-        String name,
-        String msalOpenId,
-        String dingTalkOpenId
+        String fullName,
+        String email,
+        String countryCode,
+        String phoneNumber,
+        String avatarUrl,
+        UserStatus status,
+        Long departmentId,
+        Long positionId,
+        List<BizUserIdentity> userIdentities
 ) implements Serializable {
 
-    public static UserView of(User user) {
-        // todo update view object
-        throw new RuntimeException("This feature is not implemented yet.");
+    public static UserView of(BizUser user) {
+        return new UserView(String.valueOf(user.getId()), user.getUsername(), user.getFullName(),
+                user.getEmail(), user.getCountryCode(), user.getPhoneNumber(), user.getAvatarUrl(),
+                user.getStatus(), user.getDepartmentId(), user.getPositionId(), user.getUserIdentities());
     }
 }

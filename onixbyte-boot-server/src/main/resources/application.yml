@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: onixbyte-boot-server
+  cache:
+    type: redis
+    redis:
+      time-to-live: PT1H30M
+
+mybatis:
+  mapper-locations: classpath:mappers/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl

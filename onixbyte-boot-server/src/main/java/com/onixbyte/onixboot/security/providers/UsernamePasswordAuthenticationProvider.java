@@ -32,18 +32,18 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
             throw new IllegalStateException("Cannot perform login with username and password.");
         }
 
-        var user = userService.getUserByUsername(_authentication.getPrincipal());
-        if (Objects.isNull(user) || !passwordEncoder.matches(_authentication.getCredentials(), user.getPassword())) {
+        var password = userService.getPasswordByUsername(_authentication.getPrincipal());
+        if (Objects.isNull(password) || !passwordEncoder.matches(_authentication.getCredentials(), password)) {
             throw new BizException(HttpStatus.UNAUTHORIZED, "Username or password is incorrect.");
         }
+        var user = userService.getUserByUsername(_authentication.getPrincipal());
 
         // Erase user credential
-        user.setPassword(null);
         _authentication.eraseCredentials();
 
         // Update authentication information
         _authentication.setAuthenticated(true);
-        _authentication.setUser(user);
+        _authentication.setBizUser(user);
         return _authentication;
     }
 

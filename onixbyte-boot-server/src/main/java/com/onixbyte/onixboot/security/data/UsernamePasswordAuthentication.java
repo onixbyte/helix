@@ -1,6 +1,6 @@
 package com.onixbyte.onixboot.security.data;
 
-import com.onixbyte.onixboot.entities.User;
+import com.onixbyte.onixboot.dataset.biz.BizUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,14 +15,14 @@ public class UsernamePasswordAuthentication implements Authentication, Credentia
 
     private String password;
 
-    private User user;
+    private BizUser user;
 
     private boolean authenticated;
 
     public UsernamePasswordAuthentication(
             String username,
             String password,
-            User user,
+            BizUser user,
             boolean authenticated
     ) {
         this.username = username;
@@ -42,7 +42,7 @@ public class UsernamePasswordAuthentication implements Authentication, Credentia
     }
 
     @Override
-    public User getDetails() {
+    public BizUser getDetails() {
         return user;
     }
 
@@ -79,11 +79,7 @@ public class UsernamePasswordAuthentication implements Authentication, Credentia
         this.username = username;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
+    public void setBizUser(BizUser user) {
         this.user = user;
     }
 
@@ -91,7 +87,7 @@ public class UsernamePasswordAuthentication implements Authentication, Credentia
         return new UsernamePasswordAuthentication(username, password, null, false);
     }
 
-    public static UsernamePasswordAuthentication authenticated(User user) {
+    public static UsernamePasswordAuthentication authenticated(BizUser user) {
         if (Objects.isNull(user)) {
             throw new IllegalStateException("Authenticated user cannot be null.");
         }

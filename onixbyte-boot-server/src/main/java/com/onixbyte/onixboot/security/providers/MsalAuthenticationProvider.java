@@ -4,8 +4,11 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.onixbyte.onixboot.cache.MsalCache;
-import com.onixbyte.onixboot.exception.BizException;
 import com.onixbyte.onixboot.entities.User;
+import com.onixbyte.onixboot.entities.UserIdentity;
+import com.onixbyte.onixboot.enums.IdentityProvider;
+import com.onixbyte.onixboot.enums.UserStatus;
+import com.onixbyte.onixboot.exception.BizException;
 import com.onixbyte.onixboot.properties.MsalProperties;
 import com.onixbyte.onixboot.security.data.MsalAuthentication;
 import com.onixbyte.onixboot.service.UserService;
@@ -69,7 +72,7 @@ public class MsalAuthenticationProvider implements AuthenticationProvider {
         // Construct token verifier.
         var tenantId = msalProperties.getTenantId();
         var verifier = JWT.require(algorithm)
-                .withIssuer("https://login.microsoft.com/" + tenantId + "/v2.0")
+                .withIssuer("https://login.microsoftonline.com/" + tenantId + "/v2.0")
                 .withAudience(msalProperties.getClientId())
                 .build();
 
@@ -79,23 +82,28 @@ public class MsalAuthenticationProvider implements AuthenticationProvider {
 
             // Get Microsoft Entra ID Open ID from token.
             var msalOpenId = decodedToken.getClaim("oid").asString();
-            var user = userService.getUserByMsalOpenId(msalOpenId);
+            var bizUser = userService.getUserByIdentity(IdentityProvider.MICROSOFT_ENTRA_ID, msalOpenId);
 
-            if (Objects.isNull(user)) {
+            if (Objects.isNull(bizUser)) {
                 // If user does not exist, register automatically.
                 var name = decodedToken.getClaim("name").asString();
-                // var email = decodedToken.getClaim("preferred_username").asString();
+                var email = decodedToken.getClaim("preferred_username").asString();
 
-                user = new User();
+                var user = new User();
                 user.setUsername(name);
                 user.setFullName(name);
-                // user.setMsalOpenId(msalOpenId);
-                // todo add user identities
-                user = userService.register(user);
+                user.setEmail(email);
+                user.setStatus(UserStatus.ACTIVE);
+
+                var userIdentity = new UserIdentity();
+                userIdentity.setProvider(IdentityProvider.MICROSOFT_ENTRA_ID);
+                userIdentity.setExternalId(msalOpenId);
+
+                bizUser = userService.register(user, userIdentity);
             }
 
             msalAuthentication.setAuthenticated(true);
-            msalAuthentication.setUser(user);
+            msalAuthentication.setUser(bizUser);
 
             return msalAuthentication;
         } catch (JWTVerificationException e) {

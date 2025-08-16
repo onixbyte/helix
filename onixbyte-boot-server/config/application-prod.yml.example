@@ -1,0 +1,23 @@
+spring:
+  data:
+    redis:
+      host: ${REDIS_HOST:-localhost}
+      port: ${REDIS_PORT:-6379}
+      database: ${REDIS_DATABASE_INDEX:-0}
+      # password: '#{REDIS_PASSWORD:-}'
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${PG_HOST:-localhost}:${PG_PORT:-5432}/${PG_DATABASE:-onixbyte_boot}
+    username: user
+    password: 1q2w3e!Q@W#E
+
+app:
+  authentication:
+    msal:
+      client-id: ${MSAL_CLIENT_ID}
+      tenant-id: ${MSAL_TENANT_ID}
+  jwt:
+    issuer: ${TOKEN_ISSUER}
+    secret: ${TOKEN_SECRET}
+    valid-time: PT2H
