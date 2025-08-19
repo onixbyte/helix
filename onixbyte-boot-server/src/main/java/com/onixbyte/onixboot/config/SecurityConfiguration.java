@@ -1,11 +1,13 @@
 package com.onixbyte.onixboot.config;
 
 import com.auth0.jwt.algorithms.Algorithm;
+import com.onixbyte.onixboot.properties.CorsProperties;
 import com.onixbyte.onixboot.properties.TokenProperties;
 import com.onixbyte.onixboot.security.providers.MsalAuthenticationProvider;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,7 +17,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Spring security configuration.
@@ -24,8 +31,34 @@ import org.springframework.web.cors.CorsConfigurationSource;
  */
 @Configuration
 @EnableWebSecurity
-@EnableConfigurationProperties({TokenProperties.class})
+@EnableConfigurationProperties({TokenProperties.class, CorsProperties.class})
 public class SecurityConfiguration {
+
+    /**
+     * CORS configuration source.
+     *
+     * @param properties CORS configuration properties
+     * @return configured CORS configuration source
+     */
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource(
+            CorsProperties properties
+    ) {
+        var corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowCredentials(properties.getAllowCredentials());
+        corsConfiguration.setAllowedOrigins(List.of(properties.getAllowedOrigins()));
+        corsConfiguration.setAllowedHeaders(List.of(properties.getAllowedHeaders()));
+        corsConfiguration.setAllowedMethods(Stream.of(properties.getAllowedMethods())
+                .map(HttpMethod::name)
+                .toList());
+        corsConfiguration.setMaxAge(properties.getMaxAge());
+        corsConfiguration.setAllowPrivateNetwork(properties.getAllowPrivateNetwork());
+        corsConfiguration.setExposedHeaders(List.of(properties.getExposedHeaders()));
+
+        var corsConfigurationSource = new UrlBasedCorsConfigurationSource();
+        corsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+        return corsConfigurationSource;
+    }
 
     /**
      * Spring security filter chain.
@@ -68,7 +101,7 @@ public class SecurityConfiguration {
     /**
      * Build an authentication manager with custom authentication providers.
      *
-     * @param msalAuthenticationProvider  authentication provider of Microsoft Entra ID
+     * @param msalAuthenticationProvider authentication provider of Microsoft Entra ID
      * @return an {@link ProviderManager} instance with given authentication providers
      */
     @Bean
