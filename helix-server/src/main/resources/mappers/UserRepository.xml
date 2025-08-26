@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onixbyte.helix.repository.UserRepository">
+    <resultMap id="BizUserWithIdentitiesResultMap" type="com.onixbyte.helix.domain.biz.BizUser">
+        <id property="id" column="user_id"/>
+        <result property="username" column="username"/>
+        <result property="fullName" column="full_name"/>
+        <result property="email" column="email"/>
+        <result property="countryCode" column="country_code"/>
+        <result property="phoneNumber" column="phone_number"/>
+        <result property="avatarUrl" column="avatar_url"/>
+        <result property="status" column="user_status"
+                typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+        <result property="departmentId" column="department_id"/>
+        <result property="positionId" column="position_id"/>
+        <collection property="userIdentities"
+                    javaType="java.util.ArrayList"
+                    ofType="com.onixbyte.helix.domain.biz.BizUserIdentity"
+        >
+            <result property="userId" column="identity_user_id"/>
+            <result property="provider" column="identity_provider"
+                    typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+            <result property="externalId" column="identity_external_id"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectBizUserByIdentity" resultMap="BizUserWithIdentitiesResultMap">
+        SELECT u.id           AS user_id,
+               u.username,
+               u.full_name,
+               u.email,
+               u.country_code,
+               u.phone_number,
+               u.avatar_url,
+               u.status       AS user_status,
+               u.department_id,
+               u.position_id,
+               ui.user_id     AS identity_user_id,
+               ui.provider    AS identity_provider,
+               ui.external_id AS identity_external_id
+        FROM users u
+                 LEFT JOIN user_identities ui ON u.id = ui.user_id
+        WHERE u.id = (SELECT user_id
+                      FROM user_identities
+                      WHERE provider = #{provider}
+            ::IdentityProvider
+          AND external_id = #{externalId})
+    </select>
+
+    <select id="selectByUsername" resultMap="BizUserWithIdentitiesResultMap">
+        SELECT u.id           AS user_id,
+               u.username,
+               u.full_name,
+               u.email,
+               u.country_code,
+               u.phone_number,
+               u.avatar_url,
+               u.status       AS user_status,
+               u.department_id,
+               u.position_id,
+               ui.user_id     AS identity_user_id,
+               ui.provider    AS identity_provider,
+               ui.external_id AS identity_external_id
+        FROM users u
+                 LEFT JOIN user_identities ui ON u.id = ui.user_id
+        WHERE u.username = #{username};
+    </select>
+
+    <insert id="insert">
+        INSERT INTO users
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            username,
+            <if test="user.password != null and user.password != ''">password,</if>
+            full_name,
+            <if test="user.email != null and user.email != ''">email,</if>
+            <if test="user.countryCode != null and user.countryCode != ''">country_code,</if>
+            <if test="user.phoneNumber != null and user.phoneNumber != ''">phone_number,</if>
+            <if test="user.avatarUrl != null and user.avatarUrl != ''">avatar_url,</if>
+            <!-- For numeric types, only a null check is necessary and correct. -->
+            <if test="user.departmentId != null">department_id,</if>
+            <if test="user.positionId != null">position_id,</if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            #{user.id},
+            #{user.username},
+            <if test="user.password != null and user.password != ''">#{user.password},</if>
+            #{user.fullName},
+            <if test="user.email != null and user.email != ''">#{user.email},</if>
+            <if test="user.countryCode != null and user.countryCode != ''">#{user.countryCode},</if>
+            <if test="user.phoneNumber != null and user.phoneNumber != ''">#{user.phoneNumber},</if>
+            <if test="user.avatarUrl != null and user.avatarUrl != ''">#{user.avatarUrl},</if>
+            <if test="user.departmentId != null">#{user.departmentId},</if>
+            <if test="user.positionId != null">#{user.positionId},</if>
+        </trim>
+    </insert>
+
+    <resultMap id="BizUserResultMap" type="com.onixbyte.helix.domain.biz.BizUser">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="fullName" column="full_name"/>
+        <result property="email" column="email"/>
+        <result property="countryCode" column="country_code"/>
+        <result property="phoneNumber" column="phone_number"/>
+        <result property="avatarUrl" column="avatar_url"/>
+        <result property="status" column="status" javaType="com.onixbyte.helix.enums.UserStatus"/>
+        <result property="departmentId" column="department_id"/>
+        <result property="positionId" column="position_id"/>
+
+        <collection property="userIdentities"
+                    ofType="com.onixbyte.helix.domain.biz.BizUserIdentity">
+            <result property="userId" column="id"/>
+            <result property="provider" column="provider"
+                    javaType="com.onixbyte.helix.enums.IdentityProvider"/>
+            <result property="externalId" column="external_id"/>
+        </collection>
+
+        <collection property="roles" ofType="com.onixbyte.helix.domain.biz.BizRole">
+            <id property="id" column="role_id"/>
+            <result property="name" column="role_name"/>
+            <result property="code" column="role_code"/>
+            <result property="description" column="role_description"/>
+            <result property="status" column="role_status"
+                    javaType="com.onixbyte.helix.enums.NormalStatus"/>
+        </collection>
+
+        <collection property="authorities" ofType="com.onixbyte.helix.domain.biz.BizAuthority">
+            <id property="id" column="permission_id"/>
+            <result property="code" column="permission_code"/>
+            <result property="name" column="permission_name"/>
+            <result property="description" column="permission_description"/>
+            <result property="status" column="permission_status"
+                    javaType="com.onixbyte.helix.enums.NormalStatus"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectBizUserById" resultMap="BizUserResultMap">
+        SELECT u.id,
+               u.username,
+               u.full_name,
+               u.email,
+               u.country_code,
+               u.phone_number,
+               u.avatar_url,
+               u.status,
+               u.department_id,
+               u.position_id,
+
+               ui.provider,
+               ui.external_id,
+
+               r.id          AS role_id,
+               r.name        AS role_name,
+               r.code        AS role_code,
+               r.description AS role_description,
+               r.status      AS role_status,
+
+               p.id          AS permission_id,
+               p.code        AS permission_code,
+               p.name        AS permission_name,
+               p.description AS permission_description,
+               p.status      AS permission_status
+
+        FROM users u
+                 LEFT JOIN user_identities ui ON u.id = ui.user_id
+                 LEFT JOIN role_permissions rp ON rp.role_id IN (SELECT r2.id
+                                                                 FROM roles r2
+                                                                          JOIN role_permissions rp2 ON r2.id = rp2.role_id
+                                                                 WHERE r2.status = 'ACTIVE'::NormalStatus)
+            LEFT JOIN roles r
+        ON r.id = rp.role_id
+            LEFT JOIN permissions p ON p.id = rp.permission_id
+        WHERE u.id = #{id}
+    </select>
+
+</mapper>
