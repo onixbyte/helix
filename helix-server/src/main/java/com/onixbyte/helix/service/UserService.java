@@ -12,6 +12,7 @@ import com.onixbyte.helix.mapper.UserMapper;
 import com.onixbyte.helix.validation.group.OnCreate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -74,6 +75,7 @@ public class UserService {
      * @param user the user who wants to register to our service
      * @return the user's information after registration
      */
+    @CachePut(cacheNames = "user", key = "#user.username")
     @Transactional(rollbackFor = Throwable.class)
     public BizUser registerWithUsernameAndPassword(@Validated(OnCreate.class) User user) {
         // Set user ID.
@@ -142,6 +144,7 @@ public class UserService {
      * @param username username
      * @return found user
      */
+    @Cacheable(cacheNames = "user", key = "#username", unless = "#result == null")
     public BizUser getUserByUsername(String username) {
         return userRepository.queryByUsername(username);
     }
