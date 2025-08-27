@@ -13,6 +13,10 @@ public class Role {
 
     private String code;
 
+    private Integer sort;
+
+    private Boolean defaultValue;
+
     private String description;
 
     private NormalStatus status;
@@ -24,10 +28,12 @@ public class Role {
     public Role() {
     }
 
-    public Role(Long id, String name, String code, String description, NormalStatus status, Instant createdAt, Instant updatedAt) {
+    public Role(Long id, String name, String code, Integer sort, Boolean defaultValue, String description, NormalStatus status, Instant createdAt, Instant updatedAt) {
         this.id = id;
         this.name = name;
         this.code = code;
+        this.sort = sort;
+        this.defaultValue = defaultValue;
         this.description = description;
         this.status = status;
         this.createdAt = createdAt;
@@ -56,6 +62,22 @@ public class Role {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
+
+    public Boolean getDefaultValue() {
+        return defaultValue;
+    }
+
+    public void setDefaultValue(Boolean defaultValue) {
+        this.defaultValue = defaultValue;
     }
 
     public String getDescription() {
@@ -94,17 +116,26 @@ public class Role {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Role role = (Role) o;
-        return Objects.equals(id, role.id) &&
-                Objects.equals(name, role.name) &&
-                Objects.equals(code, role.code) &&
-                Objects.equals(description, role.description) &&
-                status == role.status &&
-                Objects.equals(createdAt, role.createdAt) &&
-                Objects.equals(updatedAt, role.updatedAt);
+        return Objects.equals(id, role.id) && Objects.equals(name, role.name) && Objects.equals(code, role.code) && Objects.equals(sort, role.sort) && Objects.equals(defaultValue, role.defaultValue) && Objects.equals(description, role.description) && status == role.status && Objects.equals(createdAt, role.createdAt) && Objects.equals(updatedAt, role.updatedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, code, description, status, createdAt, updatedAt);
+        return Objects.hash(id, name, code, sort, defaultValue, description, status, createdAt, updatedAt);
+    }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", code='" + code + '\'' +
+                ", sort=" + sort +
+                ", defaultValue=" + defaultValue +
+                ", description='" + description + '\'' +
+                ", status=" + status +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
     }
 }

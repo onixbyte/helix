@@ -103,19 +103,21 @@ CREATE TABLE user_identities
 DROP TABLE IF EXISTS roles CASCADE;
 CREATE TABLE roles
 (
-    id          BIGSERIAL PRIMARY KEY,
-    name        VARCHAR(128) NOT NULL UNIQUE,
-    code        VARCHAR(64)  NOT NULL UNIQUE,
-    description TEXT,
-    status      NormalStatus NOT NULL DEFAULT 'ACTIVE',
-    created_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+    id            BIGSERIAL PRIMARY KEY,
+    name          VARCHAR(128) NOT NULL UNIQUE,
+    code          VARCHAR(64)  NOT NULL UNIQUE,
+    sort          INTEGER      NOT NULL,
+    default_value BOOLEAN      NOT NULL DEFAULT FALSE,
+    description   TEXT,
+    status        NormalStatus NOT NULL DEFAULT 'ACTIVE',
+    created_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO roles (name, code, description, status, created_at, updated_at)
-VALUES ('Admin', 'admin', 'Administrator of this system.', 'ACTIVE'::NormalStatus,
+INSERT INTO roles (name, code, sort, default_value, description, status, created_at, updated_at)
+VALUES ('Admin', 'admin', 1, FALSE, 'Administrator of this system.', 'ACTIVE'::NormalStatus,
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       ('Normal User', 'user', 'Normal user of this system.', 'ACTIVE'::NormalStatus,
+       ('Normal User', 'user', 2, TRUE, 'Normal user of this system.', 'ACTIVE'::NormalStatus,
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 DROP TABLE IF EXISTS user_roles CASCADE;

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onixbyte.helix.repository.AuthorityRepository">
+    <select id="queryAuthorities"
+            parameterType="Long"
+            resultType="com.onixbyte.helix.domain.entity.Authority">
+        SELECT a.id,
+               a.code,
+               a.name,
+               a.description,
+               a.status,
+               a.created_at,
+               a.updated_at
+        FROM authorities a
+                 INNER JOIN role_authorities ra ON a.id = ra.authority_id
+        WHERE ra.role_id = #{roleId}
+    </select>
+</mapper>
