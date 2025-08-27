@@ -42,6 +42,23 @@ CREATE TABLE positions
     updated_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+INSERT INTO positions (id, name, code, description, sort_order, status)
+VALUES (1, 'HR Manager', 'HR-MGR',
+        'Responsible for overseeing recruitment, employee relations, and staff wellbeing.', 1,
+        'ACTIVE'),
+       (2, 'Finance Officer', 'FIN-OFC',
+        'Handles accounts, prepares financial statements, and ensures compliance with regulations.',
+        2, 'ACTIVE'),
+       (3, 'IT Support Specialist', 'IT-SPT',
+        'Provides technical assistance, manages helpdesk queries, and maintains computer systems.',
+        3, 'ACTIVE'),
+       (4, 'Software Engineer', 'SWE-ENG',
+        'Develops and maintains in-house applications, ensuring code quality and system reliability.',
+        4, 'ACTIVE'),
+       (5, 'Operations Coordinator', 'OPS-CRD',
+        'Assists with day-to-day logistics, procurement, and office organisation.', 5, 'INACTIVE');
+
+
 DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE users
 (
