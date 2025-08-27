@@ -19,6 +19,16 @@ CREATE TABLE departments
     updated_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+INSERT INTO departments (id, name, parent_id, tree_path, sort_order, status)
+VALUES (1, 'Company HQ', NULL, '/1/', 1, 'ACTIVE'::NormalStatus),
+       (2, 'Human Resources', 1, '/1/2/', 1, 'ACTIVE'::NormalStatus),
+       (3, 'Finance', 1, '/1/3/', 2, 'ACTIVE'::NormalStatus),
+       (4, 'Technology', 1, '/1/4/', 3, 'ACTIVE'::NormalStatus),
+       (5, 'IT Support', 4, '/1/4/5/', 1, 'ACTIVE'::NormalStatus),
+       (6, 'Software Development', 4, '/1/4/6/', 2, 'ACTIVE'::NormalStatus),
+       (7, 'Operations', 1, '/1/7/', 4, 'INACTIVE'::NormalStatus);
+
+
 DROP TABLE IF EXISTS positions CASCADE;
 CREATE TABLE positions
 (
