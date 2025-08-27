@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository {
 
-    BizUser selectByUsername(@Param("username") String username);
+    BizUser queryByUsername(@Param("username") String username);
 
     /**
      * Find user by third party account.
@@ -24,7 +24,7 @@ public interface UserRepository {
      * @param externalId account ID provided by the provider
      * @return found user
      */
-    BizUser selectBizUserByIdentity(
+    BizUser queryBizUserByIdentity(
             @Param("provider") IdentityProvider provider,
             @Param("externalId") String externalId
     );
@@ -34,14 +34,9 @@ public interface UserRepository {
      *
      * @param user user to be added to database
      */
-    void insert(@Param("user") User user);
+    int insertUser(@Param("user") User user);
 
-    @Select("""
-            SELECT password
-            FROM users
-            WHERE username = #{username}
-            """)
-    String selectPasswordByUsername(String username);
+    BizUser queryBizUserById(@Param("id") Long id);
 
-    BizUser selectBizUserById(@Param("id") Long id);
+    String queryPasswordByUsername(@Param("username") String username);
 }

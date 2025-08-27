@@ -6,6 +6,7 @@ import com.onixbyte.helix.domain.entity.UserIdentity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.Mappings;
 
 import java.util.List;
 
@@ -19,9 +20,11 @@ public interface UserMapper {
      * Maps a User entity and a list of UserIdentity entities to a single BizUser business model.
      *
      * @param user           The source User entity. Its fields are mapped directly to BizUser.
-     * @param userIdentities The list of source UserIdentity entities.
      * @return A fully populated BizUser object.
      */
-    @Mapping(target = "userIdentities", source = "userIdentities")
-    BizUser ofBusiness(User user, List<UserIdentity> userIdentities);
+    @Mappings({
+            @Mapping(target = "authorities", ignore = true),
+            @Mapping(target = "roles", ignore = true)
+    })
+    BizUser ofBusiness(User user);
 }

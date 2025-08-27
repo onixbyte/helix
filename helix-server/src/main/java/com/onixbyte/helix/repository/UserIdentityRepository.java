@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserIdentityRepository {
 
-    int insert(@Param("userIdentity") UserIdentity userIdentity);
+    int insertUserIdentity(@Param("userIdentity") UserIdentity userIdentity);
 }

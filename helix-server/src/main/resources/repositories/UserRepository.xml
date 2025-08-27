@@ -2,72 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.onixbyte.helix.repository.UserRepository">
-    <resultMap id="BizUserWithIdentitiesResultMap" type="com.onixbyte.helix.domain.biz.BizUser">
-        <id property="id" column="user_id"/>
-        <result property="username" column="username"/>
-        <result property="fullName" column="full_name"/>
-        <result property="email" column="email"/>
-        <result property="countryCode" column="country_code"/>
-        <result property="phoneNumber" column="phone_number"/>
-        <result property="avatarUrl" column="avatar_url"/>
-        <result property="status" column="user_status"
-                typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
-        <result property="departmentId" column="department_id"/>
-        <result property="positionId" column="position_id"/>
-        <collection property="userIdentities"
-                    javaType="java.util.ArrayList"
-                    ofType="com.onixbyte.helix.domain.biz.BizUserIdentity"
-        >
-            <result property="userId" column="identity_user_id"/>
-            <result property="provider" column="identity_provider"
-                    typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
-            <result property="externalId" column="identity_external_id"/>
-        </collection>
-    </resultMap>
-
-    <select id="selectBizUserByIdentity" resultMap="BizUserWithIdentitiesResultMap">
-        SELECT u.id           AS user_id,
-               u.username,
-               u.full_name,
-               u.email,
-               u.country_code,
-               u.phone_number,
-               u.avatar_url,
-               u.status       AS user_status,
-               u.department_id,
-               u.position_id,
-               ui.user_id     AS identity_user_id,
-               ui.provider    AS identity_provider,
-               ui.external_id AS identity_external_id
-        FROM users u
-                 LEFT JOIN user_identities ui ON u.id = ui.user_id
-        WHERE u.id = (SELECT user_id
-                      FROM user_identities
-                      WHERE provider = #{provider}
-            ::IdentityProvider
-          AND external_id = #{externalId})
-    </select>
-
-    <select id="selectByUsername" resultMap="BizUserWithIdentitiesResultMap">
-        SELECT u.id           AS user_id,
-               u.username,
-               u.full_name,
-               u.email,
-               u.country_code,
-               u.phone_number,
-               u.avatar_url,
-               u.status       AS user_status,
-               u.department_id,
-               u.position_id,
-               ui.user_id     AS identity_user_id,
-               ui.provider    AS identity_provider,
-               ui.external_id AS identity_external_id
-        FROM users u
-                 LEFT JOIN user_identities ui ON u.id = ui.user_id
-        WHERE u.username = #{username};
-    </select>
-
-    <insert id="insert">
+    <insert id="insertUser" parameterType="com.onixbyte.helix.domain.entity.User">
         INSERT INTO users
         <trim prefix="(" suffix=")" suffixOverrides=",">
             id,
@@ -126,16 +61,18 @@
         </collection>
 
         <collection property="authorities" ofType="com.onixbyte.helix.domain.biz.BizAuthority">
-            <id property="id" column="permission_id"/>
-            <result property="code" column="permission_code"/>
-            <result property="name" column="permission_name"/>
-            <result property="description" column="permission_description"/>
-            <result property="status" column="permission_status"
+            <id property="id" column="authority_id"/>
+            <result property="code" column="authority_code"/>
+            <result property="name" column="authority_name"/>
+            <result property="description" column="authority_description"/>
+            <result property="status" column="authority_status"
                     javaType="com.onixbyte.helix.enums.NormalStatus"/>
         </collection>
     </resultMap>
 
-    <select id="selectBizUserById" resultMap="BizUserResultMap">
+    <select id="queryBizUserById"
+            resultMap="BizUserResultMap"
+            parameterType="Long">
         SELECT u.id,
                u.username,
                u.full_name,
@@ -156,22 +93,107 @@
                r.description AS role_description,
                r.status      AS role_status,
 
-               p.id          AS permission_id,
-               p.code        AS permission_code,
-               p.name        AS permission_name,
-               p.description AS permission_description,
-               p.status      AS permission_status
+               p.id          AS authority_id,
+               p.code        AS authority_code,
+               p.name        AS authority_name,
+               p.description AS authority_description,
+               p.status      AS authority_status
 
         FROM users u
                  LEFT JOIN user_identities ui ON u.id = ui.user_id
-                 LEFT JOIN role_permissions rp ON rp.role_id IN (SELECT r2.id
+                 LEFT JOIN role_authorities rp ON rp.role_id IN (SELECT r2.id
                                                                  FROM roles r2
-                                                                          JOIN role_permissions rp2 ON r2.id = rp2.role_id
+                                                                          JOIN role_authorities rp2 ON r2.id = rp2.role_id
+                                                                 WHERE r2.status = 'ACTIVE'::NormalStatus)
+            LEFT JOIN roles r ON r.id = rp.role_id
+            LEFT JOIN authorities p ON p.id = rp.authority_id
+        WHERE u.id = #{id}
+    </select>
+
+    <select id="queryBizUserByIdentity"
+            resultMap="BizUserResultMap">
+        SELECT u.id,
+               u.username,
+               u.full_name,
+               u.email,
+               u.country_code,
+               u.phone_number,
+               u.avatar_url,
+               u.status,
+               u.department_id,
+               u.position_id,
+
+               ui.provider,
+               ui.external_id,
+
+               r.id          AS role_id,
+               r.name        AS role_name,
+               r.code        AS role_code,
+               r.description AS role_description,
+               r.status      AS role_status,
+
+               a.id          AS authority_id,
+               a.code        AS authority_code,
+               a.name        AS authority_name,
+               a.description AS authority_description,
+               a.status      AS authority_status
+
+        FROM users u
+                 LEFT JOIN user_identities ui ON u.id = ui.user_id
+                 LEFT JOIN role_authorities rp ON rp.role_id IN (SELECT r2.id
+                                                                 FROM roles r2
+                                                                          JOIN role_authorities ra2 ON r2.id = ra2.role_id
+                                                                 WHERE r2.status = 'ACTIVE'::NormalStatus)
+                 LEFT JOIN roles r ON r.id = rp.role_id
+                 LEFT JOIN authorities a ON a.id = rp.authority_id
+        WHERE ui.provider = #{provider}::IdentityProvider
+          AND ui.external_id = #{externalId}
+    </select>
+
+    <select id="queryByUsername"
+            resultMap="BizUserResultMap">
+        SELECT u.id,
+               u.username,
+               u.full_name,
+               u.email,
+               u.country_code,
+               u.phone_number,
+               u.avatar_url,
+               u.status,
+               u.department_id,
+               u.position_id,
+
+               ui.provider,
+               ui.external_id,
+
+               r.id          AS role_id,
+               r.name        AS role_name,
+               r.code        AS role_code,
+               r.description AS role_description,
+               r.status      AS role_status,
+
+               a.id          AS authority_id,
+               a.code        AS authority_code,
+               a.name        AS authority_name,
+               a.description AS authority_description,
+               a.status      AS authority_status
+
+        FROM users u
+                 LEFT JOIN user_identities ui ON u.id = ui.user_id
+                 LEFT JOIN role_authorities ra ON ra.role_id IN (SELECT r2.id AS role_id
+                                                                 FROM roles r2
+                                                                          JOIN role_authorities ra2 ON r2.id = ra2.role_id
                                                                  WHERE r2.status = 'ACTIVE'::NormalStatus)
             LEFT JOIN roles r
-        ON r.id = rp.role_id
-            LEFT JOIN permissions p ON p.id = rp.permission_id
-        WHERE u.id = #{id}
+        ON r.id = ra.role_id
+            LEFT JOIN authorities a ON a.id = ra.authority_id
+        WHERE u.username = #{username}
+    </select>
+
+    <select id="queryPasswordByUsername" parameterType="String" resultType="String">
+        SELECT password
+        FROM users
+        WHERE username = #{username}
     </select>
 
 </mapper>

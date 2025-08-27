@@ -51,7 +51,7 @@ public class UserService {
      * @return found user
      */
     public BizUser getUserByIdentity(IdentityProvider provider, String externalId) {
-        return userRepository.selectBizUserByIdentity(provider, externalId);
+        return userRepository.queryBizUserByIdentity(provider, externalId);
     }
 
     /**
@@ -73,10 +73,12 @@ public class UserService {
         userIdentity.setUserId(userId);
 
         // Execute insert.
-        userRepository.insert(user);
-        userIdentityRepository.insert(userIdentity);
+        userRepository.insertUser(user);
+        userIdentityRepository.insertUserIdentity(userIdentity);
 
-        return userMapper.ofBusiness(user, List.of(userIdentity));
+        var bizUser = userMapper.ofBusiness(user);
+        // todo Add user authorities and roles
+        return bizUser;
     }
 
     /**
@@ -86,10 +88,10 @@ public class UserService {
      * @return found user
      */
     public BizUser getUserByUsername(String username) {
-        return userRepository.selectByUsername(username);
+        return userRepository.queryByUsername(username);
     }
 
     public String getPasswordByUsername(String username) {
-        return userRepository.selectPasswordByUsername(username);
+        return userRepository.queryPasswordByUsername(username);
     }
 }

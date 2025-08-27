@@ -162,9 +162,9 @@ VALUES ('system:dashboard:read', 'Read Dashboard', 'Read dashboard.', 'ACTIVE'::
         CURRENT_TIMESTAMP),
        ('system:role:write', 'Write Roles', 'Write roles.', 'ACTIVE'::NormalStatus,
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       ('system:permission:read', 'Read Permissions', 'Read authorities.', 'ACTIVE'::NormalStatus,
+       ('system:authority:read', 'Read Authorities', 'Read authorities.', 'ACTIVE'::NormalStatus,
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       ('system:permission:write', 'Write Permissions', 'Write authorities.',
+       ('system:authority:write', 'Write Authorities', 'Write authorities.',
         'ACTIVE'::NormalStatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
        ('system:audit_log:read', 'Read Audit Logs', 'Read audit logs.', 'ACTIVE'::NormalStatus,
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -177,10 +177,10 @@ VALUES ('system:dashboard:read', 'Read Dashboard', 'Read dashboard.', 'ACTIVE'::
 DROP TABLE IF EXISTS role_authorities CASCADE;
 CREATE TABLE role_authorities
 (
-    role_id       BIGINT    NOT NULL REFERENCES roles (id),
-    permission_id BIGSERIAL NOT NULL REFERENCES authorities (id),
-    created_at    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (role_id, permission_id)
+    role_id      BIGINT    NOT NULL REFERENCES roles (id),
+    authority_id BIGINT    NOT NULL REFERENCES authorities (id),
+    created_at   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (role_id, authority_id)
 );
 
 INSERT INTO role_authorities

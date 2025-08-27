@@ -25,6 +25,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('system:user:read')")
     @GetMapping
     public Page<UserView> listUsers() {
-        return userService.listUsers();
+        // return userService.listUsers();
+        return null;
     }
 }
