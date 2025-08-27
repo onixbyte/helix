@@ -112,6 +112,27 @@ CREATE TABLE roles
     updated_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+INSERT INTO roles (name, code, description, status, created_at, updated_at)
+VALUES ('Admin', 'admin', 'Administrator of this system.', 'ACTIVE'::NormalStatus,
+        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       ('Normal User', 'user', 'Normal user of this system.', 'ACTIVE'::NormalStatus,
+        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+DROP TABLE IF EXISTS user_roles CASCADE;
+CREATE TABLE user_roles
+(
+    user_id    BIGINT                              NOT NULL
+        CONSTRAINT user_roles_users_id_fk REFERENCES users,
+    role_id    BIGINT                              NOT NULL
+        CONSTRAINT user_roles_roles_id_fk REFERENCES roles,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    CONSTRAINT user_roles_pk PRIMARY KEY (user_id, role_id)
+);
+
+INSERT INTO user_roles
+VALUES (1, 1),
+       (2, 2);
+
 DROP TABLE IF EXISTS permissions CASCADE;
 CREATE TABLE permissions
 (
