@@ -7,16 +7,13 @@ import com.onixbyte.helix.repository.*;
 import com.onixbyte.identitygenerator.IdentityGenerator;
 import com.onixbyte.helix.domain.biz.BizUser;
 import com.onixbyte.helix.domain.entity.User;
-import com.onixbyte.helix.domain.entity.UserIdentity;
 import com.onixbyte.helix.enums.IdentityProvider;
-import com.onixbyte.helix.mapper.UserIdentityMapper;
 import com.onixbyte.helix.mapper.UserMapper;
 import com.onixbyte.helix.validation.group.OnCreate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -35,10 +32,7 @@ public class UserService {
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
     private final IdentityGenerator<Long> userIdentityGenerator;
-    private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
-    private final UserIdentityMapper userIdentityMapper;
-    private final UserIdentityRepository userIdentityRepository;
     private final RoleRepository roleRepository;
     private final UserRoleRepository userRoleRepository;
     private final RoleMapper roleMapper;
@@ -48,10 +42,7 @@ public class UserService {
     public UserService(
             UserRepository userRepository,
             IdentityGenerator<Long> userIdentityGenerator,
-            PasswordEncoder passwordEncoder,
             UserMapper userMapper,
-            UserIdentityMapper userIdentityMapper,
-            UserIdentityRepository userIdentityRepository,
             RoleRepository roleRepository,
             UserRoleRepository userRoleRepository,
             RoleMapper roleMapper,
@@ -60,10 +51,7 @@ public class UserService {
     ) {
         this.userRepository = userRepository;
         this.userIdentityGenerator = userIdentityGenerator;
-        this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
-        this.userIdentityMapper = userIdentityMapper;
-        this.userIdentityRepository = userIdentityRepository;
         this.roleRepository = roleRepository;
         this.userRoleRepository = userRoleRepository;
         this.roleMapper = roleMapper;
