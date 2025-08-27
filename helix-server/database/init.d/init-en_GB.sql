@@ -133,8 +133,8 @@ INSERT INTO user_roles
 VALUES (1, 1),
        (2, 2);
 
-DROP TABLE IF EXISTS permissions CASCADE;
-CREATE TABLE permissions
+DROP TABLE IF EXISTS authorities CASCADE;
+CREATE TABLE authorities
 (
     id          BIGSERIAL PRIMARY KEY,
     code        VARCHAR(128) NOT NULL UNIQUE,
@@ -145,7 +145,7 @@ CREATE TABLE permissions
     updated_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO permissions(code, name, description, status, created_at, updated_at)
+INSERT INTO authorities(code, name, description, status, created_at, updated_at)
 VALUES ('system:dashboard:read', 'Read Dashboard', 'Read dashboard.', 'ACTIVE'::NormalStatus,
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
        ('system:user:read', 'Read User', 'Read user.', 'ACTIVE'::NormalStatus, CURRENT_TIMESTAMP,
@@ -162,9 +162,9 @@ VALUES ('system:dashboard:read', 'Read Dashboard', 'Read dashboard.', 'ACTIVE'::
         CURRENT_TIMESTAMP),
        ('system:role:write', 'Write Roles', 'Write roles.', 'ACTIVE'::NormalStatus,
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       ('system:permission:read', 'Read Permissions', 'Read permissions.', 'ACTIVE'::NormalStatus,
+       ('system:permission:read', 'Read Permissions', 'Read authorities.', 'ACTIVE'::NormalStatus,
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       ('system:permission:write', 'Write Permissions', 'Write permissions.',
+       ('system:permission:write', 'Write Permissions', 'Write authorities.',
         'ACTIVE'::NormalStatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
        ('system:audit_log:read', 'Read Audit Logs', 'Read audit logs.', 'ACTIVE'::NormalStatus,
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -174,16 +174,16 @@ VALUES ('system:dashboard:read', 'Read Dashboard', 'Read dashboard.', 'ACTIVE'::
        ('system:setting:write', 'Write System Settings', 'Write system settings.',
         'ACTIVE'::NormalStatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
-DROP TABLE IF EXISTS role_permissions CASCADE;
-CREATE TABLE role_permissions
+DROP TABLE IF EXISTS role_authorities CASCADE;
+CREATE TABLE role_authorities
 (
     role_id       BIGINT    NOT NULL REFERENCES roles (id),
-    permission_id BIGSERIAL NOT NULL REFERENCES permissions (id),
+    permission_id BIGSERIAL NOT NULL REFERENCES authorities (id),
     created_at    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (role_id, permission_id)
 );
 
-INSERT INTO role_permissions
+INSERT INTO role_authorities
 VALUES (1, 1, CURRENT_TIMESTAMP),
        (1, 2, CURRENT_TIMESTAMP),
        (1, 3, CURRENT_TIMESTAMP),
