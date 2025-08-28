@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Object relation mapper of user.
  *
@@ -39,4 +41,8 @@ public interface UserRepository {
     BizUser queryBizUserById(@Param("id") Long id);
 
     String queryPasswordByUsername(@Param("username") String username);
+
+    List<User> queryUserList(@Param("offset") Long offset, @Param("pageSize") Long pageSize);
+
+    Long countUsers();
 }

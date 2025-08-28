@@ -1,5 +1,6 @@
 package com.onixbyte.helix.service;
 
+import com.onixbyte.helix.domain.common.Page;
 import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.mapper.AuthorityMapper;
 import com.onixbyte.helix.mapper.RoleMapper;
@@ -158,5 +159,26 @@ public class UserService {
     @Cacheable(cacheNames = "user::password", key = "#username", unless = "#result == null")
     public String getPasswordByUsername(String username) {
         return userRepository.queryPasswordByUsername(username);
+    }
+
+    /**
+     * Get users.
+     *
+     * @return a page list containing users in the system
+     */
+    public Page<BizUser> getUsers(Long pageNum, Long pageSize) {
+        var offset = (pageNum - 1) * pageSize;
+        var page = new Page<BizUser>();
+        page.setPageNum(pageNum);
+        page.setPageSize(pageSize);
+
+        var records = userRepository.queryUserList(offset, pageSize)
+                .stream()
+                .map(userMapper::ofBusiness)
+                .toList();
+        page.setRecords(records);
+
+        page.setTotal(userRepository.countUsers());
+        return page;
     }
 }
