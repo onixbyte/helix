@@ -2,7 +2,7 @@ package com.onixbyte.helix.domain.view;
 
 import com.onixbyte.helix.domain.biz.BizUser;
 import com.onixbyte.helix.domain.biz.BizUserIdentity;
-import com.onixbyte.helix.enums.UserStatus;
+import com.onixbyte.helix.constant.UserStatus;
 
 import java.io.Serializable;
 import java.util.List;
