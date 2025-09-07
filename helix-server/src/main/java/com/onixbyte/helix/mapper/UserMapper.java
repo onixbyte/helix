@@ -2,14 +2,11 @@ package com.onixbyte.helix.mapper;
 
 import com.onixbyte.helix.domain.biz.BizUser;
 import com.onixbyte.helix.domain.entity.User;
-import com.onixbyte.helix.domain.entity.UserIdentity;
 import com.onixbyte.helix.domain.view.UserView;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.Mappings;
-
-import java.util.List;
 
 /**
  * A MapStruct mapper to convert User domain entities to BizUser business models.

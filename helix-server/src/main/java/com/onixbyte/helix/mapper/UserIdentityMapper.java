@@ -4,7 +4,6 @@ import com.onixbyte.helix.domain.biz.BizUserIdentity;
 import com.onixbyte.helix.domain.entity.UserIdentity;
 import com.onixbyte.helix.domain.view.UserIdentityView;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.Mappings;
 
