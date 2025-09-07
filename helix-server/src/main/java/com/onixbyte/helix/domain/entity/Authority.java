@@ -1,6 +1,6 @@
 package com.onixbyte.helix.domain.entity;
 
-import com.onixbyte.helix.enums.NormalStatus;
+import com.onixbyte.helix.constant.NormalStatus;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -63,5 +63,61 @@ public class Authority {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
+    }
+
+    public static AuthorityBuilder builder() {
+        return new AuthorityBuilder();
+    }
+
+    public static class AuthorityBuilder {
+        private Long id;
+        private String code;
+        private String name;
+        private String description;
+        private NormalStatus status;
+        private Instant createdAt;
+        private Instant updatedAt;
+
+        private AuthorityBuilder() {
+        }
+
+        public AuthorityBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public AuthorityBuilder code(String code) {
+            this.code = code;
+            return this;
+        }
+
+        public AuthorityBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public AuthorityBuilder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public AuthorityBuilder status(NormalStatus status) {
+            this.status = status;
+            return this;
+        }
+
+        public AuthorityBuilder createdAt(Instant createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public AuthorityBuilder updatedAt(Instant updatedAt) {
+            this.updatedAt = updatedAt;
+            return this;
+        }
+
+        public Authority build() {
+            return new Authority(id, code, name, description, status, createdAt, updatedAt);
+        }
     }
 }

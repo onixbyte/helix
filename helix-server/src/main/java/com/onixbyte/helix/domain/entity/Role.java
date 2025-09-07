@@ -1,6 +1,6 @@
 package com.onixbyte.helix.domain.entity;
 
-import com.onixbyte.helix.enums.NormalStatus;
+import com.onixbyte.helix.constant.NormalStatus;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -137,5 +137,76 @@ public class Role {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
+    }
+
+    /**
+     * Static builder factory method, required.
+     */
+    public static RoleBuilder builder() {
+        return new RoleBuilder();
+    }
+
+    public static class RoleBuilder {
+        private Long id;
+        private String name;
+        private String code;
+        private Integer sort;
+        private Boolean defaultValue;
+        private String description;
+        private NormalStatus status;
+        private Instant createdAt;
+        private Instant updatedAt;
+
+        private RoleBuilder() {
+        }
+
+        public RoleBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public RoleBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public RoleBuilder code(String code) {
+            this.code = code;
+            return this;
+        }
+
+        public RoleBuilder sort(Integer sort) {
+            this.sort = sort;
+            return this;
+        }
+
+        public RoleBuilder defaultValue(Boolean defaultValue) {
+            this.defaultValue = defaultValue;
+            return this;
+        }
+
+        public RoleBuilder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public RoleBuilder status(NormalStatus status) {
+            this.status = status;
+            return this;
+        }
+
+        public RoleBuilder createdAt(Instant createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public RoleBuilder updatedAt(Instant updatedAt) {
+            this.updatedAt = updatedAt;
+            return this;
+        }
+
+        public Role build() {
+            return new Role(id, name, code, sort, defaultValue, description, status, createdAt, updatedAt);
+        }
     }
 }

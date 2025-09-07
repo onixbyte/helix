@@ -1,6 +1,6 @@
 package com.onixbyte.helix.domain.entity;
 
-import com.onixbyte.helix.enums.UserStatus;
+import com.onixbyte.helix.constant.UserStatus;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -203,5 +203,97 @@ public class User {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
+    }
+
+    public static UserBuilder builder() {
+        return new UserBuilder();
+    }
+
+    public static class UserBuilder {
+        private Long id;
+        private String username;
+        private String password;
+        private String fullName;
+        private String email;
+        private String countryCode;
+        private String phoneNumber;
+        private String avatarUrl;
+        private UserStatus status;
+        private Long departmentId;
+        private Long positionId;
+        private Instant createdAt;
+        private Instant updatedAt;
+
+        private UserBuilder() {
+        }
+
+        public UserBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public UserBuilder username(String username) {
+            this.username = username;
+            return this;
+        }
+
+        public UserBuilder password(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public UserBuilder fullName(String fullName) {
+            this.fullName = fullName;
+            return this;
+        }
+
+        public UserBuilder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public UserBuilder countryCode(String countryCode) {
+            this.countryCode = countryCode;
+            return this;
+        }
+
+        public UserBuilder phoneNumber(String phoneNumber) {
+            this.phoneNumber = phoneNumber;
+            return this;
+        }
+
+        public UserBuilder avatarUrl(String avatarUrl) {
+            this.avatarUrl = avatarUrl;
+            return this;
+        }
+
+        public UserBuilder status(UserStatus status) {
+            this.status = status;
+            return this;
+        }
+
+        public UserBuilder departmentId(Long departmentId) {
+            this.departmentId = departmentId;
+            return this;
+        }
+
+        public UserBuilder positionId(Long positionId) {
+            this.positionId = positionId;
+            return this;
+        }
+
+        public UserBuilder createdAt(Instant createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public UserBuilder updatedAt(Instant updatedAt) {
+            this.updatedAt = updatedAt;
+            return this;
+        }
+
+        public User build() {
+            return new User(id, username, password, fullName, email, countryCode, phoneNumber, avatarUrl, status, departmentId, positionId, createdAt, updatedAt);
+        }
     }
 }

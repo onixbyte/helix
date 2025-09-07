@@ -1,6 +1,6 @@
 package com.onixbyte.helix.domain.entity;
 
-import com.onixbyte.helix.enums.NormalStatus;
+import com.onixbyte.helix.constant.NormalStatus;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -20,6 +20,7 @@ public class Department {
     private NormalStatus status;
 
     private Instant createdAt;
+
     private Instant updatedAt;
 
     public Department() {
@@ -131,5 +132,67 @@ public class Department {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
+    }
+
+    public static DepartmentBuilder builder() {
+        return new DepartmentBuilder();
+    }
+
+    public static class DepartmentBuilder {
+        private Long id;
+        private String name;
+        private Long parentId;
+        private String treePath;
+        private Integer sortOrder;
+        private NormalStatus status;
+        private Instant createdAt;
+        private Instant updatedAt;
+
+        private DepartmentBuilder() {
+        }
+
+        public DepartmentBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public DepartmentBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public DepartmentBuilder parentId(Long parentId) {
+            this.parentId = parentId;
+            return this;
+        }
+
+        public DepartmentBuilder treePath(String treePath) {
+            this.treePath = treePath;
+            return this;
+        }
+
+        public DepartmentBuilder sortOrder(Integer sortOrder) {
+            this.sortOrder = sortOrder;
+            return this;
+        }
+
+        public DepartmentBuilder status(NormalStatus status) {
+            this.status = status;
+            return this;
+        }
+
+        public DepartmentBuilder createdAt(Instant createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public DepartmentBuilder updatedAt(Instant updatedAt) {
+            this.updatedAt = updatedAt;
+            return this;
+        }
+
+        public Department build() {
+            return new Department(id, name, parentId, treePath, sortOrder, status, createdAt, updatedAt);
+        }
     }
 }

@@ -1,6 +1,6 @@
 package com.onixbyte.helix.domain.entity;
 
-import com.onixbyte.helix.enums.NormalStatus;
+import com.onixbyte.helix.constant.NormalStatus;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -132,5 +132,67 @@ public class Position {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
+    }
+
+    public static PositionBuilder builder() {
+        return new PositionBuilder();
+    }
+
+    public static class PositionBuilder {
+        private Long id;
+        private String name;
+        private String code;
+        private String description;
+        private Integer sortOrder;
+        private NormalStatus status;
+        private Instant createdAt;
+        private Instant updatedAt;
+
+        private PositionBuilder() {
+        }
+
+        public PositionBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public PositionBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public PositionBuilder code(String code) {
+            this.code = code;
+            return this;
+        }
+
+        public PositionBuilder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public PositionBuilder sortOrder(Integer sortOrder) {
+            this.sortOrder = sortOrder;
+            return this;
+        }
+
+        public PositionBuilder status(NormalStatus status) {
+            this.status = status;
+            return this;
+        }
+
+        public PositionBuilder createdAt(Instant createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public PositionBuilder updatedAt(Instant updatedAt) {
+            this.updatedAt = updatedAt;
+            return this;
+        }
+
+        public Position build() {
+            return new Position(id, name, code, description, sortOrder, status, createdAt, updatedAt);
+        }
     }
 }

@@ -66,4 +66,36 @@ public class RoleAuthority {
                 ", createdAt=" + createdAt +
                 '}';
     }
+
+    public static RoleAuthorityBuilder builder() {
+        return new RoleAuthorityBuilder();
+    }
+
+    public static class RoleAuthorityBuilder {
+        private Long roleId;
+        private Long permissionId;
+        private Instant createdAt;
+
+        private RoleAuthorityBuilder() {
+        }
+
+        public RoleAuthorityBuilder roleId(Long roleId) {
+            this.roleId = roleId;
+            return this;
+        }
+
+        public RoleAuthorityBuilder permissionId(Long permissionId) {
+            this.permissionId = permissionId;
+            return this;
+        }
+
+        public RoleAuthorityBuilder createdAt(Instant createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public RoleAuthority build() {
+            return new RoleAuthority(roleId, permissionId, createdAt);
+        }
+    }
 }
