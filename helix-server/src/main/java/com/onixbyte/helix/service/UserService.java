@@ -2,10 +2,15 @@ package com.onixbyte.helix.service;
 
 import com.onixbyte.helix.domain.common.Page;
 import com.onixbyte.helix.domain.entity.UserIdentity;
+import com.onixbyte.helix.domain.view.UserView;
+import com.onixbyte.helix.domain.web.request.PageRequest;
 import com.onixbyte.helix.exception.BizException;
+import com.onixbyte.helix.manager.UserManager;
 import com.onixbyte.helix.mapper.AuthorityMapper;
 import com.onixbyte.helix.mapper.RoleMapper;
+import com.onixbyte.helix.mapper.UserIdentityMapper;
 import com.onixbyte.helix.repository.*;
+import com.onixbyte.helix.utils.PageUtil;
 import com.onixbyte.identitygenerator.IdentityGenerator;
 import com.onixbyte.helix.domain.biz.BizUser;
 import com.onixbyte.helix.domain.entity.User;
@@ -41,6 +46,9 @@ public class UserService {
     private final RoleMapper roleMapper;
     private final AuthorityRepository authorityRepository;
     private final AuthorityMapper authorityMapper;
+    private final UserIdentityRepository userIdentityRepository;
+    private final UserIdentityMapper userIdentityMapper;
+    private final UserManager userManager;
 
     public UserService(
             UserRepository userRepository,
@@ -50,8 +58,8 @@ public class UserService {
             UserRoleRepository userRoleRepository,
             RoleMapper roleMapper,
             AuthorityRepository authorityRepository,
-            AuthorityMapper authorityMapper
-    ) {
+            AuthorityMapper authorityMapper,
+            UserIdentityRepository userIdentityRepository, UserIdentityMapper userIdentityMapper, UserManager userManager) {
         this.userRepository = userRepository;
         this.userIdentityGenerator = userIdentityGenerator;
         this.userMapper = userMapper;
@@ -60,6 +68,9 @@ public class UserService {
         this.roleMapper = roleMapper;
         this.authorityRepository = authorityRepository;
         this.authorityMapper = authorityMapper;
+        this.userIdentityRepository = userIdentityRepository;
+        this.userIdentityMapper = userIdentityMapper;
+        this.userManager = userManager;
     }
 
     /**
@@ -116,29 +127,28 @@ public class UserService {
         return bizUser;
     }
 
-    // /**
-    //  * IAM user registration.
-    //  *
-    //  * @param user user information
-    //  * @param userIdentity user IAM information
-    //  * @return the registered user information.
-    //  */
-    // @Transactional(rollbackFor = Throwable.class)
-    // public BizUser registerWithThirdPartyAccount(@Validated(OnCreate.class) User user, UserIdentity userIdentity) {
-    //     // Set user ID.
-    //     var userId = userIdentityGenerator.nextId();
-    //     user.setId(userId);
-    //     user.setPassword(null);
-    //
-    //     // Execute insert.
-    //     userRepository.insertUser(user);
-    //     userIdentityRepository.insertUserIdentity(userIdentity);
-    //
-    //
-    //     var bizUser = userMapper.ofBusiness(user);
-    //     bizUser.setUserIdentities(List.of(userIdentityMapper.ofBusiness(userIdentity)));
-    //     return bizUser;
-    // }
+    /**
+     * IAM user registration.
+     *
+     * @param user         user information
+     * @param userIdentity user IAM information
+     * @return the registered user information.
+     */
+    @Transactional(rollbackFor = Throwable.class)
+    public BizUser registerWithThirdPartyAccount(@Validated(OnCreate.class) User user, UserIdentity userIdentity) {
+        // Set user ID.
+        var userId = userIdentityGenerator.nextId();
+        user.setId(userId);
+        user.setPassword(null);
+
+        // Execute insert.
+        userRepository.insertUser(user);
+        userIdentityRepository.insertUserIdentity(userIdentity);
+
+        var bizUser = userMapper.ofBusiness(user);
+        bizUser.setUserIdentities(List.of(userIdentityMapper.ofBusiness(userIdentity)));
+        return bizUser;
+    }
 
     /**
      * Get user by username.
@@ -151,39 +161,23 @@ public class UserService {
         return userRepository.queryByUsername(username);
     }
 
-    /**
-     * Query user's password by username.
-     *
-     * @param username username
-     * @return user's password
-     */
-    @Cacheable(cacheNames = "user::password", key = "#username", unless = "#result == null")
-    public String getPasswordByUsername(String username) {
-        return userRepository.queryPasswordByUsername(username);
-    }
+    public Page<UserView> queryUsers(PageRequest pageRequest) {
+        var pageNum = PageUtil.getPageNum(pageRequest);
+        var pageSize = PageUtil.getPageSize(pageRequest);
+        var offset = PageUtil.getOffset(pageRequest);
 
-    /**
-     * Get users.
-     *
-     * @return a page list containing users in the system
-     */
-    public Page<BizUser> getUsers(Long pageNum, Long pageSize) {
-        var offset = (pageNum - 1) * pageSize;
-        var page = new Page<BizUser>();
-        page.setPageNum(pageNum);
-        page.setPageSize(pageSize);
+        var page = new Page<UserView>(pageNum, pageSize);
 
-        var records = userRepository.queryUserList(offset, pageSize)
+        var records = userManager.queryUsers(offset, pageSize);
+        var count = userManager.countUsers();
+
+        page.setRecords(records
                 .stream()
-                .map(userMapper::ofBusiness)
-                .toList();
-        page.setRecords(records);
+                .map(userMapper::asBusiness)
+                .map(userMapper::asView)
+                .toList());
+        page.setTotal(count);
 
-        page.setTotal(userRepository.countUsers());
         return page;
-    }
-
-    public BizUser register(User user, UserIdentity userIdentity) {
-        return null;
     }
 }

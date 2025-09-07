@@ -1,6 +1,7 @@
 package com.onixbyte.helix.security.providers;
 
 import com.onixbyte.helix.exception.BizException;
+import com.onixbyte.helix.manager.UserManager;
 import com.onixbyte.helix.security.data.UsernamePasswordAuthentication;
 import com.onixbyte.helix.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -17,13 +18,16 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final UserManager userManager;
 
     public UsernamePasswordAuthenticationProvider(
             UserService userService,
-            PasswordEncoder passwordEncoder
+            PasswordEncoder passwordEncoder,
+            UserManager userManager
     ) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.userManager = userManager;
     }
 
     @Override
@@ -32,7 +36,7 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
             throw new IllegalStateException("Cannot perform login with username and password.");
         }
 
-        var password = userService.getPasswordByUsername(_authentication.getPrincipal());
+        var password = userManager.getPasswordByUsername(_authentication.getPrincipal());
         if (Objects.isNull(password) || !passwordEncoder.matches(_authentication.getCredentials(), password)) {
             throw new BizException(HttpStatus.UNAUTHORIZED, "Username or password is incorrect.");
         }

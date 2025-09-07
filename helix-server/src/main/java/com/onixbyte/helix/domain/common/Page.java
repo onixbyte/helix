@@ -16,6 +16,11 @@ public class Page<T> {
     public Page() {
     }
 
+    public Page(Long pageNum, Long pageSize) {
+        this.pageNum = pageNum;
+        this.pageSize = pageSize;
+    }
+
     public Page(List<T> records, Long total, Long pageSize, Long pageNum) {
         this.records = records;
         this.total = total;

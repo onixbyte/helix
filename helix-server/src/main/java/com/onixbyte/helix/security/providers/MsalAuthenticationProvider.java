@@ -99,7 +99,7 @@ public class MsalAuthenticationProvider implements AuthenticationProvider {
                 userIdentity.setProvider(IdentityProvider.MICROSOFT_ENTRA_ID);
                 userIdentity.setExternalId(msalOpenId);
 
-                bizUser = userService.register(user, userIdentity);
+                bizUser = userService.registerWithThirdPartyAccount(user, userIdentity);
             }
 
             msalAuthentication.setAuthenticated(true);
