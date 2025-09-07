@@ -2,9 +2,8 @@ package com.onixbyte.helix.repository;
 
 import com.onixbyte.helix.domain.biz.BizUser;
 import com.onixbyte.helix.domain.entity.User;
-import com.onixbyte.helix.enums.IdentityProvider;
+import com.onixbyte.helix.constant.IdentityProvider;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

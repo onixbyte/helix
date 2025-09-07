@@ -1,6 +1,7 @@
 package com.onixbyte.helix.service;
 
 import com.onixbyte.helix.domain.common.Page;
+import com.onixbyte.helix.domain.entity.UserIdentity;
 import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.mapper.AuthorityMapper;
 import com.onixbyte.helix.mapper.RoleMapper;
@@ -8,7 +9,7 @@ import com.onixbyte.helix.repository.*;
 import com.onixbyte.identitygenerator.IdentityGenerator;
 import com.onixbyte.helix.domain.biz.BizUser;
 import com.onixbyte.helix.domain.entity.User;
-import com.onixbyte.helix.enums.IdentityProvider;
+import com.onixbyte.helix.constant.IdentityProvider;
 import com.onixbyte.helix.mapper.UserMapper;
 import com.onixbyte.helix.validation.group.OnCreate;
 import org.slf4j.Logger;
@@ -180,5 +181,9 @@ public class UserService {
 
         page.setTotal(userRepository.countUsers());
         return page;
+    }
+
+    public BizUser register(User user, UserIdentity userIdentity) {
+        return null;
     }
 }

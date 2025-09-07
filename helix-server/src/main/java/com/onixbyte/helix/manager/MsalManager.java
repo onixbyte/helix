@@ -1,9 +1,10 @@
-package com.onixbyte.helix.cache;
+package com.onixbyte.helix.manager;
 
-import com.onixbyte.helix.domain.biz.MsalPublicKey;
+import com.onixbyte.helix.domain.common.MsalPublicKey;
 import com.onixbyte.helix.domain.web.response.MsalPublicKeysResponse;
 import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.properties.MsalProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -13,21 +14,15 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
-/**
- * Microsoft Entra ID cache.
- * <p>
- * Caches all data that will be used for Microsoft Entra ID.
- *
- * @author zihluwang
- */
 @Component
-public class MsalCache {
+public class MsalManager {
 
     private final WebClient webClient;
     private final MsalProperties msalProperties;
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public MsalCache(
+    @Autowired
+    public MsalManager(
             WebClient webClient,
             MsalProperties msalProperties,
             RedisTemplate<String, Object> redisTemplate

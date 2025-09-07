@@ -1,4 +1,4 @@
-package com.onixbyte.helix.enums;
+package com.onixbyte.helix.constant;
 
 public enum UserStatus {
 

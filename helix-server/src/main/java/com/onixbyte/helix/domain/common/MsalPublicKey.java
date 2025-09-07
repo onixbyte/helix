@@ -1,4 +1,4 @@
-package com.onixbyte.helix.domain.biz;
+package com.onixbyte.helix.domain.common;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.onixbyte.helix.exception.BizException;

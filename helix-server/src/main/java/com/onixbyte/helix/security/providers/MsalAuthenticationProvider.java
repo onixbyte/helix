@@ -3,12 +3,12 @@ package com.onixbyte.helix.security.providers;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.onixbyte.helix.cache.MsalCache;
 import com.onixbyte.helix.domain.entity.User;
 import com.onixbyte.helix.domain.entity.UserIdentity;
-import com.onixbyte.helix.enums.IdentityProvider;
-import com.onixbyte.helix.enums.UserStatus;
+import com.onixbyte.helix.constant.IdentityProvider;
+import com.onixbyte.helix.constant.UserStatus;
 import com.onixbyte.helix.exception.BizException;
+import com.onixbyte.helix.manager.MsalManager;
 import com.onixbyte.helix.properties.MsalProperties;
 import com.onixbyte.helix.security.data.MsalAuthentication;
 import com.onixbyte.helix.service.UserService;
@@ -26,16 +26,16 @@ import java.util.Objects;
 public class MsalAuthenticationProvider implements AuthenticationProvider {
 
     private static final Logger log = LoggerFactory.getLogger(MsalAuthenticationProvider.class);
-    private final MsalCache msalCache;
+    private final MsalManager msalManager;
     private final MsalProperties msalProperties;
     private final UserService userService;
 
     public MsalAuthenticationProvider(
-            MsalCache msalCache,
+            MsalManager msalManager,
             MsalProperties msalProperties,
             UserService userService
     ) {
-        this.msalCache = msalCache;
+        this.msalManager = msalManager;
         this.msalProperties = msalProperties;
         this.userService = userService;
     }
@@ -64,7 +64,7 @@ public class MsalAuthenticationProvider implements AuthenticationProvider {
         }
 
         // Get public key.
-        var publicKey = msalCache.getMsalPublicKey(keyId).generateRSAPublicKey();
+        var publicKey = msalManager.getMsalPublicKey(keyId).generateRSAPublicKey();
 
         // Generate algorithm with public key.
         var algorithm = Algorithm.RSA256(publicKey, null);

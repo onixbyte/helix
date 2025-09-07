@@ -1,6 +1,6 @@
 package com.onixbyte.helix.domain.web.response;
 
-import com.onixbyte.helix.domain.biz.MsalPublicKey;
+import com.onixbyte.helix.domain.common.MsalPublicKey;
 
 import java.io.Serializable;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.onixbyte.helix.constants;
+package com.onixbyte.helix.constant;
 
 /**
  * External hosts.
