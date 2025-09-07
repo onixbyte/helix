@@ -162,22 +162,7 @@ public class UserService {
     }
 
     public Page<UserView> queryUsers(PageRequest pageRequest) {
-        var pageNum = PageUtil.getPageNum(pageRequest);
-        var pageSize = PageUtil.getPageSize(pageRequest);
-        var offset = PageUtil.getOffset(pageRequest);
-
-        var page = new Page<UserView>(pageNum, pageSize);
-
-        var records = userManager.queryUsers(offset, pageSize);
-        var count = userManager.countUsers();
-
-        page.setRecords(records
-                .stream()
-                .map(userMapper::asBusiness)
-                .map(userMapper::asView)
-                .toList());
-        page.setTotal(count);
-
-        return page;
+        var page = PageUtil.<UserView>getPage(pageRequest);
+        return userManager.queryUsersPaginated(page);
     }
 }

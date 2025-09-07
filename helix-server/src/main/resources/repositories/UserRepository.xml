@@ -195,20 +195,42 @@
         FROM users
         WHERE username = #{username}
     </select>
+
+    <resultMap id="UserViewResultMap" type="com.onixbyte.helix.domain.view.UserView">
+        <id column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="full_name" property="fullName" />
+        <result column="email" property="email" />
+        <result column="country_code" property="countryCode" />
+        <result column="phone_number" property="phoneNumber" />
+        <result column="avatar_url" property="avatarUrl" />
+        <result column="status" property="status" />
+        <result column="department_id" property="departmentId" />
+        <result column="position_id" property="positionId" />
+        <collection property="userIdentities" ofType="com.onixbyte.helix.domain.view.UserIdentityView">
+            <id column="user_id" property="userId"/>
+            <result column="provider" property="provider" javaType="com.onixbyte.helix.constant.IdentityProvider"/>
+            <result column="external_id" property="externalId"/>
+        </collection>
+    </resultMap>
     
-    <select id="queryUserList" resultType="com.onixbyte.helix.domain.entity.User">
-        SELECT id,
-               username,
-               full_name,
-               email,
-               country_code,
-               phone_number,
-               avatar_url,
-               status,
-               department_id,
-               position_id
-        FROM users
-        ORDER BY id
+    <select id="queryUserList" resultMap="UserViewResultMap">
+        SELECT u.id,
+               u.username,
+               u.full_name,
+               u.email,
+               u.country_code,
+               u.phone_number,
+               u.avatar_url,
+               u.status,
+               u.department_id,
+               u.position_id,
+               ui.user_id,
+               ui.provider,
+               ui.external_id
+        FROM users u
+                 LEFT JOIN user_identities ui ON u.id = ui.user_id
+        ORDER BY u.id
         OFFSET #{offset} LIMIT #{pageSize}
     </select>
 

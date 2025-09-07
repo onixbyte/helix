@@ -3,6 +3,7 @@ package com.onixbyte.helix.repository;
 import com.onixbyte.helix.domain.biz.BizUser;
 import com.onixbyte.helix.domain.entity.User;
 import com.onixbyte.helix.constant.IdentityProvider;
+import com.onixbyte.helix.domain.view.UserView;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -41,7 +42,7 @@ public interface UserRepository {
 
     String queryPasswordByUsername(@Param("username") String username);
 
-    List<User> queryUserList(@Param("offset") Long offset, @Param("pageSize") Long pageSize);
+    List<UserView> queryUserList(@Param("offset") Long offset, @Param("pageSize") Long pageSize);
 
     Long countUsers();
 }

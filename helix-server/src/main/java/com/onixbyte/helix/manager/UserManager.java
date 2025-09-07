@@ -3,6 +3,7 @@ package com.onixbyte.helix.manager;
 import com.onixbyte.helix.domain.biz.BizUser;
 import com.onixbyte.helix.domain.common.Page;
 import com.onixbyte.helix.domain.entity.User;
+import com.onixbyte.helix.domain.view.UserView;
 import com.onixbyte.helix.repository.UserRepository;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
@@ -33,8 +34,12 @@ public class UserManager {
         return userRepository.queryPasswordByUsername(username);
     }
 
-    public List<User> queryUsers(Long offset, Long pageSize) {
-        return userRepository.queryUserList(offset, pageSize);
+    public Page<UserView> queryUsersPaginated(Page<UserView> page) {
+        var count = countUsers();
+        var result = userRepository.queryUserList(page.calculateOffset(), page.getPageSize());
+        page.setTotal(count);
+        page.setRecords(result);
+        return page;
     }
 
     public Long countUsers() {

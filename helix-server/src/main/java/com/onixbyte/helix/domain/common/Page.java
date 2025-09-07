@@ -2,6 +2,7 @@ package com.onixbyte.helix.domain.common;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
 public class Page<T> {
 
@@ -83,5 +84,17 @@ public class Page<T> {
                 ", pageSize=" + pageSize +
                 ", pageNum=" + pageNum +
                 '}';
+    }
+
+    public long calculateOffset() {
+        return (pageNum - 1) * pageSize;
+    }
+
+    public <U> Page<U> map(Function<T, U> mapper) {
+        var records = this.records
+                .stream()
+                .map(mapper)
+                .toList();
+        return new Page<>(records, total, pageSize, pageNum);
     }
 }

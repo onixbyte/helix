@@ -23,12 +23,6 @@ public record UserView(
         UserStatus status,
         Long departmentId,
         Long positionId,
-        List<BizUserIdentity> userIdentities
+        List<UserIdentityView> userIdentities
 ) implements Serializable {
-
-    public static UserView of(BizUser user) {
-        return new UserView(String.valueOf(user.getId()), user.getUsername(), user.getFullName(),
-                user.getEmail(), user.getCountryCode(), user.getPhoneNumber(), user.getAvatarUrl(),
-                user.getStatus(), user.getDepartmentId(), user.getPositionId(), user.getUserIdentities());
-    }
 }
