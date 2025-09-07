@@ -1,6 +1,6 @@
 package com.onixbyte.helix.domain.biz;
 
-import com.onixbyte.helix.enums.UserStatus;
+import com.onixbyte.helix.constant.UserStatus;
 
 import java.io.Serializable;
 import java.util.List;
@@ -200,5 +200,98 @@ public class BizUser implements Serializable {
                 ", roles=" + roles +
                 ", authorities=" + authorities +
                 '}';
+    }
+
+    public static BizUserBuilder builder() {
+        return new BizUserBuilder();
+    }
+
+    public static class BizUserBuilder {
+        private Long id;
+        private String username;
+        private String fullName;
+        private String email;
+        private String countryCode;
+        private String phoneNumber;
+        private String avatarUrl;
+        private UserStatus status;
+        private Long departmentId;
+        private Long positionId;
+        private List<BizUserIdentity> userIdentities;
+        private List<BizRole> roles;
+        private List<BizAuthority> authorities;
+
+        private BizUserBuilder() {
+        }
+
+        public BizUserBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public BizUserBuilder username(String username) {
+            this.username = username;
+            return this;
+        }
+
+        public BizUserBuilder fullName(String fullName) {
+            this.fullName = fullName;
+            return this;
+        }
+
+        public BizUserBuilder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public BizUserBuilder countryCode(String countryCode) {
+            this.countryCode = countryCode;
+            return this;
+        }
+
+        public BizUserBuilder phoneNumber(String phoneNumber) {
+            this.phoneNumber = phoneNumber;
+            return this;
+        }
+
+        public BizUserBuilder avatarUrl(String avatarUrl) {
+            this.avatarUrl = avatarUrl;
+            return this;
+        }
+
+        public BizUserBuilder status(UserStatus status) {
+            this.status = status;
+            return this;
+        }
+
+        public BizUserBuilder departmentId(Long departmentId) {
+            this.departmentId = departmentId;
+            return this;
+        }
+
+        public BizUserBuilder positionId(Long positionId) {
+            this.positionId = positionId;
+            return this;
+        }
+
+        public BizUserBuilder userIdentities(List<BizUserIdentity> userIdentities) {
+            this.userIdentities = userIdentities;
+            return this;
+        }
+
+        public BizUserBuilder roles(List<BizRole> roles) {
+            this.roles = roles;
+            return this;
+        }
+
+        public BizUserBuilder authorities(List<BizAuthority> authorities) {
+            this.authorities = authorities;
+            return this;
+        }
+
+        public BizUser build() {
+            return new BizUser(id, username, fullName, email, countryCode, phoneNumber, avatarUrl,
+                    status, departmentId, positionId, userIdentities, roles, authorities);
+        }
     }
 }

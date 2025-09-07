@@ -1,6 +1,6 @@
 package com.onixbyte.helix.domain.biz;
 
-import com.onixbyte.helix.enums.NormalStatus;
+import com.onixbyte.helix.constant.NormalStatus;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -89,5 +89,49 @@ public class BizAuthority implements Serializable {
                 ", description='" + description + '\'' +
                 ", status=" + status +
                 '}';
+    }
+
+    public static BizAuthorityBuilder builder() {
+        return new BizAuthorityBuilder();
+    }
+
+    public static class BizAuthorityBuilder {
+        private Long id;
+        private String code;
+        private String name;
+        private String description;
+        private NormalStatus status;
+
+        private BizAuthorityBuilder() {
+        }
+
+        public BizAuthorityBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public BizAuthorityBuilder code(String code) {
+            this.code = code;
+            return this;
+        }
+
+        public BizAuthorityBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public BizAuthorityBuilder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public BizAuthorityBuilder status(NormalStatus status) {
+            this.status = status;
+            return this;
+        }
+
+        public BizAuthority build() {
+            return new BizAuthority(id, code, name, description, status);
+        }
     }
 }

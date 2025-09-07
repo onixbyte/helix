@@ -1,6 +1,6 @@
 package com.onixbyte.helix.domain.biz;
 
-import com.onixbyte.helix.enums.IdentityProvider;
+import com.onixbyte.helix.constant.IdentityProvider;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -67,5 +67,37 @@ public class BizUserIdentity implements Serializable {
                 ", provider='" + provider + '\'' +
                 ", externalId='" + externalId + '\'' +
                 '}';
+    }
+
+    public static BizUserIdentityBuilder builder() {
+        return new BizUserIdentityBuilder();
+    }
+
+    public static class BizUserIdentityBuilder {
+        private String userId;
+        private IdentityProvider provider;
+        private String externalId;
+
+        private BizUserIdentityBuilder() {
+        }
+
+        public BizUserIdentityBuilder userId(String userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public BizUserIdentityBuilder provider(IdentityProvider provider) {
+            this.provider = provider;
+            return this;
+        }
+
+        public BizUserIdentityBuilder externalId(String externalId) {
+            this.externalId = externalId;
+            return this;
+        }
+
+        public BizUserIdentity build() {
+            return new BizUserIdentity(userId, provider, externalId);
+        }
     }
 }

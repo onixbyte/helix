@@ -1,8 +1,9 @@
 package com.onixbyte.helix.domain.biz;
 
-import com.onixbyte.helix.enums.NormalStatus;
+import com.onixbyte.helix.constant.NormalStatus;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 public class BizRole implements Serializable {
@@ -89,5 +90,49 @@ public class BizRole implements Serializable {
                 ", description='" + description + '\'' +
                 ", status=" + status +
                 '}';
+    }
+
+    public static BizRoleBuilder builder() {
+        return new BizRoleBuilder();
+    }
+
+    public static class BizRoleBuilder {
+        private Long id;
+        private String name;
+        private String code;
+        private String description;
+        private NormalStatus status;
+
+        private BizRoleBuilder() {
+        }
+
+        public BizRoleBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public BizRoleBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public BizRoleBuilder code(String code) {
+            this.code = code;
+            return this;
+        }
+
+        public BizRoleBuilder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public BizRoleBuilder status(NormalStatus status) {
+            this.status = status;
+            return this;
+        }
+
+        public BizRole build() {
+            return new BizRole(id, name, code, description, status);
+        }
     }
 }
