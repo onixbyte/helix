@@ -20,16 +20,16 @@ public class EncodeUtil {
     public static String encodeUriComponent(String content) {
         String encodedComponent;
 
-        // 1. First, we use the standard Java URLEncoder.
+        // First, we use the standard Java URLEncoder.
         //
         //    It's crucial to specify the character encoding, with UTF-8 being the web standard.
         encodedComponent = URLEncoder.encode(content, StandardCharsets.UTF_8);
 
-        // 2. Next, we must manually correct the output of URLEncoder to match encodeURIComponent's
-        //    behaviour.
+        // Next, we must manually correct the output of URLEncoder to match encodeURIComponent's
+        // behaviour.
         //
-        //    JavaScript's encodeURIComponent does not encode these characters: - _ . ! ~ * ' ( )
-        //    URLEncoder, however, does encode some of them.
+        // JavaScript's encodeURIComponent does not encode these characters: - _ . ! ~ * ' ( )
+        // URLEncoder, however, does encode some of them.
 
         // Replace "+" with "%20" (space character)
         encodedComponent = encodedComponent.replace("+", "%20");
@@ -50,9 +50,6 @@ public class EncodeUtil {
         //
         // Modern versions of URLEncoder (in recent JDKs) correctly leave '!' and '~' unencoded,
         // so explicit replacements for "%21" and "%7E" are typically no longer necessary.
-        //
-        // However, if compatibility with very old Java versions is a concern, you might add them.
-        // encodedComponent = encodedComponent.replace("%7E", "~");
         return encodedComponent;
     }
 }
