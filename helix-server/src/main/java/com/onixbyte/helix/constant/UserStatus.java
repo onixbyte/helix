@@ -3,14 +3,14 @@ package com.onixbyte.helix.constant;
 /**
  * Enumeration representing the various states of user accounts within the system.
  * <p>
- * This enumeration defines the possible status values for user accounts in the Helix
- * application, providing a standardised way to manage user account lifecycle and
- * access control. Each status represents a different level of account accessibility
- * and operational capability within the system.
+ * This enumeration defines the possible status values for user accounts in the Helix application,
+ * providing a standardised way to manage user account lifecycle and access control. Each status
+ * represents a different level of account accessibility and operational capability within
+ * the system.
  * <p>
- * User status directly affects authentication, authorisation, and system access
- * permissions. The status is typically managed through administrative functions
- * and security policies to ensure proper access control and account management.
+ * User status directly affects authentication, authorisation, and system access permissions.
+ * The status is typically managed through administrative functions and security policies to ensure
+ * proper access control and account management.
  *
  * @author zihluwang
  * @since 1.0.0
