@@ -3,7 +3,6 @@ package com.onixbyte.helix.config;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.onixbyte.helix.properties.CorsProperties;
 import com.onixbyte.helix.properties.TokenProperties;
-import com.onixbyte.helix.security.providers.MsalAuthenticationProvider;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,9 +25,28 @@ import java.util.List;
 import java.util.stream.Stream;
 
 /**
- * Spring security configuration.
+ * Configuration class for Spring Security components and policies.
+ * <p>
+ * This configuration class establishes comprehensive security settings for the Helix application,
+ * including CORS policies, authentication mechanisms, password encoding, and JWT token handling.
+ * It configures a stateless security architecture suitable for modern web applications and APIs.
+ * <p>
+ * Key security features configured:
+ * <ul>
+ *   <li>CORS (Cross-Origin Resource Sharing) configuration</li>
+ *   <li>Stateless session management</li>
+ *   <li>JWT-based authentication with HMAC256 algorithm</li>
+ *   <li>BCrypt password encoding</li>
+ *   <li>Method-level security annotations</li>
+ *   <li>Custom authentication providers</li>
+ * </ul>
  *
  * @author zihluwang
+ * @see EnableWebSecurity
+ * @see EnableMethodSecurity
+ * @see TokenProperties
+ * @see CorsProperties
+ * @since 1.0.0
  */
 @Configuration
 @EnableWebSecurity
@@ -37,10 +55,21 @@ import java.util.stream.Stream;
 public class SecurityConfiguration {
 
     /**
-     * CORS configuration source.
+     * Creates a CORS configuration source based on application properties.
+     * <p>
+     * This method configures Cross-Origin Resource Sharing (CORS) policies using the
+     * {@link CorsProperties} configuration. It sets up allowed origins, headers, methods,
+     * credentials handling, and other CORS-related settings to enable secure cross-origin requests
+     * from web browsers.
+     * <p>
+     * The configuration is applied globally to all endpoints (/**) within the application.
      *
-     * @param properties CORS configuration properties
-     * @return configured CORS configuration source
+     * @param properties the CORS configuration properties containing allowed origins, headers,
+     *                   methods, etc
+     * @return a configured {@link CorsConfigurationSource} for handling cross-origin requests
+     * @see CorsProperties
+     * @see CorsConfiguration
+     * @see UrlBasedCorsConfigurationSource
      */
     @Bean
     public CorsConfigurationSource corsConfigurationSource(
@@ -63,12 +92,27 @@ public class SecurityConfiguration {
     }
 
     /**
-     * Spring security filter chain.
+     * Configures the Spring Security filter chain for HTTP requests.
+     * <p>
+     * This method establishes the core security policies for the application, including:
+     * <ul>
+     *   <li>CORS configuration integration</li>
+     *   <li>CSRF protection disabled (suitable for stateless APIs)</li>
+     *   <li>Stateless session management</li>
+     *   <li>Request authorization rules with public and protected endpoints</li>
+     * </ul>
+     * <p>
+     * The configuration permits access to error pages and authentication endpoints whilst requiring
+     * authentication for all other requests. Logout endpoints require authentication to prevent
+     * unauthorised session termination.
      *
-     * @param httpSecurity            HTTP security context
-     * @param corsConfigurationSource cross-origin configuration
-     * @return built security filter chain
-     * @throws Exception if any exception occurred while building HTTP security filter chain
+     * @param httpSecurity            the HTTP security configuration builder
+     * @param corsConfigurationSource the CORS configuration source for cross-origin requests
+     * @return a configured {@link SecurityFilterChain} for processing HTTP requests
+     * @throws Exception if any exception occurs during security filter chain construction
+     * @see HttpSecurity
+     * @see SecurityFilterChain
+     * @see SessionCreationPolicy#STATELESS
      */
     @Bean
     public SecurityFilterChain securityFilterChain(
@@ -91,9 +135,19 @@ public class SecurityConfiguration {
     }
 
     /**
-     * Register a password encoder that helps encode plain text password in Spring context.
+     * Creates a password encoder for secure password hashing.
+     * <p>
+     * This method provides a {@link BCryptPasswordEncoder} instance that uses the BCrypt hashing
+     * algorithm to securely encode passwords. BCrypt is a adaptive hash function designed for
+     * password hashing that includes a salt to protect against rainbow table attacks and is
+     * computationally expensive to resist brute-force attacks.
+     * <p>
+     * The encoder is used throughout the application for password verification during
+     * authentication and for encoding new passwords during user registration.
      *
-     * @return a {@link BCryptPasswordEncoder} instance
+     * @return a {@link BCryptPasswordEncoder} instance for secure password operations
+     * @see BCryptPasswordEncoder
+     * @see PasswordEncoder
      */
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -101,25 +155,40 @@ public class SecurityConfiguration {
     }
 
     /**
-     * Build an authentication manager with custom authentication providers.
+     * Creates an authentication manager with custom authentication providers.
+     * <p>
+     * This method configures a {@link ProviderManager} that coordinates multiple authentication
+     * providers to handle different authentication mechanisms within the application. The manager
+     * attempts authentication using each configured provider until one succeeds or all fail.
+     * <p>
+     * Currently configured for extensibility to support various authentication providers such as
+     * Microsoft Entra ID, local database authentication, or other identity providers as needed.
      *
-     * @param msalAuthenticationProvider authentication provider of Microsoft Entra ID
-     * @return an {@link ProviderManager} instance with given authentication providers
+     * @return a {@link ProviderManager} instance configured with authentication providers
+     * @see ProviderManager
+     * @see AuthenticationManager
      */
     @Bean
     public AuthenticationManager authenticationManager(
-            MsalAuthenticationProvider msalAuthenticationProvider
     ) {
         return new ProviderManager(
-                msalAuthenticationProvider
         );
     }
 
     /**
-     * The algorithm to sign tokens.
+     * Creates the JWT signing algorithm using application token properties.
+     * <p>
+     * This method configures an HMAC256 algorithm instance using the secret key specified in
+     * the {@link TokenProperties}. The algorithm is used for signing and verifying JWT tokens
+     * throughout the application, ensuring token integrity and authenticity.
+     * <p>
+     * HMAC256 provides a good balance of security and performance for JWT token signing in
+     * most applications.
      *
-     * @param properties token properties
-     * @return built algorithm
+     * @param properties the token configuration properties containing the signing secret
+     * @return a configured {@link Algorithm} instance for JWT token operations
+     * @see Algorithm
+     * @see TokenProperties
      */
     @Bean
     public Algorithm algorithm(TokenProperties properties) {

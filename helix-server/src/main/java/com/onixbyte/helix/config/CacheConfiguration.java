@@ -11,19 +11,41 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
 /**
- * Cache configuration.
+ * Configuration class for Redis-based caching components.
+ * <p>
+ * This configuration class provides beans for Redis cache management and template operations
+ * within the Helix application. It configures custom serialisation strategies using
+ * {@link GenericJackson2JsonRedisSerializer} for values and string serialisation for keys,
+ * ensuring optimal performance and compatibility with JSON-based data structures.
+ * <p>
+ * The configuration includes:
+ * <ul>
+ *   <li>Custom {@link RedisCacheManager} with JSON serialisation support</li>
+ *   <li>Configured {@link RedisTemplate} for direct Redis operations</li>
+ * </ul>
  *
  * @author zihluwang
+ * @since 1.0.0
+ * @see RedisCacheManager
+ * @see RedisTemplate
+ * @see GenericJackson2JsonRedisSerializer
  */
 @Configuration
 public class CacheConfiguration {
 
     /**
-     * Create a custom redis cache manager with generic jackson serialiser.
+     * Creates a custom Redis cache manager with JSON serialisation support.
+     * <p>
+     * This method configures a {@link RedisCacheManager} that uses string serialisation for cache
+     * keys and {@link GenericJackson2JsonRedisSerializer} for cache values. This setup ensures that
+     * complex objects can be stored and retrieved from Redis cache whilst maintaining readability
+     * and compatibility with JSON-based systems.
      *
-     * @param connectionFactory redis connection factory
-     * @return a {@link RedisCacheManager} that serialise keys with string serialiser and serialise
-     * value with generic jackson serialiser
+     * @param connectionFactory the Redis connection factory used to establish connections
+     * @return a configured {@link RedisCacheManager} with custom serialisation settings
+     * @see RedisCacheManager
+     * @see GenericJackson2JsonRedisSerializer
+     * @see RedisSerializationContext
      */
     @Bean
     public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
@@ -43,11 +65,20 @@ public class CacheConfiguration {
     }
 
     /**
-     * Redis template that serialise key with string serialiser and value with generic
-     * jackson serialiser.
+     * Creates a Redis template for direct Redis operations with custom serialisation.
+     * <p>
+     * This method configures a {@link RedisTemplate} that uses string serialisation for keys
+     * and {@link GenericJackson2JsonRedisSerializer} for values. This template provides low-level
+     * access to Redis operations whilst ensuring consistent serialisation strategies across
+     * the application.
+     * <p>
+     * The template is fully configured and ready for use after bean creation.
      *
-     * @param connectionFactory redis connection factory
-     * @return a redis template
+     * @param connectionFactory the Redis connection factory used to establish connections
+     * @return a fully configured {@link RedisTemplate} for Redis operations
+     * @see RedisTemplate
+     * @see GenericJackson2JsonRedisSerializer
+     * @see RedisSerializer
      */
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
