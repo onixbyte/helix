@@ -6,14 +6,51 @@ import org.springframework.http.HttpMethod;
 import java.time.Duration;
 
 /**
- * A configuration properties class for Cross-Origin Resource Sharing (CORS) settings. This class
- * maps properties prefixed with {@code app.cors} from application configuration files to a
- * Java object, allowing for easy management of CORS policies.
+ * Configuration properties class for Cross-Origin Resource Sharing (CORS) settings.
  * <p>
- * It defines various aspects of CORS, such as allowed origins, methods, headers, and
- * credential handling.
+ * This class provides a type-safe way to bind CORS-related configuration properties from
+ * application configuration files (such as {@code application.yml} or
+ * {@code application.properties}) to a Java object. All properties are prefixed with
+ * {@code app.cors} and are automatically mapped by Spring Boot's configuration property
+ * binding mechanism.
+ * <p>
+ * <strong>CORS Overview:</strong> Cross-Origin Resource Sharing is a security feature implemented
+ * by web browsers that restricts web pages from making requests to a different domain than the one
+ * serving the web page. This class allows fine-grained control over CORS policies for the Helix
+ * application's REST APIs.
+ * <p>
+ * <strong>Configuration Example:</strong>
+ * <pre>{@code
+ * app:
+ *   cors:
+ *     allowed-origins:
+ *       - "https://example.com"
+ *       - "https://app.example.com"
+ *     allowed-methods:
+ *       - GET
+ *       - POST
+ *       - PUT
+ *       - DELETE
+ *     allowed-headers:
+ *       - "Content-Type"
+ *       - "Authorization"
+ *     allow-credentials: true
+ *     max-age: PT1H
+ * }</pre>
+ * <p>
+ * <strong>Security Considerations:</strong> When configuring CORS, be mindful of
+ * security implications. Avoid using wildcard ({@code "*"}) for origins when
+ * {@code allowCredentials} is set to {@code true}, as this can expose the application to
+ * security vulnerabilities.
+ * <p>
+ * The class follows JavaBean conventions with getter and setter methods for each property,
+ * making it compatible with Spring's property binding and validation frameworks.
  *
  * @author zihluwang
+ * @see ConfigurationProperties
+ * @see org.springframework.web.cors.CorsConfiguration
+ * @see org.springframework.web.servlet.config.annotation.CorsRegistry
+ * @since 1.0.0
  */
 @ConfigurationProperties(prefix = "app.cors")
 public class CorsProperties {
@@ -29,38 +66,38 @@ public class CorsProperties {
     private HttpMethod[] allowedMethods;
 
     /**
-     * The array of origins (domains) that are allowed to make cross-origin requests.
-     * Use "*" to allow all origins.
+     * The array of origins (domains) that are allowed to make cross-origin requests. Use "*" to
+     * allow all origins.
      */
     private String[] allowedOrigins;
 
     /**
-     * A flag indicating whether the client is allowed to send credentials (cookies, HTTP authentication)
-     * with the cross-origin request.
+     * A flag indicating whether the client is allowed to send credentials (cookies,
+     * HTTP authentication) with the cross-origin request.
      */
     private Boolean allowCredentials;
 
     /**
-     * A flag indicating whether requests from a private network IP address to a public network IP address
-     * are allowed.
+     * A flag indicating whether requests from a private network IP address to a public network IP
+     * address are allowed.
      */
     private Boolean allowPrivateNetwork;
 
     /**
-     * The maximum amount of time (in seconds) for which the results of a preflight request
-     * can be cached by the client.
+     * The maximum amount of time (in seconds) for which the results of a preflight request can be
+     * cached by the client.
      */
     private Duration maxAge;
 
     /**
-     * The array of HTTP header names that are allowed to be exposed to the client in a cross-origin response.
+     * The array of HTTP header names that are allowed to be exposed to the client in a
+     * cross-origin response.
      */
     private String[] exposedHeaders;
 
     /**
-     * Constructs a new {@code CorsProperties} instance.
-     * This default constructor is typically used by the Spring framework to
-     * instantiate the properties bean.
+     * Constructs a new {@code CorsProperties} instance. This default constructor is typically used
+     * by the Spring framework to instantiate the properties bean.
      */
     public CorsProperties() {
         // Default constructor
