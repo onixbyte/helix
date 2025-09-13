@@ -1,5 +1,4 @@
 [versions]
-mapStructVersion = "1.6.3"
 javaJwtVersion = "4.5.0"
 postgresDriverVersion = "42.7.7"
 springVersion = "6.2.9"
@@ -9,12 +8,8 @@ myBatisSpringBootVersion = "3.0.5"
 reactorVersion = "3.7.8"
 junitPlatformVersion = "1.12.2"
 onixbyteVersion = "3.2.0"
-slf4jVersion = "2.0.17"
-logbackVersion = "1.5.18"
 
 [libraries]
-mapStruct-core = { group = "org.mapstruct", name = "mapstruct", version.ref = "mapStructVersion" }
-mapStruct-annotationProcessor = { group = "org.mapstruct", name = "mapstruct-processor", version.ref = "mapStructVersion" }
 jwt-core = { group = "com.auth0", name = "java-jwt", version.ref = "javaJwtVersion" }
 postgres-driver = { group = "org.postgresql", name = "postgresql", version.ref = "postgresDriverVersion" }
 spring-context = { group = "org.springframework", name = "spring-context", version.ref = "springVersion" }
@@ -34,8 +29,6 @@ junit-launcher = { group = "org.junit.platform", name = "junit-platform-launcher
 onixbyte-tuple = { group = "com.onixbyte", name = "tuple", version.ref = "onixbyteVersion" }
 onixbyte-commonToolbox = { group = "com.onixbyte", name = "common-toolbox", version.ref = "onixbyteVersion" }
 onixbyte-identityGenerator = { group = "com.onixbyte", name = "identity-generator", version.ref = "onixbyteVersion" }
-slf4j-api = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4jVersion" }
-logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logbackVersion" }
 
 [plugins]
 

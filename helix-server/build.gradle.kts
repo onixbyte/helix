@@ -29,8 +29,6 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.mapStruct.core)
-    annotationProcessor(libs.mapStruct.annotationProcessor)
     implementation(libs.onixbyte.tuple)
     implementation(libs.onixbyte.commonToolbox)
     implementation(libs.onixbyte.identityGenerator)
