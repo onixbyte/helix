@@ -288,6 +288,7 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
 ### Backend
+!gradle-wrapper.jar
 **/config/*.yml
 **/config/*.yaml
 **/config/*.properties
