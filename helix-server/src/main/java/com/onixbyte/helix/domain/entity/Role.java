@@ -1,129 +1,95 @@
 package com.onixbyte.helix.domain.entity;
 
-import com.onixbyte.helix.constant.NormalStatus;
+import com.onixbyte.helix.constant.Status;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
- * Entity representing security roles within the Helix application.
+ * Represents a role entity within the access control system.
  * <p>
- * A role defines a collection of permissions and authorities that can be assigned to users within
- * the system. Roles are a fundamental component of the Role-Based Access Control (RBAC)
- * security model, allowing for granular permission management and access control.
- * <p>
- * Each role has a unique code for system identification, a descriptive name for display purposes,
- * and can be marked as a default role that is automatically assigned to new users
- * upon registration.
- * <p>
- * Roles can be associated with multiple authorities through the {@link RoleAuthority} entity,
- * creating a many-to-many relationship that defines the specific permissions granted to users
- * assigned to this role.
- * <p>
- * The sort field allows for consistent ordering of roles in administrative interfaces, whilst the
- * status field enables roles to be activated or deactivated without deletion.
+ * Roles define sets of permissions and responsibilities that can be assigned to users. They form
+ * the foundation of the role-based access control (RBAC) system, allowing for flexible and scalable
+ * permission management across the Helix application.
  *
  * @author zihluwang
- * @see Authority
- * @see RoleAuthority
- * @see User
- * @see NormalStatus
- * @since 1.0.0
+ * @version 1.0
+ * @since 1.0
  */
 public class Role {
 
     /**
-     * The unique identifier for this role.
+     * The unique identifier for the role.
+     * <p>
+     * This serves as the primary key in the database and is used for all internal references to the
+     * role entity.
      */
     private Long id;
 
     /**
-     * The display name of this role.
+     * The human-readable name of the role.
      * <p>
-     * This should be a human-readable name that clearly describes the role's purpose, such as
-     * "{@code Administrator}", "{@code Manager}", or "{@code Standard User}".
+     * This field contains the display name of the role as it should appear in user interfaces and
+     * administrative panels.
      */
     private String name;
 
     /**
-     * The unique code identifier for this role.
+     * The unique code identifier for the role.
      * <p>
-     * This code is used for system identification and should be unique across all roles.
-     * It's typically used in security checks and internal system references.
+     * This field contains a system-level identifier that is typically used in code
+     * and configuration. It should be unique across all roles and follow a consistent
+     * naming convention.
      */
     private String code;
 
     /**
-     * The sort order for this role.
+     * The sort order for displaying roles.
      * <p>
-     * Used to maintain consistent ordering when displaying roles in administrative interfaces or
-     * selection lists.
+     * This field determines the order in which roles should be displayed in lists and
+     * selection interfaces. Lower values indicate higher priority in sorting.
      */
     private Integer sort;
 
     /**
      * Indicates whether this role is assigned by default to new users.
      * <p>
-     * When set to {@code true}, this role will be automatically assigned to users upon registration
-     * or creation. Only one role should typically be marked as default.
+     * When set to true, this role will be automatically assigned to newly created user accounts.
+     * This is useful for defining baseline permissions that all users should have.
      */
     private Boolean defaultValue;
 
     /**
-     * A detailed description of this role.
+     * A detailed description of the role's purpose and permissions.
      * <p>
-     * This field can contain information about the role's purpose, responsibilities, and the types
-     * of permissions it grants.
+     * This field provides additional context about what the role represents and what capabilities
+     * it grants to users who are assigned to it.
      */
     private String description;
 
     /**
-     * The current status of this role.
+     * The current status of the role.
      * <p>
-     * Determines whether this role is active and available for assignment to users.
+     * This field determines whether the role is active, inactive, or in any other state as defined
+     * by the {@link Status} enumeration.
      */
-    private NormalStatus status;
+    private Status status;
 
     /**
-     * The timestamp when this role was created.
+     * The timestamp when this role record was created.
+     * <p>
+     * This field is automatically set when the role entity is first persisted and provides audit
+     * information about when the role was established.
      */
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 
     /**
-     * The timestamp when this role was last updated.
+     * The timestamp when this role record was last updated.
+     * <p>
+     * This field is automatically updated whenever any changes are made to the role entity and
+     * provides audit information about the most recent modification.
      */
-    private Instant updatedAt;
-
-    /**
-     * Default constructor for JPA and serialisation frameworks.
-     */
-    public Role() {
-    }
-
-    /**
-     * Constructs a new Role with all fields specified.
-     *
-     * @param id           the unique identifier
-     * @param name         the role name
-     * @param code         the unique role code
-     * @param sort         the sort order for display purposes
-     * @param defaultValue whether this role is assigned by default
-     * @param description  the detailed description of the role
-     * @param status       the current status
-     * @param createdAt    the creation timestamp
-     * @param updatedAt    the last update timestamp
-     */
-    public Role(Long id, String name, String code, Integer sort, Boolean defaultValue, String description, NormalStatus status, Instant createdAt, Instant updatedAt) {
-        this.id = id;
-        this.name = name;
-        this.code = code;
-        this.sort = sort;
-        this.defaultValue = defaultValue;
-        this.description = description;
-        this.status = status;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
+    private LocalDateTime updatedAt;
 
     public Long getId() {
         return id;
@@ -173,27 +139,42 @@ public class Role {
         this.description = description;
     }
 
-    public NormalStatus getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(NormalStatus status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
-    public Instant getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Instant createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Instant getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Instant updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Role() {
+    }
+
+    public Role(Long id, String name, String code, Integer sort, Boolean defaultValue, String description, Status status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.name = name;
+        this.code = code;
+        this.sort = sort;
+        this.defaultValue = defaultValue;
+        this.description = description;
+        this.status = status;
+        this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
@@ -222,92 +203,5 @@ public class Role {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
-    }
-
-    /**
-     * Creates a new builder instance for constructing Role objects.
-     *
-     * @return a new {@link RoleBuilder} instance
-     */
-    public static RoleBuilder builder() {
-        return new RoleBuilder();
-    }
-
-    /**
-     * Builder class for constructing {@link Role} instances.
-     * <p>
-     * This builder provides a fluent interface for setting role properties and ensures consistent
-     * object construction.
-     */
-    public static class RoleBuilder {
-        private Long id;
-        private String name;
-        private String code;
-        private Integer sort;
-        private Boolean defaultValue;
-        private String description;
-        private NormalStatus status;
-        private Instant createdAt;
-        private Instant updatedAt;
-
-        /**
-         * Private constructor to enforce builder pattern usage.
-         */
-        private RoleBuilder() {
-        }
-
-        public RoleBuilder id(Long id) {
-            this.id = id;
-            return this;
-        }
-
-        public RoleBuilder name(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public RoleBuilder code(String code) {
-            this.code = code;
-            return this;
-        }
-
-        public RoleBuilder sort(Integer sort) {
-            this.sort = sort;
-            return this;
-        }
-
-        public RoleBuilder defaultValue(Boolean defaultValue) {
-            this.defaultValue = defaultValue;
-            return this;
-        }
-
-        public RoleBuilder description(String description) {
-            this.description = description;
-            return this;
-        }
-
-        public RoleBuilder status(NormalStatus status) {
-            this.status = status;
-            return this;
-        }
-
-        public RoleBuilder createdAt(Instant createdAt) {
-            this.createdAt = createdAt;
-            return this;
-        }
-
-        public RoleBuilder updatedAt(Instant updatedAt) {
-            this.updatedAt = updatedAt;
-            return this;
-        }
-
-        /**
-         * Builds and returns a new Role instance with the configured properties.
-         *
-         * @return a new {@link Role} instance
-         */
-        public Role build() {
-            return new Role(id, name, code, sort, defaultValue, description, status, createdAt, updatedAt);
-        }
     }
 }

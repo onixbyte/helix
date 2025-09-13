@@ -1,76 +1,47 @@
 package com.onixbyte.helix.domain.entity;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
- * Entity representing the many-to-many relationship between roles and authorities.
+ * Represents the association between roles and authorities in the access control system.
  * <p>
- * This entity serves as a junction table in the Role-Based Access Control (RBAC) system, linking
- * {@link Role} entities with {@link Authority} entities to define which permissions are granted
- * to each role.
- * <p>
- * Each record in this entity represents a single permission assignment, indicating that users
- * assigned to a specific role are granted the associated authority. This design allows for flexible
- * and granular permission management, where roles can be composed of multiple authorities, and
- * authorities can be shared across multiple roles.
- * <p>
- * The entity maintains a creation timestamp to track when the permission assignment
- * was established, which can be useful for auditing and compliance purposes.
+ * This entity implements the many-to-many relationship between roles and authorities, allowing
+ * roles to be granted specific permissions. It forms a crucial part of the role-based access
+ * control (RBAC) system by defining which authorities (permissions) are associated with each role.
  *
  * @author zihluwang
- * @see Role
- * @see Authority
- * @see User
- * @since 1.0.0
+ * @version 1.0
+ * @since 1.0
  */
 public class RoleAuthority {
 
     /**
-     * The identifier of the role in this role-authority relationship.
+     * The identifier of the role in this association.
      * <p>
-     * This field references the {@link Role#getId()} and establishes which role is being granted
-     * the associated authority.
+     * This field references the primary key of the Role entity that is being granted the
+     * associated authority. Together with authorityId, it forms the composite primary key for this
+     * association entity.
      */
     private Long roleId;
 
     /**
-     * The identifier of the authority in this role-authority relationship.
+     * The identifier of the authority in this association.
      * <p>
-     * This field references the {@link Authority#getId()} and establishes which specific permission
-     * or authority is being granted to the role.
-     * <p>
-     * Note: The field name uses 'permissionId' for historical reasons, but it actually references
-     * an Authority entity.
+     * This field references the primary key of the Authority entity that is being granted to the
+     * associated role. Together with roleId, it forms the composite primary key for this
+     * association entity.
      */
-    private Long permissionId;
+    private Long authorityId;
 
     /**
-     * The timestamp when this role-authority relationship was created.
+     * The timestamp when this role-authority association was created.
      * <p>
-     * This field is useful for auditing purposes and tracking when specific permissions were
-     * granted to roles.
+     * This field is automatically set when the association is first established and provides audit
+     * information about when the authority was granted to the role. This is particularly useful for
+     * compliance and security auditing purposes.
      */
-    private Instant createdAt;
-
-    /**
-     * Default constructor for JPA and serialisation frameworks.
-     */
-    public RoleAuthority() {
-    }
-
-    /**
-     * Constructs a new RoleAuthority with all fields specified.
-     *
-     * @param roleId       the identifier of the role
-     * @param permissionId the identifier of the authority (permission)
-     * @param createdAt    the creation timestamp
-     */
-    public RoleAuthority(Long roleId, Long permissionId, Instant createdAt) {
-        this.roleId = roleId;
-        this.permissionId = permissionId;
-        this.createdAt = createdAt;
-    }
+    private LocalDateTime createdAt;
 
     public Long getRoleId() {
         return roleId;
@@ -80,19 +51,28 @@ public class RoleAuthority {
         this.roleId = roleId;
     }
 
-    public Long getPermissionId() {
-        return permissionId;
+    public Long getAuthorityId() {
+        return authorityId;
     }
 
-    public void setPermissionId(Long permissionId) {
-        this.permissionId = permissionId;
+    public void setAuthorityId(Long authorityId) {
+        this.authorityId = authorityId;
     }
 
-    public Instant getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Instant createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public RoleAuthority() {
+    }
+
+    public RoleAuthority(Long roleId, Long authorityId, LocalDateTime createdAt) {
+        this.roleId = roleId;
+        this.authorityId = authorityId;
         this.createdAt = createdAt;
     }
 
@@ -100,73 +80,20 @@ public class RoleAuthority {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         RoleAuthority that = (RoleAuthority) o;
-        return Objects.equals(roleId, that.roleId) &&
-                Objects.equals(permissionId, that.permissionId) &&
-                Objects.equals(createdAt, that.createdAt);
+        return Objects.equals(roleId, that.roleId) && Objects.equals(authorityId, that.authorityId) && Objects.equals(createdAt, that.createdAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(roleId, permissionId, createdAt);
+        return Objects.hash(roleId, authorityId, createdAt);
     }
 
     @Override
     public String toString() {
-        return "RolePermission{" +
+        return "RoleAuthority{" +
                 "roleId=" + roleId +
-                ", permissionId=" + permissionId +
+                ", authorityId=" + authorityId +
                 ", createdAt=" + createdAt +
                 '}';
-    }
-
-    /**
-     * Creates a new builder instance for constructing RoleAuthority objects.
-     *
-     * @return a new {@link RoleAuthorityBuilder} instance
-     */
-    public static RoleAuthorityBuilder builder() {
-        return new RoleAuthorityBuilder();
-    }
-
-    /**
-     * Builder class for constructing {@link RoleAuthority} instances.
-     * <p>
-     * This builder provides a fluent interface for setting role-authority relationship properties
-     * and ensures consistent object construction.
-     */
-    public static class RoleAuthorityBuilder {
-        private Long roleId;
-        private Long permissionId;
-        private Instant createdAt;
-
-        /**
-         * Private constructor to enforce builder pattern usage.
-         */
-        private RoleAuthorityBuilder() {
-        }
-
-        public RoleAuthorityBuilder roleId(Long roleId) {
-            this.roleId = roleId;
-            return this;
-        }
-
-        public RoleAuthorityBuilder permissionId(Long permissionId) {
-            this.permissionId = permissionId;
-            return this;
-        }
-
-        public RoleAuthorityBuilder createdAt(Instant createdAt) {
-            this.createdAt = createdAt;
-            return this;
-        }
-
-        /**
-         * Builds and returns a new RoleAuthority instance with the configured properties.
-         *
-         * @return a new {@link RoleAuthority} instance
-         */
-        public RoleAuthority build() {
-            return new RoleAuthority(roleId, permissionId, createdAt);
-        }
     }
 }

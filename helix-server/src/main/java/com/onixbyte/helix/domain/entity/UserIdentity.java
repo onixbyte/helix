@@ -2,90 +2,66 @@ package com.onixbyte.helix.domain.entity;
 
 import com.onixbyte.helix.constant.IdentityProvider;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
- * Entity representing user identity associations with external identity providers.
+ * Represents an external identity mapping for a user.
  * <p>
- * This entity manages the relationship between internal users and external identity providers,
- * enabling federated authentication and single sign-on (SSO) capabilities. Each user identity
- * record links a local user account to an external identity from providers such as OAuth services,
- * LDAP directories, or other authentication systems.
- * <p>
- * The user identity system supports multiple authentication strategies by allowing users to have
- * multiple identity associations. This enables flexible authentication workflows where users can
- * authenticate through different providers whilst maintaining a single internal user profile.
- * <p>
- * Each identity association contains the external identifier used by the identity provider, the
- * provider type, and metadata about when the association was created and last updated.
- * This information is crucial for maintaining synchronisation with external systems and auditing
- * authentication events.
+ * This entity manages the relationship between internal user accounts and external identity
+ * providers (such as OAuth providers, LDAP systems, or other authentication services). It enables
+ * users to authenticate using external credentials while maintaining a consistent internal user
+ * identity within the Helix system.
  *
  * @author zihluwang
- * @see User
- * @see IdentityProvider
- * @since 1.0.0
+ * @version 1.0
+ * @since 1.0
  */
 public class UserIdentity {
 
     /**
-     * The identifier of the user this identity belongs to.
+     * The identifier of the internal user account.
      * <p>
-     * This field references {@link User#getId()} and establishes the association between the
-     * external identity and the internal user account.
+     * This field establishes the relationship between the external identity and the internal
+     * user entity. It references the primary key of the User entity that this external identity
+     * is associated with.
      */
     private Long userId;
 
     /**
-     * The identity provider that manages this external identity.
+     * The external identity provider.
      * <p>
-     * This field specifies which authentication system or service is responsible for validating
-     * this identity, such as OAuth providers, LDAP directories, or local authentication.
+     * This field specifies which external authentication system or service this identity mapping
+     * represents, as defined by the {@link IdentityProvider} enumeration
+     * (e.g., Google, Microsoft, LDAP, etc.).
      */
     private IdentityProvider provider;
 
     /**
-     * The external identifier used by the identity provider.
+     * The unique identifier from the external provider.
      * <p>
-     * This field contains the unique identifier assigned by the external identity provider to
-     * represent this user. The format and structure of this identifier depends on the specific
-     * provider implementation.
+     * This field contains the user's unique identifier as provided by the external
+     * authentication system. This could be an email address, username, or any other unique
+     * identifier that the external provider uses.
      */
     private String externalId;
 
     /**
-     * The timestamp when this identity association was created.
+     * The timestamp when this identity mapping was created.
+     * <p>
+     * This field is automatically set when the user identity entity is first persisted and provides
+     * audit information about when the external identity was first linked to the internal
+     * user account.
      */
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 
     /**
-     * The timestamp when this identity association was last updated.
+     * The timestamp when this identity mapping was last updated.
+     * <p>
+     * This field is automatically updated whenever any changes are made to the user identity entity
+     * and provides audit information about the most recent modification to the identity mapping.
      */
-    private Instant updatedAt;
-
-    /**
-     * Default constructor for JPA and serialisation frameworks.
-     */
-    public UserIdentity() {
-    }
-
-    /**
-     * Constructs a new UserIdentity with all fields specified.
-     *
-     * @param userId     the identifier of the associated user
-     * @param provider   the identity provider managing this identity
-     * @param externalId the external identifier from the provider
-     * @param createdAt  the creation timestamp
-     * @param updatedAt  the last update timestamp
-     */
-    public UserIdentity(Long userId, IdentityProvider provider, String externalId, Instant createdAt, Instant updatedAt) {
-        this.userId = userId;
-        this.provider = provider;
-        this.externalId = externalId;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
+    private LocalDateTime updatedAt;
 
     public Long getUserId() {
         return userId;
@@ -111,19 +87,30 @@ public class UserIdentity {
         this.externalId = externalId;
     }
 
-    public Instant getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Instant createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Instant getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Instant updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public UserIdentity() {
+    }
+
+    public UserIdentity(Long userId, IdentityProvider provider, String externalId, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.userId = userId;
+        this.provider = provider;
+        this.externalId = externalId;
+        this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
@@ -131,11 +118,7 @@ public class UserIdentity {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         UserIdentity that = (UserIdentity) o;
-        return Objects.equals(userId, that.userId) &&
-                provider == that.provider &&
-                Objects.equals(externalId, that.externalId) &&
-                Objects.equals(createdAt, that.createdAt) &&
-                Objects.equals(updatedAt, that.updatedAt);
+        return Objects.equals(userId, that.userId) && provider == that.provider && Objects.equals(externalId, that.externalId) && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
     }
 
     @Override
@@ -152,68 +135,5 @@ public class UserIdentity {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
-    }
-
-    /**
-     * Creates a new builder instance for constructing UserIdentity objects.
-     *
-     * @return a new {@link UserIdentityBuilder} instance
-     */
-    public static UserIdentityBuilder builder() {
-        return new UserIdentityBuilder();
-    }
-
-    /**
-     * Builder class for constructing {@link UserIdentity} instances.
-     * <p>
-     * This builder provides a fluent interface for setting user identity properties and ensures
-     * consistent object construction.
-     */
-    public static class UserIdentityBuilder {
-        private Long userId;
-        private IdentityProvider provider;
-        private String externalId;
-        private Instant createdAt;
-        private Instant updatedAt;
-
-        /**
-         * Private constructor to enforce builder pattern usage.
-         */
-        private UserIdentityBuilder() {
-        }
-
-        public UserIdentityBuilder userId(Long userId) {
-            this.userId = userId;
-            return this;
-        }
-
-        public UserIdentityBuilder provider(IdentityProvider provider) {
-            this.provider = provider;
-            return this;
-        }
-
-        public UserIdentityBuilder externalId(String externalId) {
-            this.externalId = externalId;
-            return this;
-        }
-
-        public UserIdentityBuilder createdAt(Instant createdAt) {
-            this.createdAt = createdAt;
-            return this;
-        }
-
-        public UserIdentityBuilder updatedAt(Instant updatedAt) {
-            this.updatedAt = updatedAt;
-            return this;
-        }
-
-        /**
-         * Builds and returns a new UserIdentity instance with the configured properties.
-         *
-         * @return a new {@link UserIdentity} instance
-         */
-        public UserIdentity build() {
-            return new UserIdentity(userId, provider, externalId, createdAt, updatedAt);
-        }
     }
 }

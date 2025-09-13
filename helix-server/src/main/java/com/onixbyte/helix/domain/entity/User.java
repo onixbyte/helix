@@ -2,193 +2,178 @@ package com.onixbyte.helix.domain.entity;
 
 import com.onixbyte.helix.constant.UserStatus;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
- * Entity representing users within the Helix application.
+ * Represents a user entity in the Helix system.
  * <p>
- * A user represents an individual who can access and interact with the system. Users are the
- * central entity in the application's security and organisational model, containing authentication
- * credentials, personal information, and organisational associations.
- * <p>
- * Each user has a unique username for authentication, personal details such as full name and
- * contact information, and organisational associations through department and position references.
- * Users can have different statuses that control their access to the system.
- * <p>
- * The user entity supports multiple authentication methods through associated
- * {@link UserIdentity} entities, allowing for flexible authentication strategies such as
- * local credentials, OAuth, or other identity providers.
- * <p>
- * Users are associated with departments and positions to establish their role within the
- * organisational hierarchy, and can be assigned multiple roles through the RBAC system to control
- * their permissions and access rights.
+ * This entity encapsulates all user-related information including authentication credentials,
+ * personal details, contact information, and organisational associations. Users are the core
+ * entities that interact with the system and are associated with departments and positions within
+ * the organisational hierarchy.
  *
  * @author zihluwang
- * @see UserIdentity
- * @see Department
- * @see Position
- * @see Role
- * @see UserStatus
- * @since 1.0.0
+ * @version 1.0
+ * @since 1.0
  */
 public class User {
 
     /**
-     * The unique identifier for this user.
+     * The unique identifier for the user.
+     * <p>
+     * This serves as the primary key in the database and is used for all internal references to the
+     * user entity.
      */
     private Long id;
 
     /**
-     * The unique username for this user.
+     * The unique username for authentication purposes.
      * <p>
-     * This field is used for authentication and must be unique across all users in the system.
-     * It serves as the primary identifier for login purposes.
+     * This field must be unique across the system and is used for user login. It should follow the
+     * system's username policy regarding length and allowed characters.
      */
     private String username;
 
     /**
-     * The encrypted password for this user.
+     * The encrypted password for user authentication.
      * <p>
-     * This field stores the user's password in an encrypted format. It should never be stored or
-     * transmitted in plain text.
+     * This field stores the hashed password and should never contain plain text passwords. The
+     * password is encrypted using the system's configured password encoding strategy.
      */
     private String password;
 
     /**
-     * The full name of this user.
+     * The user's complete full name.
      * <p>
-     * This field contains the user's complete name as it should be displayed throughout the
-     * application interface.
+     * This field contains the user's display name as it should appear throughout the application
+     * interface and in reports.
      */
     private String fullName;
 
     /**
-     * The email address of this user.
+     * The user's email address.
      * <p>
-     * This field stores the user's primary email address, which can be used for notifications,
-     * password recovery, and other communication purposes.
+     * This field stores the primary email address for the user and is used for notifications,
+     * password recovery, and other system communications. The email must be unique across
+     * the system.
      */
     private String email;
 
     /**
      * The country code for the user's phone number.
      * <p>
-     * This field stores the international dialling code (e.g., "{@code +44}", "{@code +1}")
-     * associated with the user's phone number for proper formatting and
-     * international communication.
+     * This field stores the international dialling code (e.g., "+44" for UK, "+1" for US) and is
+     * used in conjunction with the phone number for complete contact information.
      */
     private String countryCode;
 
     /**
-     * The phone number of this user.
+     * The user's phone number without the country code.
      * <p>
-     * This field stores the user's phone number without the country code, which should be stored
-     * separately in the {@code countryCode} field.
+     * This field stores the local phone number and should be used together with the country code
+     * to form the complete international phone number.
      */
     private String phoneNumber;
 
     /**
-     * The URL of the user's avatar image.
+     * The URL to the user's avatar image.
      * <p>
-     * This field contains a URL pointing to the user's profile picture or avatar image, which can
-     * be displayed in the user interface.
+     * This field contains the complete URL path to the user's profile picture. It may be null if no
+     * avatar has been set.
      */
     private String avatarUrl;
 
     /**
-     * The current status of this user.
+     * The current status of the user account.
      * <p>
-     * This field determines the user's access level and account state, such as active, inactive,
-     * or locked.
+     * This field determines whether the user account is active, inactive, or in any other state as
+     * defined by the {@link UserStatus} enumeration.
      */
     private UserStatus status;
 
     /**
-     * The identifier of the department this user belongs to.
+     * The identifier of the department to which this user belongs.
      * <p>
-     * This field references {@link Department#getId()} and establishes the user's organisational
-     * association within the company structure.
+     * This field establishes the relationship between the user and their department within the
+     * organisational structure. It may be null if the user is not assigned to any department.
      */
     private Long departmentId;
 
     /**
-     * The identifier of the position this user holds.
+     * The identifier of the position held by this user.
      * <p>
-     * This field references {@link Position#getId()} and defines the user's job role or function
-     * within the organisation.
+     * This field establishes the relationship between the user and their job position within
+     * the organisation. It may be null if no specific position is assigned.
      */
     private Long positionId;
 
     /**
-     * The timestamp when this user was created.
+     * The timestamp when this user record was created.
+     * <p>
+     * This field is automatically set when the user entity is first persisted and provides audit
+     * information about when the user account was established.
      */
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 
     /**
-     * The timestamp when this user was last updated.
+     * The timestamp when this user record was last updated.
+     * <p>
+     * This field is automatically updated whenever any changes are made to the user entity and
+     * provides audit information about the most recent modification.
      */
-    private Instant updatedAt;
+    private LocalDateTime updatedAt;
 
     /**
-     * Default constructor for JPA and serialisation frameworks.
-     */
-    public User() {
-    }
-
-    /**
-     * Constructs a new User with all fields specified.
+     * Gets the unique identifier for this user.
      *
-     * @param id           the unique identifier
-     * @param username     the unique username for authentication
-     * @param password     the encrypted password
-     * @param fullName     the user's full name
-     * @param email        the user's email address
-     * @param countryCode  the country code for the phone number
-     * @param phoneNumber  the user's phone number
-     * @param avatarUrl    the URL of the user's avatar image
-     * @param status       the current user status
-     * @param departmentId the identifier of the user's department
-     * @param positionId   the identifier of the user's position
-     * @param createdAt    the creation timestamp
-     * @param updatedAt    the last update timestamp
+     * @return the user's unique identifier
      */
-    public User(Long id, String username, String password, String fullName, String email, String countryCode, String phoneNumber, String avatarUrl, UserStatus status, Long departmentId, Long positionId, Instant createdAt, Instant updatedAt) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.fullName = fullName;
-        this.email = email;
-        this.countryCode = countryCode;
-        this.phoneNumber = phoneNumber;
-        this.avatarUrl = avatarUrl;
-        this.status = status;
-        this.departmentId = departmentId;
-        this.positionId = positionId;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
-
     public Long getId() {
         return id;
     }
 
+    /**
+     * Sets the unique identifier for this user.
+     *
+     * @param id the user's unique identifier
+     */
     public void setId(Long id) {
         this.id = id;
     }
 
+    /**
+     * Gets the username for authentication.
+     *
+     * @return the username
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * Sets the username for authentication.
+     *
+     * @param username the username, must be unique across the system
+     */
     public void setUsername(String username) {
         this.username = username;
     }
 
+    /**
+     * Gets the encrypted password.
+     *
+     * @return the encrypted password
+     */
     public String getPassword() {
         return password;
     }
 
+    /**
+     * Sets the encrypted password.
+     *
+     * @param password the encrypted password (never plain text)
+     */
     public void setPassword(String password) {
         this.password = password;
     }
@@ -201,10 +186,20 @@ public class User {
         this.fullName = fullName;
     }
 
+    /**
+     * Gets the user's email address.
+     *
+     * @return the email address
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * Sets the user's email address.
+     *
+     * @param email the email address, must be unique across the system
+     */
     public void setEmail(String email) {
         this.email = email;
     }
@@ -233,10 +228,20 @@ public class User {
         this.avatarUrl = avatarUrl;
     }
 
+    /**
+     * Gets the current status of the user account.
+     *
+     * @return the user status
+     */
     public UserStatus getStatus() {
         return status;
     }
 
+    /**
+     * Sets the current status of the user account.
+     *
+     * @param status the user status
+     */
     public void setStatus(UserStatus status) {
         this.status = status;
     }
@@ -257,19 +262,38 @@ public class User {
         this.positionId = positionId;
     }
 
-    public Instant getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Instant createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Instant getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Instant updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public User() {
+    }
+
+    public User(Long id, String username, String password, String fullName, String email, String countryCode, String phoneNumber, String avatarUrl, UserStatus status, Long departmentId, Long positionId, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.fullName = fullName;
+        this.email = email;
+        this.countryCode = countryCode;
+        this.phoneNumber = phoneNumber;
+        this.avatarUrl = avatarUrl;
+        this.status = status;
+        this.departmentId = departmentId;
+        this.positionId = positionId;
+        this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
@@ -277,25 +301,12 @@ public class User {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) &&
-                Objects.equals(username, user.username) &&
-                Objects.equals(password, user.password) &&
-                Objects.equals(fullName, user.fullName) &&
-                Objects.equals(email, user.email) &&
-                Objects.equals(countryCode, user.countryCode) &&
-                Objects.equals(phoneNumber, user.phoneNumber) &&
-                Objects.equals(avatarUrl, user.avatarUrl) &&
-                status == user.status &&
-                Objects.equals(departmentId, user.departmentId) &&
-                Objects.equals(positionId, user.positionId) &&
-                Objects.equals(createdAt, user.createdAt) &&
-                Objects.equals(updatedAt, user.updatedAt);
+        return Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(fullName, user.fullName) && Objects.equals(email, user.email) && Objects.equals(countryCode, user.countryCode) && Objects.equals(phoneNumber, user.phoneNumber) && Objects.equals(avatarUrl, user.avatarUrl) && status == user.status && Objects.equals(departmentId, user.departmentId) && Objects.equals(positionId, user.positionId) && Objects.equals(createdAt, user.createdAt) && Objects.equals(updatedAt, user.updatedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, password, fullName, email, countryCode, phoneNumber,
-                avatarUrl, status, departmentId, positionId, createdAt, updatedAt);
+        return Objects.hash(id, username, password, fullName, email, countryCode, phoneNumber, avatarUrl, status, departmentId, positionId, createdAt, updatedAt);
     }
 
     @Override
@@ -315,116 +326,5 @@ public class User {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
-    }
-
-    /**
-     * Creates a new builder instance for constructing User objects.
-     *
-     * @return a new {@link UserBuilder} instance
-     */
-    public static UserBuilder builder() {
-        return new UserBuilder();
-    }
-
-    /**
-     * Builder class for constructing {@link User} instances.
-     * <p>
-     * This builder provides a fluent interface for setting user properties and ensures consistent
-     * object construction.
-     */
-    public static class UserBuilder {
-        private Long id;
-        private String username;
-        private String password;
-        private String fullName;
-        private String email;
-        private String countryCode;
-        private String phoneNumber;
-        private String avatarUrl;
-        private UserStatus status;
-        private Long departmentId;
-        private Long positionId;
-        private Instant createdAt;
-        private Instant updatedAt;
-
-        /**
-         * Private constructor to enforce builder pattern usage.
-         */
-        private UserBuilder() {
-        }
-
-        public UserBuilder id(Long id) {
-            this.id = id;
-            return this;
-        }
-
-        public UserBuilder username(String username) {
-            this.username = username;
-            return this;
-        }
-
-        public UserBuilder password(String password) {
-            this.password = password;
-            return this;
-        }
-
-        public UserBuilder fullName(String fullName) {
-            this.fullName = fullName;
-            return this;
-        }
-
-        public UserBuilder email(String email) {
-            this.email = email;
-            return this;
-        }
-
-        public UserBuilder countryCode(String countryCode) {
-            this.countryCode = countryCode;
-            return this;
-        }
-
-        public UserBuilder phoneNumber(String phoneNumber) {
-            this.phoneNumber = phoneNumber;
-            return this;
-        }
-
-        public UserBuilder avatarUrl(String avatarUrl) {
-            this.avatarUrl = avatarUrl;
-            return this;
-        }
-
-        public UserBuilder status(UserStatus status) {
-            this.status = status;
-            return this;
-        }
-
-        public UserBuilder departmentId(Long departmentId) {
-            this.departmentId = departmentId;
-            return this;
-        }
-
-        public UserBuilder positionId(Long positionId) {
-            this.positionId = positionId;
-            return this;
-        }
-
-        public UserBuilder createdAt(Instant createdAt) {
-            this.createdAt = createdAt;
-            return this;
-        }
-
-        public UserBuilder updatedAt(Instant updatedAt) {
-            this.updatedAt = updatedAt;
-            return this;
-        }
-
-        /**
-         * Builds and returns a new User instance with the configured properties.
-         *
-         * @return a new {@link User} instance
-         */
-        public User build() {
-            return new User(id, username, password, fullName, email, countryCode, phoneNumber, avatarUrl, status, departmentId, positionId, createdAt, updatedAt);
-        }
     }
 }

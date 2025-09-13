@@ -1,116 +1,98 @@
 package com.onixbyte.helix.domain.entity;
 
-import com.onixbyte.helix.constant.NormalStatus;
+import com.onixbyte.helix.constant.Status;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
- * Entity representing organisational departments within the Helix application.
+ * Represents a department entity within the organisational hierarchy.
  * <p>
- * A department represents an organisational unit or division within a company or institution.
- * Departments are organised in a hierarchical tree structure, allowing for nested sub-departments
- * and complex organisational hierarchies.
- * <p>
- * The department hierarchy is maintained through parent-child relationships using the
- * {@code parentId} field and materialised path pattern via the {@code treePath} field for efficient
- * tree operations and queries.
- * <p>
- * Each department has a sort order for consistent display ordering within the same
- * hierarchical level, and a status indicating whether the department is currently active within
- * the organisation.
+ * This entity models departments as hierarchical structures where each department can have a
+ * parent department, creating a tree-like organisational structure. Departments are used to group
+ * users and define organisational boundaries within the Helix system.
+ * </p>
  *
  * @author zihluwang
- * @see User
- * @see Position
- * @see NormalStatus
- * @since 1.0.0
+ * @version 1.0
+ * @since 1.0
  */
 public class Department {
 
     /**
-     * The unique identifier for this department.
+     * The unique identifier for the department.
+     * <p>
+     * This serves as the primary key in the database and is used for all
+     * internal references to the department entity.
+     * </p>
      */
     private Long id;
 
     /**
-     * The name of this department.
+     * The name of the department.
      * <p>
-     * This should be a descriptive name that clearly identifies the department's purpose or
-     * function within the organisation.
+     * This field contains the human-readable name of the department as it
+     * should appear in the organisational chart and user interfaces.
+     * </p>
      */
     private String name;
 
     /**
-     * The identifier of the parent department in the hierarchy.
+     * The identifier of the parent department.
      * <p>
-     * This field is null for root-level departments and contains the ID of the parent department
-     * for sub-departments.
+     * This field establishes the hierarchical relationship between departments.
+     * A null value indicates that this is a root-level department with no parent.
+     * </p>
      */
     private Long parentId;
 
     /**
-     * The materialised path representing this department's position in the tree.
+     * The complete path from root to this department in the hierarchy.
      * <p>
-     * This field contains a path string that represents the full hierarchy from root to
-     * this department, enabling efficient tree queries and operations without recursive
-     * database calls.
+     * This field contains a string representation of the department's position
+     * in the organisational tree, typically formatted as a path with separators
+     * (e.g., "/root/division/department"). This enables efficient querying of
+     * department hierarchies.
+     * </p>
      */
     private String treePath;
 
     /**
-     * The sort order for this department within its hierarchical level.
+     * The sort order for displaying departments.
      * <p>
-     * Used to maintain consistent ordering when displaying departments at the same level in
-     * the hierarchy.
+     * This field determines the order in which departments should be displayed
+     * when listed alongside their siblings in the hierarchy. Lower values
+     * indicate higher priority in sorting.
+     * </p>
      */
-    private Integer sortOrder;
+    private Integer sort;
 
     /**
-     * The current status of this department.
+     * The current status of the department.
      * <p>
-     * Determines whether this department is active and operational within the organisation.
+     * This field determines whether the department is active, inactive, or in any
+     * other state as defined by the {@link Status} enumeration.
+     * </p>
      */
-    private NormalStatus status;
+    private Status status;
 
     /**
-     * The timestamp when this department was created.
+     * The timestamp when this department record was created.
+     * <p>
+     * This field is automatically set when the department entity is first persisted
+     * and provides audit information about when the department was established.
+     * </p>
      */
-    private Instant createdAt;
+    private LocalDateTime createTime;
 
     /**
-     * The timestamp when this department was last updated.
+     * The timestamp when this department record was last updated.
+     * <p>
+     * This field is automatically updated whenever any changes are made to the
+     * department entity and provides audit information about the most recent modification.
+     * </p>
      */
-    private Instant updatedAt;
-
-    /**
-     * Default constructor for JPA and serialization frameworks.
-     */
-    public Department() {
-    }
-
-    /**
-     * Constructs a new Department with all fields specified.
-     *
-     * @param id        the unique identifier
-     * @param name      the department name
-     * @param parentId  the parent department ID (null for root departments)
-     * @param treePath  the materialised path in the department hierarchy
-     * @param sortOrder the sort order within the hierarchical level
-     * @param status    the current status
-     * @param createdAt the creation timestamp
-     * @param updatedAt the last update timestamp
-     */
-    public Department(Long id, String name, Long parentId, String treePath, Integer sortOrder, NormalStatus status, Instant createdAt, Instant updatedAt) {
-        this.id = id;
-        this.name = name;
-        this.parentId = parentId;
-        this.treePath = treePath;
-        this.sortOrder = sortOrder;
-        this.status = status;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
+    private LocalDateTime updateTime;
 
     public Long getId() {
         return id;
@@ -144,55 +126,85 @@ public class Department {
         this.treePath = treePath;
     }
 
-    public Integer getSortOrder() {
-        return sortOrder;
+    public Integer getSort() {
+        return sort;
     }
 
-    public void setSortOrder(Integer sortOrder) {
-        this.sortOrder = sortOrder;
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 
-    public NormalStatus getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(NormalStatus status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
-    public Instant getCreatedAt() {
-        return createdAt;
+    public LocalDateTime getCreateTime() {
+        return createTime;
     }
 
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
     }
 
-    public Instant getUpdatedAt() {
-        return updatedAt;
+    public LocalDateTime getUpdateTime() {
+        return updateTime;
     }
 
-    public void setUpdatedAt(Instant updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setUpdateTime(LocalDateTime updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    /**
+     * Default constructor for Department.
+     * <p>
+     * Creates a new Department instance with all fields initialised to their default values.
+     * This constructor is typically used by JPA and other frameworks for entity instantiation.
+     * </p>
+     */
+    public Department() {
+    }
+
+    /**
+     * Constructs a new Department with all specified parameters.
+     * <p>
+     * This constructor allows for the creation of a fully initialised Department entity
+     * with all field values provided at instantiation time.
+     * </p>
+     *
+     * @param id the unique identifier for the department
+     * @param name the name of the department
+     * @param parentId the identifier of the parent department (null for root departments)
+     * @param treePath the complete hierarchical path to this department
+     * @param sort the sort order for display purposes
+     * @param status the current status of the department
+     * @param createTime the timestamp when the department was created
+     * @param updateTime the timestamp when the department was last updated
+     */
+    public Department(Long id, String name, Long parentId, String treePath, Integer sort, Status status, LocalDateTime createTime, LocalDateTime updateTime) {
+        this.id = id;
+        this.name = name;
+        this.parentId = parentId;
+        this.treePath = treePath;
+        this.sort = sort;
+        this.status = status;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Department that = (Department) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(parentId, that.parentId) &&
-                Objects.equals(treePath, that.treePath) &&
-                Objects.equals(sortOrder, that.sortOrder) &&
-                status == that.status &&
-                Objects.equals(createdAt, that.createdAt) &&
-                Objects.equals(updatedAt, that.updatedAt);
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(parentId, that.parentId) && Objects.equals(treePath, that.treePath) && Objects.equals(sort, that.sort) && status == that.status && Objects.equals(createTime, that.createTime) && Objects.equals(updateTime, that.updateTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, parentId, treePath, sortOrder, status, createdAt, updatedAt);
+        return Objects.hash(id, name, parentId, treePath, sort, status, createTime, updateTime);
     }
 
     @Override
@@ -202,91 +214,10 @@ public class Department {
                 ", name='" + name + '\'' +
                 ", parentId=" + parentId +
                 ", treePath='" + treePath + '\'' +
-                ", sortOrder=" + sortOrder +
+                ", sort=" + sort +
                 ", status=" + status +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
                 '}';
-    }
-
-    /**
-     * Creates a new builder instance for constructing Department objects.
-     *
-     * @return a new {@link DepartmentBuilder} instance
-     */
-    public static DepartmentBuilder builder() {
-        return new DepartmentBuilder();
-    }
-
-    /**
-     * Builder class for constructing {@link Department} instances.
-     * <p>
-     * This builder provides a fluent interface for setting department properties and ensures
-     * consistent object construction.
-     */
-    public static class DepartmentBuilder {
-        private Long id;
-        private String name;
-        private Long parentId;
-        private String treePath;
-        private Integer sortOrder;
-        private NormalStatus status;
-        private Instant createdAt;
-        private Instant updatedAt;
-
-        /**
-         * Private constructor to enforce builder pattern usage.
-         */
-        private DepartmentBuilder() {
-        }
-
-        public DepartmentBuilder id(Long id) {
-            this.id = id;
-            return this;
-        }
-
-        public DepartmentBuilder name(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public DepartmentBuilder parentId(Long parentId) {
-            this.parentId = parentId;
-            return this;
-        }
-
-        public DepartmentBuilder treePath(String treePath) {
-            this.treePath = treePath;
-            return this;
-        }
-
-        public DepartmentBuilder sortOrder(Integer sortOrder) {
-            this.sortOrder = sortOrder;
-            return this;
-        }
-
-        public DepartmentBuilder status(NormalStatus status) {
-            this.status = status;
-            return this;
-        }
-
-        public DepartmentBuilder createdAt(Instant createdAt) {
-            this.createdAt = createdAt;
-            return this;
-        }
-
-        public DepartmentBuilder updatedAt(Instant updatedAt) {
-            this.updatedAt = updatedAt;
-            return this;
-        }
-
-        /**
-         * Builds and returns a new Department instance with the configured properties.
-         *
-         * @return a new {@link Department} instance
-         */
-        public Department build() {
-            return new Department(id, name, parentId, treePath, sortOrder, status, createdAt, updatedAt);
-        }
     }
 }

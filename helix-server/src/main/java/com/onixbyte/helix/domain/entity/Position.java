@@ -1,117 +1,88 @@
 package com.onixbyte.helix.domain.entity;
 
-import com.onixbyte.helix.constant.NormalStatus;
+import com.onixbyte.helix.constant.Status;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
- * Entity representing job positions within the Helix application.
+ * Represents a position entity within the organisational structure.
  * <p>
- * A position defines a specific role or job function within an organisation, such as
- * "{@code Software Engineer}", "{@code Project Manager}", or "{@code Sales Representative}".
- * Positions are used in conjunction with departments to define the organisational structure and can
- * be assigned to users to establish their roles and responsibilities.
- * <p>
- * Each position has a unique code for system identification, a descriptive name for
- * display purposes, and an optional description providing additional details about the role's
- * responsibilities and requirements.
- * <p>
- * Positions support ordering through the sort order field and can be activated or deactivated using
- * the status field to manage organisational changes.
+ * Positions define job roles or titles that can be assigned to users within the organisation. They
+ * provide a way to categorise users based on their responsibilities and functions, complementing
+ * the department-based organisational hierarchy. Positions can be used for reporting,
+ * access control, and organisational management purposes.
  *
  * @author zihluwang
- * @see User
- * @see Department
- * @see NormalStatus
- * @since 1.0.0
+ * @version 1.0
+ * @since 1.0
  */
 public class Position {
 
     /**
-     * The unique identifier for this position.
+     * The unique identifier for the position.
+     * <p>
+     * This serves as the primary key in the database and is used for all internal references to the
+     * position entity.
      */
     private Long id;
 
     /**
-     * The display name of this position.
+     * The human-readable name of the position.
      * <p>
-     * This should be a human-readable name that clearly describes the job role or function, such as
-     * "{@code Senior Software Engineer}" or "{@code Marketing Manager}".
+     * This field contains the job title or position name as it should appear in
+     * organisational charts, user profiles, and administrative interfaces.
      */
     private String name;
 
     /**
-     * The unique code identifier for this position.
+     * The unique code identifier for the position.
      * <p>
-     * This code is used for system identification and should be unique across all positions.
-     * It's typically used in integrations and internal system references.
+     * This field contains a system-level identifier that uniquely identifies the position. It is
+     * typically used for integration purposes and should follow a consistent naming convention.
      */
     private String code;
 
     /**
-     * A detailed description of this position.
+     * A detailed description of the position's responsibilities and requirements.
      * <p>
-     * This field can contain information about the role's responsibilities, requirements,
-     * qualifications, and other relevant details that help define the position's scope
-     * and expectations.
+     * This field provides additional context about the role, including key responsibilities,
+     * required skills, or other relevant information that helps define what this position entails.
      */
     private String description;
 
     /**
-     * The sort order for this position.
+     * The sort order for displaying positions.
      * <p>
-     * Used to maintain consistent ordering when displaying positions in lists or
-     * hierarchical views.
+     * This field determines the order in which positions should be displayed in lists and
+     * selection interfaces. Lower values indicate higher priority in sorting, which can reflect
+     * organisational hierarchy or importance.
      */
-    private Integer sortOrder;
+    private Integer sort;
 
     /**
-     * The current status of this position.
+     * The current status of the position.
      * <p>
-     * Determines whether this position is active and available for assignment within
-     * the organisation.
+     * This field determines whether the position is active, inactive, or in any other state as
+     * defined by the {@link Status} enumeration.
      */
-    private NormalStatus status;
+    private Status status;
 
     /**
-     * The timestamp when this position was created.
+     * The timestamp when this position record was created.
+     * <p>
+     * This field is automatically set when the position entity is first persisted and provides
+     * audit information about when the position was established.
      */
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 
     /**
-     * The timestamp when this position was last updated.
+     * The timestamp when this position record was last updated.
+     * <p>
+     * This field is automatically updated whenever any changes are made to the position entity and
+     * provides audit information about the most recent modification.
      */
-    private Instant updatedAt;
-
-    /**
-     * Default constructor for JPA and serialisation frameworks.
-     */
-    public Position() {
-    }
-
-    /**
-     * Constructs a new Position with all fields specified.
-     *
-     * @param id          the unique identifier
-     * @param name        the position name
-     * @param code        the unique position code
-     * @param description the detailed description of the position
-     * @param sortOrder   the sort order for display purposes
-     * @param status      the current status
-     * @param createdAt   the creation timestamp
-     * @param updatedAt   the last update timestamp
-     */
-    public Position(Long id, String name, String code, String description, Integer sortOrder, NormalStatus status, Instant createdAt, Instant updatedAt) {
-        this.id = id;
-        this.name = name;
-        this.code = code;
-        this.description = description;
-        this.sortOrder = sortOrder;
-        this.status = status;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
+    private LocalDateTime updatedAt;
 
     public Long getId() {
         return id;
@@ -145,35 +116,49 @@ public class Position {
         this.description = description;
     }
 
-    public Integer getSortOrder() {
-        return sortOrder;
+    public Integer getSort() {
+        return sort;
     }
 
-    public void setSortOrder(Integer sortOrder) {
-        this.sortOrder = sortOrder;
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 
-    public NormalStatus getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(NormalStatus status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
-    public Instant getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Instant createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Instant getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Instant updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Position() {
+    }
+
+    public Position(Long id, String name, String code, String description, Integer sort, Status status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.name = name;
+        this.code = code;
+        this.description = description;
+        this.sort = sort;
+        this.status = status;
+        this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
@@ -181,19 +166,12 @@ public class Position {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Position position = (Position) o;
-        return Objects.equals(id, position.id) &&
-                Objects.equals(name, position.name) &&
-                Objects.equals(code, position.code) &&
-                Objects.equals(description, position.description) &&
-                Objects.equals(sortOrder, position.sortOrder) &&
-                status == position.status &&
-                Objects.equals(createdAt, position.createdAt) &&
-                Objects.equals(updatedAt, position.updatedAt);
+        return Objects.equals(id, position.id) && Objects.equals(name, position.name) && Objects.equals(code, position.code) && Objects.equals(description, position.description) && Objects.equals(sort, position.sort) && status == position.status && Objects.equals(createdAt, position.createdAt) && Objects.equals(updatedAt, position.updatedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, code, description, sortOrder, status, createdAt, updatedAt);
+        return Objects.hash(id, name, code, description, sort, status, createdAt, updatedAt);
     }
 
     @Override
@@ -203,91 +181,10 @@ public class Position {
                 ", name='" + name + '\'' +
                 ", code='" + code + '\'' +
                 ", description='" + description + '\'' +
-                ", sortOrder=" + sortOrder +
+                ", sort=" + sort +
                 ", status=" + status +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
-    }
-
-    /**
-     * Creates a new builder instance for constructing Position objects.
-     *
-     * @return a new {@link PositionBuilder} instance
-     */
-    public static PositionBuilder builder() {
-        return new PositionBuilder();
-    }
-
-    /**
-     * Builder class for constructing {@link Position} instances.
-     * <p>
-     * This builder provides a fluent interface for setting position properties and ensures
-     * consistent object construction.
-     */
-    public static class PositionBuilder {
-        private Long id;
-        private String name;
-        private String code;
-        private String description;
-        private Integer sortOrder;
-        private NormalStatus status;
-        private Instant createdAt;
-        private Instant updatedAt;
-
-        /**
-         * Private constructor to enforce builder pattern usage.
-         */
-        private PositionBuilder() {
-        }
-
-        public PositionBuilder id(Long id) {
-            this.id = id;
-            return this;
-        }
-
-        public PositionBuilder name(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public PositionBuilder code(String code) {
-            this.code = code;
-            return this;
-        }
-
-        public PositionBuilder description(String description) {
-            this.description = description;
-            return this;
-        }
-
-        public PositionBuilder sortOrder(Integer sortOrder) {
-            this.sortOrder = sortOrder;
-            return this;
-        }
-
-        public PositionBuilder status(NormalStatus status) {
-            this.status = status;
-            return this;
-        }
-
-        public PositionBuilder createdAt(Instant createdAt) {
-            this.createdAt = createdAt;
-            return this;
-        }
-
-        public PositionBuilder updatedAt(Instant updatedAt) {
-            this.updatedAt = updatedAt;
-            return this;
-        }
-
-        /**
-         * Builds and returns a new Position instance with the configured properties.
-         *
-         * @return a new {@link Position} instance
-         */
-        public Position build() {
-            return new Position(id, name, code, description, sortOrder, status, createdAt, updatedAt);
-        }
     }
 }
