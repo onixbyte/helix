@@ -1,10 +1,10 @@
 --- Type Definitions ---
 DROP TYPE IF EXISTS UserStatus CASCADE;
-DROP TYPE IF EXISTS NormalStatus CASCADE;
+DROP TYPE IF EXISTS Status CASCADE;
 DROP TYPE IF EXISTS IdentityProvider CASCADE;
 
 CREATE TYPE UserStatus AS ENUM ('ACTIVE', 'INACTIVE', 'LOCKED');
-CREATE TYPE NormalStatus AS ENUM ('ACTIVE', 'INACTIVE');
+CREATE TYPE Status AS ENUM ('ACTIVE', 'INACTIVE');
 CREATE TYPE IdentityProvider AS ENUM ('LOCAL', 'OIDC', 'MICROSOFT_ENTRA_ID', 'GOOGLE_OIDC', 'SAML');
 
 --- Departments Table ---
@@ -16,20 +16,20 @@ CREATE TABLE departments
     parent_id  BIGINT       NULL REFERENCES departments (id),
     tree_path  TEXT,
     sort_order INT          NOT NULL DEFAULT 0,
-    status     NormalStatus NOT NULL DEFAULT 'ACTIVE',
+    status     Status       NOT NULL DEFAULT 'ACTIVE',
     created_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 --- Departments Data Insertion ---
 INSERT INTO departments (id, name, parent_id, tree_path, sort_order, status)
-VALUES (1, 'Company HQ', NULL, '/1/', 1, 'ACTIVE'::NormalStatus),
-       (2, 'Human Resources', 1, '/1/2/', 1, 'ACTIVE'::NormalStatus),
-       (3, 'Finance', 1, '/1/3/', 2, 'ACTIVE'::NormalStatus),
-       (4, 'Technology', 1, '/1/4/', 3, 'ACTIVE'::NormalStatus),
-       (5, 'IT Support', 4, '/1/4/5/', 1, 'ACTIVE'::NormalStatus),
-       (6, 'Software Development', 4, '/1/4/6/', 2, 'ACTIVE'::NormalStatus),
-       (7, 'Operations', 1, '/1/7/', 4, 'INACTIVE'::NormalStatus);
+VALUES (1, 'Company HQ', NULL, '/1/', 1, 'ACTIVE'::Status),
+       (2, 'Human Resources', 1, '/1/2/', 1, 'ACTIVE'::Status),
+       (3, 'Finance', 1, '/1/3/', 2, 'ACTIVE'::Status),
+       (4, 'Technology', 1, '/1/4/', 3, 'ACTIVE'::Status),
+       (5, 'IT Support', 4, '/1/4/5/', 1, 'ACTIVE'::Status),
+       (6, 'Software Development', 4, '/1/4/6/', 2, 'ACTIVE'::Status),
+       (7, 'Operations', 1, '/1/7/', 4, 'INACTIVE'::Status);
 
 --- Positions Table ---
 DROP TABLE IF EXISTS positions CASCADE;
@@ -40,7 +40,7 @@ CREATE TABLE positions
     code        VARCHAR(64)  NULL UNIQUE,
     description TEXT,
     sort_order  INT          NOT NULL DEFAULT 0,
-    status      NormalStatus NOT NULL DEFAULT 'ACTIVE',
+    status      Status       NOT NULL DEFAULT 'ACTIVE',
     created_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -118,16 +118,16 @@ CREATE TABLE roles
     sort          INTEGER      NOT NULL,
     default_value BOOLEAN      NOT NULL DEFAULT FALSE,
     description   TEXT,
-    status        NormalStatus NOT NULL DEFAULT 'ACTIVE',
+    status        Status       NOT NULL DEFAULT 'ACTIVE',
     created_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 --- Roles Data Insertion ---
 INSERT INTO roles (name, code, sort, default_value, description, status, created_at, updated_at)
-VALUES ('Admin', 'admin', 1, FALSE, 'Administrator of this system.', 'ACTIVE'::NormalStatus,
+VALUES ('Admin', 'admin', 1, FALSE, 'Administrator of this system.', 'ACTIVE'::Status,
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       ('Normal User', 'user', 2, TRUE, 'Normal user of this system.', 'ACTIVE'::NormalStatus,
+       ('Normal User', 'user', 2, TRUE, 'Normal user of this system.', 'ACTIVE'::Status,
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 --- User Roles Table ---
@@ -155,40 +155,40 @@ CREATE TABLE authorities
     code        VARCHAR(128) NOT NULL UNIQUE,
     name        VARCHAR(128) NOT NULL,
     description TEXT,
-    status      NormalStatus NOT NULL DEFAULT 'ACTIVE',
+    status      Status       NOT NULL DEFAULT 'ACTIVE',
     created_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 --- Authorities Data Insertion ---
 INSERT INTO authorities(code, name, description, status, created_at, updated_at)
-VALUES ('system:dashboard:read', 'Read Dashboard', 'Read dashboard.', 'ACTIVE'::NormalStatus,
+VALUES ('system:dashboard:read', 'Read Dashboard', 'Read dashboard.', 'ACTIVE'::Status,
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       ('system:user:read', 'Read User', 'Read user.', 'ACTIVE'::NormalStatus, CURRENT_TIMESTAMP,
+       ('system:user:read', 'Read User', 'Read user.', 'ACTIVE'::Status, CURRENT_TIMESTAMP,
         CURRENT_TIMESTAMP),
-       ('system:user_detail:read', 'Read User', 'Read user detail.', 'ACTIVE'::NormalStatus,
+       ('system:user_detail:read', 'Read User', 'Read user detail.', 'ACTIVE'::Status,
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
        ('system:user:write', 'Write User', 'Write user, such as add, edit or delete.',
-        'ACTIVE'::NormalStatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       ('system:department:read', 'Read Department', 'Read departments', 'ACTIVE'::NormalStatus,
+        'ACTIVE'::Status, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       ('system:department:read', 'Read Department', 'Read departments', 'ACTIVE'::Status,
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       ('system:department:write', 'Write Department', 'Write departments.', 'ACTIVE'::NormalStatus,
+       ('system:department:write', 'Write Department', 'Write departments.', 'ACTIVE'::Status,
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       ('system:role:read', 'Read Roles', 'Read roles.', 'ACTIVE'::NormalStatus, CURRENT_TIMESTAMP,
+       ('system:role:read', 'Read Roles', 'Read roles.', 'ACTIVE'::Status, CURRENT_TIMESTAMP,
         CURRENT_TIMESTAMP),
-       ('system:role:write', 'Write Roles', 'Write roles.', 'ACTIVE'::NormalStatus,
+       ('system:role:write', 'Write Roles', 'Write roles.', 'ACTIVE'::Status,
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       ('system:authority:read', 'Read Authorities', 'Read authorities.', 'ACTIVE'::NormalStatus,
+       ('system:authority:read', 'Read Authorities', 'Read authorities.', 'ACTIVE'::Status,
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
        ('system:authority:write', 'Write Authorities', 'Write authorities.',
-        'ACTIVE'::NormalStatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       ('system:audit_log:read', 'Read Audit Logs', 'Read audit logs.', 'ACTIVE'::NormalStatus,
+        'ACTIVE'::Status, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       ('system:audit_log:read', 'Read Audit Logs', 'Read audit logs.', 'ACTIVE'::Status,
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
        ('system:sso:write', 'Manage SSO',
-        'Manage SSO configurations (such as Microsoft Entra ID, etc.).', 'ACTIVE'::NormalStatus,
+        'Manage SSO configurations (such as Microsoft Entra ID, etc.).', 'ACTIVE'::Status,
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
        ('system:setting:write', 'Write System Settings', 'Write system settings.',
-        'ACTIVE'::NormalStatus, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+        'ACTIVE'::Status, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 --- Role Authorities Table ---
 DROP TABLE IF EXISTS role_authorities CASCADE;
