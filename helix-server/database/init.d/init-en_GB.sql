@@ -15,14 +15,14 @@ CREATE TABLE departments
     name       VARCHAR(128) NOT NULL UNIQUE,
     parent_id  BIGINT       NULL REFERENCES departments (id),
     tree_path  TEXT,
-    sort_order INT          NOT NULL DEFAULT 0,
+    sort       INT          NOT NULL DEFAULT 0,
     status     Status       NOT NULL DEFAULT 'ACTIVE',
     created_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 --- Departments Data Insertion ---
-INSERT INTO departments (id, name, parent_id, tree_path, sort_order, status)
+INSERT INTO departments (id, name, parent_id, tree_path, sort, status)
 VALUES (1, 'Company HQ', NULL, '/1/', 1, 'ACTIVE'::Status),
        (2, 'Human Resources', 1, '/1/2/', 1, 'ACTIVE'::Status),
        (3, 'Finance', 1, '/1/3/', 2, 'ACTIVE'::Status),
@@ -39,14 +39,14 @@ CREATE TABLE positions
     name        VARCHAR(128) NOT NULL UNIQUE,
     code        VARCHAR(64)  NULL UNIQUE,
     description TEXT,
-    sort_order  INT          NOT NULL DEFAULT 0,
+    sort        INT          NOT NULL DEFAULT 0,
     status      Status       NOT NULL DEFAULT 'ACTIVE',
     created_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 --- Positions Data Insertion ---
-INSERT INTO positions (id, name, code, description, sort_order, status)
+INSERT INTO positions (id, name, code, description, sort, status)
 VALUES (1, 'HR Manager', 'HR-MGR',
         'Responsible for overseeing recruitment, employee relations, and staff wellbeing.', 1,
         'ACTIVE'),
