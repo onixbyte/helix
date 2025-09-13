@@ -327,4 +327,112 @@ public class User {
                 ", updatedAt=" + updatedAt +
                 '}';
     }
+
+    /**
+     * Creates a new Builder instance for constructing User objects.
+     *
+     * @return a new UserBuilder instance
+     */
+    public static UserBuilder builder() {
+        return new UserBuilder();
+    }
+
+    /**
+     * Builder class for constructing User instances with a fluent API.
+     * <p>
+     * This builder provides a convenient way to construct User objects with optional parameters,
+     * following the Builder pattern for improved readability and maintainability.
+     */
+    public static class UserBuilder {
+        private Long id;
+        private String username;
+        private String password;
+        private String fullName;
+        private String email;
+        private String countryCode;
+        private String phoneNumber;
+        private String avatarUrl;
+        private UserStatus status;
+        private Long departmentId;
+        private Long positionId;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
+
+        private UserBuilder() {
+        }
+
+        public UserBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public UserBuilder username(String username) {
+            this.username = username;
+            return this;
+        }
+
+        public UserBuilder password(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public UserBuilder fullName(String fullName) {
+            this.fullName = fullName;
+            return this;
+        }
+
+        public UserBuilder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public UserBuilder countryCode(String countryCode) {
+            this.countryCode = countryCode;
+            return this;
+        }
+
+        public UserBuilder phoneNumber(String phoneNumber) {
+            this.phoneNumber = phoneNumber;
+            return this;
+        }
+
+        public UserBuilder avatarUrl(String avatarUrl) {
+            this.avatarUrl = avatarUrl;
+            return this;
+        }
+
+        public UserBuilder status(UserStatus status) {
+            this.status = status;
+            return this;
+        }
+
+        public UserBuilder departmentId(Long departmentId) {
+            this.departmentId = departmentId;
+            return this;
+        }
+
+        public UserBuilder positionId(Long positionId) {
+            this.positionId = positionId;
+            return this;
+        }
+
+        public UserBuilder createdAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public UserBuilder updatedAt(LocalDateTime updatedAt) {
+            this.updatedAt = updatedAt;
+            return this;
+        }
+
+        /**
+         * Builds and returns a new User instance with the configured properties.
+         *
+         * @return a new User instance
+         */
+        public User build() {
+            return new User(id, username, password, fullName, email, countryCode, phoneNumber, avatarUrl, status, departmentId, positionId, createdAt, updatedAt);
+        }
+    }
 }

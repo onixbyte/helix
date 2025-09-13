@@ -187,4 +187,82 @@ public class Position {
                 ", updatedAt=" + updatedAt +
                 '}';
     }
+
+    /**
+     * Creates a new Builder instance for constructing Position objects.
+     *
+     * @return a new PositionBuilder instance
+     */
+    public static PositionBuilder builder() {
+        return new PositionBuilder();
+    }
+
+    /**
+     * Builder class for constructing Position instances with a fluent API.
+     * <p>
+     * This builder provides a convenient way to construct Position objects with optional parameters,
+     * following the Builder pattern for improved readability and maintainability.
+     */
+    public static class PositionBuilder {
+        private Long id;
+        private String name;
+        private String code;
+        private String description;
+        private Integer sort;
+        private Status status;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
+
+        private PositionBuilder() {
+        }
+
+        public PositionBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public PositionBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public PositionBuilder code(String code) {
+            this.code = code;
+            return this;
+        }
+
+        public PositionBuilder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public PositionBuilder sort(Integer sort) {
+            this.sort = sort;
+            return this;
+        }
+
+        public PositionBuilder status(Status status) {
+            this.status = status;
+            return this;
+        }
+
+        public PositionBuilder createdAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public PositionBuilder updatedAt(LocalDateTime updatedAt) {
+            this.updatedAt = updatedAt;
+            return this;
+        }
+
+        /**
+         * Builds and returns a new Position instance with the configured properties.
+         *
+         * @return a new Position instance
+         */
+        public Position build() {
+            return new Position(id, name, code, description, sort, status, createdAt, updatedAt);
+        }
+    }
 }

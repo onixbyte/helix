@@ -136,4 +136,64 @@ public class UserIdentity {
                 ", updatedAt=" + updatedAt +
                 '}';
     }
+
+    /**
+     * Creates a new Builder instance for constructing UserIdentity objects.
+     *
+     * @return a new UserIdentityBuilder instance
+     */
+    public static UserIdentityBuilder builder() {
+        return new UserIdentityBuilder();
+    }
+
+    /**
+     * Builder class for constructing UserIdentity instances with a fluent API.
+     * <p>
+     * This builder provides a convenient way to construct UserIdentity objects with optional
+     * parameters, following the Builder pattern for improved readability and maintainability.
+     */
+    public static class UserIdentityBuilder {
+        private Long userId;
+        private IdentityProvider provider;
+        private String externalId;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
+
+        private UserIdentityBuilder() {
+        }
+
+        public UserIdentityBuilder userId(Long userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public UserIdentityBuilder provider(IdentityProvider provider) {
+            this.provider = provider;
+            return this;
+        }
+
+        public UserIdentityBuilder externalId(String externalId) {
+            this.externalId = externalId;
+            return this;
+        }
+
+        public UserIdentityBuilder createdAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public UserIdentityBuilder updatedAt(LocalDateTime updatedAt) {
+            this.updatedAt = updatedAt;
+            return this;
+        }
+
+        /**
+         * Builds and returns a new UserIdentity instance with the configured properties.
+         *
+         * @return a new UserIdentity instance
+         */
+        public UserIdentity build() {
+            return new UserIdentity(userId, provider, externalId, createdAt, updatedAt);
+        }
+    }
 }

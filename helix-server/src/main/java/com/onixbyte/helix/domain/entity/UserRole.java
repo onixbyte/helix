@@ -97,4 +97,52 @@ public class UserRole {
                 ", createdAt=" + createdAt +
                 '}';
     }
+
+    /**
+     * Creates a new Builder instance for constructing UserRole objects.
+     *
+     * @return a new UserRoleBuilder instance
+     */
+    public static UserRoleBuilder builder() {
+        return new UserRoleBuilder();
+    }
+
+    /**
+     * Builder class for constructing UserRole instances with a fluent API.
+     * <p>
+     * This builder provides a convenient way to construct UserRole objects with optional
+     * parameters, following the Builder pattern for improved readability and maintainability.
+     */
+    public static class UserRoleBuilder {
+        private Long roleId;
+        private Long userId;
+        private LocalDateTime createdAt;
+
+        private UserRoleBuilder() {
+        }
+
+        public UserRoleBuilder roleId(Long roleId) {
+            this.roleId = roleId;
+            return this;
+        }
+
+        public UserRoleBuilder userId(Long userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public UserRoleBuilder createdAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        /**
+         * Builds and returns a new UserRole instance with the configured properties.
+         *
+         * @return a new UserRole instance
+         */
+        public UserRole build() {
+            return new UserRole(roleId, userId, createdAt);
+        }
+    }
 }

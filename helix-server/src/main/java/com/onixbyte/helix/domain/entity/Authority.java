@@ -170,4 +170,76 @@ public class Authority {
                 ", updatedAt=" + updatedAt +
                 '}';
     }
+
+    /**
+     * Creates a new Builder instance for constructing Authority objects.
+     *
+     * @return a new AuthorityBuilder instance
+     */
+    public static AuthorityBuilder builder() {
+        return new AuthorityBuilder();
+    }
+
+    /**
+     * Builder class for constructing Authority instances with a fluent API.
+     * <p>
+     * This builder provides a convenient way to construct Authority objects with optional
+     * parameters, following the Builder pattern for improved readability and maintainability.
+     */
+    public static class AuthorityBuilder {
+        private Long id;
+        private String code;
+        private String name;
+        private String description;
+        private Status status;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
+
+        private AuthorityBuilder() {
+        }
+
+        public AuthorityBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public AuthorityBuilder code(String code) {
+            this.code = code;
+            return this;
+        }
+
+        public AuthorityBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public AuthorityBuilder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public AuthorityBuilder status(Status status) {
+            this.status = status;
+            return this;
+        }
+
+        public AuthorityBuilder createdAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public AuthorityBuilder updatedAt(LocalDateTime updatedAt) {
+            this.updatedAt = updatedAt;
+            return this;
+        }
+
+        /**
+         * Builds and returns a new Authority instance with the configured properties.
+         *
+         * @return a new Authority instance
+         */
+        public Authority build() {
+            return new Authority(id, code, name, description, status, createdAt, updatedAt);
+        }
+    }
 }

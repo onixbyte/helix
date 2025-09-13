@@ -96,4 +96,52 @@ public class RoleAuthority {
                 ", createdAt=" + createdAt +
                 '}';
     }
+
+    /**
+     * Creates a new Builder instance for constructing RoleAuthority objects.
+     *
+     * @return a new RoleAuthorityBuilder instance
+     */
+    public static RoleAuthorityBuilder builder() {
+        return new RoleAuthorityBuilder();
+    }
+
+    /**
+     * Builder class for constructing RoleAuthority instances with a fluent API.
+     * <p>
+     * This builder provides a convenient way to construct RoleAuthority objects with optional parameters,
+     * following the Builder pattern for improved readability and maintainability.
+     */
+    public static class RoleAuthorityBuilder {
+        private Long roleId;
+        private Long authorityId;
+        private LocalDateTime createdAt;
+
+        private RoleAuthorityBuilder() {
+        }
+
+        public RoleAuthorityBuilder roleId(Long roleId) {
+            this.roleId = roleId;
+            return this;
+        }
+
+        public RoleAuthorityBuilder authorityId(Long authorityId) {
+            this.authorityId = authorityId;
+            return this;
+        }
+
+        public RoleAuthorityBuilder createdAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        /**
+         * Builds and returns a new RoleAuthority instance with the configured properties.
+         *
+         * @return a new RoleAuthority instance
+         */
+        public RoleAuthority build() {
+            return new RoleAuthority(roleId, authorityId, createdAt);
+        }
+    }
 }
