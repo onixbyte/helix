@@ -110,8 +110,8 @@ public class UserRole {
     /**
      * Builder class for constructing UserRole instances with a fluent API.
      * <p>
-     * This builder provides a convenient way to construct UserRole objects with optional
-     * parameters, following the Builder pattern for improved readability and maintainability.
+     * This builder provides a convenient way to construct UserRole objects with optional parameters,
+     * following the Builder pattern for improved readability and maintainability.
      */
     public static class UserRoleBuilder {
         private Long roleId;

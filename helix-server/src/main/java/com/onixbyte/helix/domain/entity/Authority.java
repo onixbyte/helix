@@ -183,8 +183,8 @@ public class Authority {
     /**
      * Builder class for constructing Authority instances with a fluent API.
      * <p>
-     * This builder provides a convenient way to construct Authority objects with optional
-     * parameters, following the Builder pattern for improved readability and maintainability.
+     * This builder provides a convenient way to construct Authority objects with optional parameters,
+     * following the Builder pattern for improved readability and maintainability.
      */
     public static class AuthorityBuilder {
         private Long id;

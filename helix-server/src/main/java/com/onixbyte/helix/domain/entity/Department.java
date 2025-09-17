@@ -8,9 +8,10 @@ import java.util.Objects;
 /**
  * Represents a department entity within the organisational hierarchy.
  * <p>
- * This entity models departments as hierarchical structures where each department can have a parent
- * department, creating a tree-like organisational structure. Departments are used to group users
- * and define organisational boundaries within the Helix system.
+ * This entity models departments as hierarchical structures where each department can have a
+ * parent department, creating a tree-like organisational structure. Departments are used to group
+ * users and define organisational boundaries within the Helix system.
+ * </p>
  *
  * @author zihluwang
  * @version 1.0
@@ -21,66 +22,75 @@ public class Department {
     /**
      * The unique identifier for the department.
      * <p>
-     * This serves as the primary key in the database and is used for all internal references to the
-     * department entity.
+     * This serves as the primary key in the database and is used for all
+     * internal references to the department entity.
+     * </p>
      */
     private Long id;
 
     /**
      * The name of the department.
      * <p>
-     * This field contains the human-readable name of the department as it should appear in the
-     * organisational chart and user interfaces.
+     * This field contains the human-readable name of the department as it
+     * should appear in the organisational chart and user interfaces.
+     * </p>
      */
     private String name;
 
     /**
      * The identifier of the parent department.
      * <p>
-     * This field establishes the hierarchical relationship between departments. A null value
-     * indicates that this is a root-level department with no parent.
+     * This field establishes the hierarchical relationship between departments.
+     * A null value indicates that this is a root-level department with no parent.
+     * </p>
      */
     private Long parentId;
 
     /**
      * The complete path from root to this department in the hierarchy.
      * <p>
-     * This field contains a string representation of the department's position in the
-     * organisational tree, typically formatted as a path with separators
+     * This field contains a string representation of the department's position
+     * in the organisational tree, typically formatted as a path with separators
      * (e.g., "/root/division/department"). This enables efficient querying of
      * department hierarchies.
+     * </p>
      */
     private String treePath;
 
     /**
      * The sort order for displaying departments.
      * <p>
-     * This field determines the order in which departments should be displayed when listed
-     * alongside their siblings in the hierarchy. Lower values indicate higher priority in sorting.
+     * This field determines the order in which departments should be displayed
+     * when listed alongside their siblings in the hierarchy. Lower values
+     * indicate higher priority in sorting.
+     * </p>
      */
     private Integer sort;
 
     /**
      * The current status of the department.
      * <p>
-     * This field determines whether the department is active, inactive, or in any other state as
-     * defined by the {@link Status} enumeration.
+     * This field determines whether the department is active, inactive, or in any
+     * other state as defined by the {@link Status} enumeration.
+     * </p>
      */
     private Status status;
 
     /**
      * The timestamp when this department record was created.
      * <p>
-     * This field is automatically set when the department entity is first persisted and provides
-     * audit information about when the department was established.
+     * This field is automatically set when the department entity is first persisted
+     * and provides audit information about when the department was established.
+     * </p>
      */
     private LocalDateTime createTime;
 
     /**
      * The timestamp when this department record was last updated.
      * <p>
-     * This field is automatically updated whenever any changes are made to the department entity
-     * and provides audit information about the most recent modification.
+     * This field is automatically updated whenever any changes are made to the
+     * department entity and provides audit information about the most recent modification.
+     * </p>
      */
     private LocalDateTime updateTime;
 
@@ -151,8 +161,9 @@ public class Department {
     /**
      * Default constructor for Department.
      * <p>
-     * Creates a new Department instance with all fields initialised to their default values. This
-     * constructor is typically used by JPA and other frameworks for entity instantiation.
+     * Creates a new Department instance with all fields initialised to their default values.
+     * This constructor is typically used by JPA and other frameworks for entity instantiation.
+     * </p>
      */
     public Department() {
     }
@@ -160,15 +171,16 @@ public class Department {
     /**
      * Constructs a new Department with all specified parameters.
      * <p>
-     * This constructor allows for the creation of a fully initialised Department entity with all
-     * field values provided at instantiation time.
+     * This constructor allows for the creation of a fully initialised Department entity
+     * with all field values provided at instantiation time.
+     * </p>
      *
-     * @param id         the unique identifier for the department
-     * @param name       the name of the department
-     * @param parentId   the identifier of the parent department (null for root departments)
-     * @param treePath   the complete hierarchical path to this department
-     * @param sort       the sort order for display purposes
-     * @param status     the current status of the department
+     * @param id the unique identifier for the department
+     * @param name the name of the department
+     * @param parentId the identifier of the parent department (null for root departments)
+     * @param treePath the complete hierarchical path to this department
+     * @param sort the sort order for display purposes
+     * @param status the current status of the department
      * @param createTime the timestamp when the department was created
      * @param updateTime the timestamp when the department was last updated
      */
@@ -221,8 +233,8 @@ public class Department {
     /**
      * Builder class for constructing Department instances with a fluent API.
      * <p>
-     * This builder provides a convenient way to construct Department objects with optional
-     * parameters, following the Builder pattern for improved readability and maintainability.
+     * This builder provides a convenient way to construct Department objects with optional parameters,
+     * following the Builder pattern for improved readability and maintainability.
      */
     public static class DepartmentBuilder {
         private Long id;

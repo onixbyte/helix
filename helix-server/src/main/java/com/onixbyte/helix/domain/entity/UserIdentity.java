@@ -149,8 +149,8 @@ public class UserIdentity {
     /**
      * Builder class for constructing UserIdentity instances with a fluent API.
      * <p>
-     * This builder provides a convenient way to construct UserIdentity objects with optional
-     * parameters, following the Builder pattern for improved readability and maintainability.
+     * This builder provides a convenient way to construct UserIdentity objects with optional parameters,
+     * following the Builder pattern for improved readability and maintainability.
      */
     public static class UserIdentityBuilder {
         private Long userId;
