@@ -36,11 +36,11 @@ public class EncodeUtil {
      * <p>
      * The method handles the following character encoding differences:
      * <ul>
-     * <li>Converts "+" to "%20" for proper space encoding</li>
-     * <li>Preserves "*" characters (decoded from "%2A")</li>
-     * <li>Preserves "'" characters (decoded from "%27")</li>
-     * <li>Preserves "(" characters (decoded from "%28")</li>
-     * <li>Preserves ")" characters (decoded from "%29")</li>
+     * <li>Converts "+" to "{@code %20}" for proper space encoding</li>
+     * <li>Preserves "*" characters (decoded from "{@code %2A}")</li>
+     * <li>Preserves "'" characters (decoded from "{@code %27}")</li>
+     * <li>Preserves "(" characters (decoded from "{@code %28}")</li>
+     * <li>Preserves ")" characters (decoded from "{@code %29}")</li>
      * </ul>
      * <p>
      * Characters that remain unencoded in both implementations: {@code - _ . ! ~ * ' ( )}
