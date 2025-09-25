@@ -4,7 +4,7 @@ postgresDriverVersion = "42.7.7"
 springVersion = "6.2.9"
 springSecurityVersion = "6.5.2"
 springBootVersion = "3.5.4"
-myBatisSpringBootVersion = "3.0.5"
+mybatisFlexVersion = "1.11.1"
 reactorVersion = "3.7.8"
 junitPlatformVersion = "1.12.2"
 onixbyteVersion = "3.2.0"
@@ -20,9 +20,9 @@ spring-boot-starter-validation = { group = "org.springframework.boot", name = "s
 spring-boot-starter-redis = { group = "org.springframework.boot", name = "spring-boot-starter-data-redis", version.ref = "springBootVersion" }
 spring-boot-starter-cache = { group = "org.springframework.boot", name = "spring-boot-starter-cache", version.ref = "springBootVersion" }
 spring-boot-starter-security = { group = "org.springframework.boot", name = "spring-boot-starter-security", version.ref = "springBootVersion" }
-spring-boot-starter-mybatis = { group = "org.mybatis.spring.boot", name = "mybatis-spring-boot-starter", version.ref = "myBatisSpringBootVersion" }
+spring-boot-starter-mybatisFlex = { group = "com.mybatis-flex", name = "mybatis-flex-spring-boot-starter", version.ref = "mybatisFlexVersion" }
 spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test", version.ref = "springBootVersion" }
-spring-boot-starter-mybatisTest = { group = "org.mybatis.spring.boot", name = "mybatis-spring-boot-starter-test", version.ref = "myBatisSpringBootVersion" }
+mybatisFlex-annotationProcessor = { group = "com.mybatis-flex", name = "mybatis-flex-processor", version.ref = "mybatisFlexVersion" }
 spring-security-test = { group = "org.springframework.security", name = "spring-security-test", version.ref = "springSecurityVersion" }
 reactor-test = { group = "io.projectreactor", name = "reactor-test", version.ref = "reactorVersion" }
 junit-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version.ref = "junitPlatformVersion" }
