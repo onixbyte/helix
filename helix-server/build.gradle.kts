@@ -40,12 +40,12 @@ dependencies {
     implementation(libs.spring.boot.starter.redis)
     implementation(libs.spring.boot.starter.cache)
     implementation(libs.spring.boot.starter.security)
-    implementation(libs.spring.boot.starter.mybatisFlex)
-    annotationProcessor(libs.mybatisFlex.annotationProcessor)
+    implementation(libs.spring.boot.starter.jpa)
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.reactor.test)
     testImplementation(libs.spring.security.test)
     runtimeOnly(libs.postgres.driver)
+    testRuntimeOnly(libs.h2.database)
     testRuntimeOnly(libs.junit.launcher)
 }
 

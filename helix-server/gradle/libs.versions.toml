@@ -1,10 +1,11 @@
 [versions]
 javaJwtVersion = "4.5.0"
 postgresDriverVersion = "42.7.7"
+h2Version = "2.2.224"
 springVersion = "6.2.9"
 springSecurityVersion = "6.5.2"
 springBootVersion = "3.5.4"
-mybatisFlexVersion = "1.11.1"
+jpaVersion = "3.5.2"
 reactorVersion = "3.7.8"
 junitPlatformVersion = "1.12.2"
 onixbyteVersion = "3.2.0"
@@ -12,6 +13,7 @@ onixbyteVersion = "3.2.0"
 [libraries]
 jwt-core = { group = "com.auth0", name = "java-jwt", version.ref = "javaJwtVersion" }
 postgres-driver = { group = "org.postgresql", name = "postgresql", version.ref = "postgresDriverVersion" }
+h2-database = { group = "com.h2database", name = "h2", version.ref = "h2Version" }
 spring-context = { group = "org.springframework", name = "spring-context", version.ref = "springVersion" }
 spring-boot-configurationProcessor = { group = "org.springframework.boot", name = "spring-boot-configuration-processor", version.ref = "springBootVersion" }
 spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web", version.ref = "springBootVersion" }
@@ -20,9 +22,8 @@ spring-boot-starter-validation = { group = "org.springframework.boot", name = "s
 spring-boot-starter-redis = { group = "org.springframework.boot", name = "spring-boot-starter-data-redis", version.ref = "springBootVersion" }
 spring-boot-starter-cache = { group = "org.springframework.boot", name = "spring-boot-starter-cache", version.ref = "springBootVersion" }
 spring-boot-starter-security = { group = "org.springframework.boot", name = "spring-boot-starter-security", version.ref = "springBootVersion" }
-spring-boot-starter-mybatisFlex = { group = "com.mybatis-flex", name = "mybatis-flex-spring-boot-starter", version.ref = "mybatisFlexVersion" }
+spring-boot-starter-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa", version.ref = "jpaVersion" }
 spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test", version.ref = "springBootVersion" }
-mybatisFlex-annotationProcessor = { group = "com.mybatis-flex", name = "mybatis-flex-processor", version.ref = "mybatisFlexVersion" }
 spring-security-test = { group = "org.springframework.security", name = "spring-security-test", version.ref = "springSecurityVersion" }
 reactor-test = { group = "io.projectreactor", name = "reactor-test", version.ref = "reactorVersion" }
 junit-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version.ref = "junitPlatformVersion" }
