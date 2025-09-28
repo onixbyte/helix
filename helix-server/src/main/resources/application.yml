@@ -5,8 +5,3 @@ spring:
     type: redis
     redis:
       time-to-live: PT1H30M
-
-mybatis:
-  mapper-locations: classpath:repositories/*.xml
-  configuration:
-    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
