@@ -9,6 +9,7 @@ jpaVersion = "3.5.2"
 reactorVersion = "3.7.8"
 junitPlatformVersion = "1.12.2"
 onixbyteVersion = "3.2.0"
+awsSdkVersion = "2.25.48"
 
 [libraries]
 jwt-core = { group = "com.auth0", name = "java-jwt", version.ref = "javaJwtVersion" }
@@ -27,9 +28,12 @@ spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-
 spring-security-test = { group = "org.springframework.security", name = "spring-security-test", version.ref = "springSecurityVersion" }
 reactor-test = { group = "io.projectreactor", name = "reactor-test", version.ref = "reactorVersion" }
 junit-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version.ref = "junitPlatformVersion" }
-onixbyte-tuple = { group = "com.onixbyte", name = "tuple", version.ref = "onixbyteVersion" }
-onixbyte-commonToolbox = { group = "com.onixbyte", name = "common-toolbox", version.ref = "onixbyteVersion" }
-onixbyte-identityGenerator = { group = "com.onixbyte", name = "identity-generator", version.ref = "onixbyteVersion" }
+onixbyte-versionCatalogue = { group = "com.onixbyte", name = "version-catalogue", version.ref = "onixbyteVersion" }
+onixbyte-tuple = { group = "com.onixbyte", name = "tuple" }
+onixbyte-commonToolbox = { group = "com.onixbyte", name = "common-toolbox" }
+onixbyte-identityGenerator = { group = "com.onixbyte", name = "identity-generator" }
+aws-sdk-bom = { group = "software.amazon.awssdk", name = "bom", version.ref = "awsSdkVersion" }
+aws-sdk-s3 = { group = "software.amazon.awssdk", name = "s3" }
 
 [plugins]
 

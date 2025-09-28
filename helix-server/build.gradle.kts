@@ -22,6 +22,9 @@ java {
 }
 
 dependencies {
+    implementation(platform(libs.aws.sdk.bom))
+    implementation(libs.aws.sdk.s3)
+    implementation(platform(libs.onixbyte.versionCatalogue))
     implementation(libs.onixbyte.tuple)
     implementation(libs.onixbyte.commonToolbox)
     implementation(libs.onixbyte.identityGenerator)
