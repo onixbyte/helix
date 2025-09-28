@@ -14,18 +14,11 @@ tasks.withType<JavaCompile> {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(17)
     }
-}
-
-repositories {
-    maven("https://repo.nju.edu.cn/maven/")
-    maven("https://maven.proxy.ustclug.org/maven2/")
-    maven("https://maven.aliyun.com/repository/public")
-    mavenCentral()
 }
 
 dependencies {
