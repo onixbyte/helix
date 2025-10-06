@@ -168,12 +168,12 @@ public class SecurityConfiguration {
      * @see ProviderManager
      * @see AuthenticationManager
      */
-    @Bean
-    public AuthenticationManager authenticationManager(
-    ) {
-        return new ProviderManager(
-        );
-    }
+    // @Bean
+    // public AuthenticationManager authenticationManager(
+    // ) {
+    //     return new ProviderManager(
+    //     );
+    // }
 
     /**
      * Creates the JWT signing algorithm using application token properties.
