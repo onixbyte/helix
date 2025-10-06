@@ -58,11 +58,11 @@ public class FileService {
         if (fileProperties.isPathStyle()) {
             fileUrlBuilder.append(fileProperties.getBucket());
         }
-        fileUrlBuilder.append(fullKey);
+        fileUrlBuilder.append("/").append(fullKey);
         return fileUrlBuilder.toString();
     }
 
     private String buildFullKey(String prefix, String fileName) {
-        return String.format("/%s/%s", prefix, fileName);
+        return String.format("%s/%s", prefix, fileName);
     }
 }
