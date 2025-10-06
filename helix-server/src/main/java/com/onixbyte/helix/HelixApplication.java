@@ -1,6 +1,5 @@
 package com.onixbyte.helix;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
@@ -37,7 +36,6 @@ import org.springframework.cache.annotation.EnableCaching;
  * @see SpringApplication
  * @since 1.0.0
  */
-@MapperScan("com.onixbyte.helix.repository")
 @EnableCaching
 @SpringBootApplication
 public class HelixApplication {
