@@ -6,7 +6,7 @@ plugins {
 
 val artefactVersion: String by project
 
-group = "com.onixbyte.onixboot"
+group = "com.onixbyte.helix"
 version = artefactVersion
 
 tasks.withType<JavaCompile> {
@@ -24,6 +24,7 @@ java {
 dependencies {
     implementation(platform(libs.aws.sdk.bom))
     implementation(libs.aws.sdk.s3)
+    implementation(libs.commons.io)
     implementation(platform(libs.onixbyte.versionCatalogue))
     implementation(libs.onixbyte.tuple)
     implementation(libs.onixbyte.commonToolbox)
