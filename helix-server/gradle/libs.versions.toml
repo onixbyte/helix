@@ -10,6 +10,7 @@ reactorVersion = "3.7.8"
 junitPlatformVersion = "1.12.2"
 onixbyteVersion = "3.2.0"
 awsSdkVersion = "2.25.48"
+commonsIoVersion = "2.16.1"
 
 [libraries]
 jwt-core = { group = "com.auth0", name = "java-jwt", version.ref = "javaJwtVersion" }
@@ -34,6 +35,7 @@ onixbyte-commonToolbox = { group = "com.onixbyte", name = "common-toolbox" }
 onixbyte-identityGenerator = { group = "com.onixbyte", name = "identity-generator" }
 aws-sdk-bom = { group = "software.amazon.awssdk", name = "bom", version.ref = "awsSdkVersion" }
 aws-sdk-s3 = { group = "software.amazon.awssdk", name = "s3" }
+commons-io = { group = "commons-io", name = "commons-io", version.ref = "commonsIoVersion" }
 
 [plugins]
 
