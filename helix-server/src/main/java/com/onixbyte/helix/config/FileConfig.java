@@ -34,16 +34,16 @@ public class FileConfig {
     public S3Client s3Client(FileProperties fileProperties) {
         // initialise AWS credentials
         var credentials = AwsBasicCredentials.create(
-                fileProperties.getAccessKeyId(),
-                fileProperties.getSecretAccessKey()
+                fileProperties.accessKeyId(),
+                fileProperties.secretAccessKey()
         );
 
         // prepare s3 client
         var s3ClientBuilder = S3Client.builder()
-                .region(Region.of(fileProperties.getRegion()))
+                .region(Region.of(fileProperties.region()))
                 .credentialsProvider(StaticCredentialsProvider.create(credentials));
 
-        Optional.ofNullable(fileProperties.getEndpoint())
+        Optional.ofNullable(fileProperties.endpoint())
                 .ifPresent((endpoint) -> {
                     try {
                         s3ClientBuilder.endpointOverride(new URI(endpoint));
@@ -53,7 +53,7 @@ public class FileConfig {
                 });
 
         s3ClientBuilder.serviceConfiguration(S3Configuration.builder()
-                .pathStyleAccessEnabled(fileProperties.isPathStyle())
+                .pathStyleAccessEnabled(fileProperties.pathStyle())
                 .build()
         );
 

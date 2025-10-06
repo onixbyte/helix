@@ -46,7 +46,7 @@ public class FileService {
         var fullKey = buildFullKey(prefix, file.getOriginalFilename());
 
         var request = PutObjectRequest.builder()
-                .bucket(fileProperties.getBucket())
+                .bucket(fileProperties.bucket())
                 .key(fullKey)
                 .contentType(file.getContentType())
                 .contentLength(file.getSize())
@@ -54,9 +54,9 @@ public class FileService {
 
         s3Client.putObject(request, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
 
-        var fileUrlBuilder = new StringBuilder(fileProperties.getPublicHost());
-        if (fileProperties.isPathStyle()) {
-            fileUrlBuilder.append(fileProperties.getBucket());
+        var fileUrlBuilder = new StringBuilder(fileProperties.publicHost());
+        if (fileProperties.pathStyle()) {
+            fileUrlBuilder.append(fileProperties.bucket());
         }
         fileUrlBuilder.append("/").append(fullKey);
         return fileUrlBuilder.toString();

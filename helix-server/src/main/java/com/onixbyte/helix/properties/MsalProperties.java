@@ -31,80 +31,19 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * All properties are prefixed with {@code app.authentication.msal} and are automatically
  * bound by Spring Boot's configuration property mechanism.
  *
+ * @param tenantId directory (tenant) ID of the Microsoft Entra ID tenant where the application
+ *                 is registered
+ * @param clientId application (client) ID assigned to the application when registered in
+ *                 Microsoft Entra ID
  * @author zihluwang
- * @since 1.0.0
  * @see ConfigurationProperties
  * @see <a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/msal-overview">MSAL Overview</a>
  * @see <a href="https://docs.microsoft.com/en-us/entra/identity-platform/">Microsoft Entra ID Platform</a>
+ * @since 1.0.0
  */
 @ConfigurationProperties(prefix = "app.authentication.msal")
-public class MsalProperties {
-
-    /**
-     * The application (client) ID assigned to the application when registered in Microsoft Entra ID.
-     * <p>
-     * This unique identifier is used by Microsoft Entra ID to identify the application
-     * during authentication flows. It is a GUID that is generated when the application
-     * is registered in the Microsoft Entra ID portal.
-     * <p>
-     * Example: {@code "12345678-1234-1234-1234-123456789012"}
-     */
-    private String clientId;
-
-    /**
-     * The directory (tenant) ID of the Microsoft Entra ID tenant where the application is registered.
-     * <p>
-     * This identifier specifies which Microsoft Entra ID tenant should be used for authentication.
-     * It can be either the tenant ID (GUID) or a verified domain name of the tenant.
-     * Use {@code "common"} to allow users from any Microsoft Entra ID tenant,
-     * or {@code "organizations"} to allow only work and school accounts.
-     * <p>
-     * Example: {@code "87654321-4321-4321-4321-210987654321"}
-     */
-    private String tenantId;
-
-    /**
-     * Constructs a new {@code MsalProperties} instance.
-     * <p>
-     * This default constructor is used by Spring Boot's configuration property
-     * binding mechanism to create and populate the properties bean.
-     */
-    public MsalProperties() {
-    }
-
-    /**
-     * Retrieves the application (client) ID for Microsoft Entra ID authentication.
-     *
-     * @return the client ID as a string, or {@code null} if not configured
-     */
-    public String getClientId() {
-        return clientId;
-    }
-
-    /**
-     * Sets the application (client) ID for Microsoft Entra ID authentication.
-     *
-     * @param clientId the client ID to set, typically a GUID string
-     */
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
-    }
-
-    /**
-     * Retrieves the directory (tenant) ID for Microsoft Entra ID authentication.
-     *
-     * @return the tenant ID as a string, or {@code null} if not configured
-     */
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    /**
-     * Sets the directory (tenant) ID for Microsoft Entra ID authentication.
-     *
-     * @param tenantId the tenant ID to set, can be a GUID, domain name, or special value like "common"
-     */
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
-    }
+public record MsalProperties(
+        String tenantId,
+        String clientId
+) {
 }

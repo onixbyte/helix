@@ -68,4 +68,11 @@ public class FileController {
                     "Failed upload file: " + e.getMessage());
         }
     }
+
+    @DeleteMapping
+    public void deleteFile(
+            @RequestParam String fileKey
+    ) {
+
+    }
 }

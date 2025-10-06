@@ -39,123 +39,19 @@ import java.time.Duration;
  * All properties are prefixed with {@code app.jwt} and are automatically bound
  * by Spring Boot's configuration property mechanism.
  *
+ * @param issuer    name of the issuer
+ * @param secret    secret to sign a token
+ * @param validTime validity duration for JWT tokens
  * @author zihluwang
- * @since 1.0.0
  * @see ConfigurationProperties
  * @see <a href="https://tools.ietf.org/html/rfc7519">RFC 7519 - JSON Web Token (JWT)</a>
  * @see <a href="https://jwt.io/">JWT.io - JSON Web Tokens Introduction</a>
+ * @since 1.0.0
  */
 @ConfigurationProperties(prefix = "app.jwt")
-public class TokenProperties {
-
-    /**
-     * The issuer identifier for JWT tokens.
-     * <p>
-     * This claim identifies the principal that issued the JWT. The issuer value
-     * is typically a string containing a StringOrURI value, commonly the application
-     * name or a URL identifying the token issuer. This value is included in the
-     * JWT payload and is validated during token verification to ensure the token
-     * was issued by a trusted source.
-     * <p>
-     * Example: {@code "helix-server"} or {@code "https://api.example.com"}
-     */
-    private String issuer;
-
-    /**
-     * The secret key used for signing and verifying JWT tokens.
-     * <p>
-     * This symmetric key is used with HMAC-based algorithms (such as HS256) to
-     * create and validate the digital signature of JWT tokens. The secret must be
-     * kept confidential and should be sufficiently long and random to ensure
-     * cryptographic security.
-     * <p>
-     * <strong>Security Requirements:</strong>
-     * <ul>
-     * <li>Minimum length of 256 bits (32 characters) for HS256 algorithm</li>
-     * <li>Should be cryptographically random and unique per environment</li>
-     * <li>Must be stored securely and never exposed in logs or version control</li>
-     * </ul>
-     */
-    private String secret;
-
-    /**
-     * The validity duration for JWT tokens.
-     * <p>
-     * This property defines how long a JWT token remains valid after issuance.
-     * After this duration expires, the token will be considered invalid and
-     * authentication will fail. The duration should balance security (shorter
-     * is more secure) with user experience (longer reduces re-authentication frequency).
-     * <p>
-     * The value is specified using ISO-8601 duration format, such as:
-     * <ul>
-     * <li>{@code PT15M} - 15 minutes</li>
-     * <li>{@code PT1H} - 1 hour</li>
-     * <li>{@code PT24H} - 24 hours</li>
-     * <li>{@code P1D} - 1 day</li>
-     * </ul>
-     */
-    private Duration validTime;
-
-    /**
-     * Constructs a new {@code TokenProperties} instance.
-     * <p>
-     * This default constructor is used by Spring Boot's configuration property
-     * binding mechanism to create and populate the properties bean.
-     */
-    public TokenProperties() {
-    }
-
-    /**
-     * Retrieves the JWT token issuer identifier.
-     *
-     * @return the issuer string, or {@code null} if not configured
-     */
-    public String getIssuer() {
-        return issuer;
-    }
-
-    /**
-     * Sets the JWT token issuer identifier.
-     *
-     * @param issuer the issuer string to set, typically an application name or URL
-     */
-    public void setIssuer(String issuer) {
-        this.issuer = issuer;
-    }
-
-    /**
-     * Retrieves the JWT signing secret key.
-     *
-     * @return the secret key string, or {@code null} if not configured
-     */
-    public String getSecret() {
-        return secret;
-    }
-
-    /**
-     * Sets the JWT signing secret key.
-     *
-     * @param secret the secret key to set, must be at least 256 bits for security
-     */
-    public void setSecret(String secret) {
-        this.secret = secret;
-    }
-
-    /**
-     * Retrieves the JWT token validity duration.
-     *
-     * @return the validity duration, or {@code null} if not configured
-     */
-    public Duration getValidTime() {
-        return validTime;
-    }
-
-    /**
-     * Sets the JWT token validity duration.
-     *
-     * @param validTime the validity duration to set, using ISO-8601 duration format
-     */
-    public void setValidTime(Duration validTime) {
-        this.validTime = validTime;
-    }
+public record TokenProperties(
+        String issuer,
+        String secret,
+        Duration validTime
+) {
 }

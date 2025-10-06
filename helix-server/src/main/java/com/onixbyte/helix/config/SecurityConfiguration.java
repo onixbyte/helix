@@ -76,15 +76,15 @@ public class SecurityConfiguration {
             CorsProperties properties
     ) {
         var corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowCredentials(properties.getAllowCredentials());
-        corsConfiguration.setAllowedOrigins(List.of(properties.getAllowedOrigins()));
-        corsConfiguration.setAllowedHeaders(List.of(properties.getAllowedHeaders()));
-        corsConfiguration.setAllowedMethods(Stream.of(properties.getAllowedMethods())
+        corsConfiguration.setAllowCredentials(properties.allowCredentials());
+        corsConfiguration.setAllowedOrigins(List.of(properties.allowedOrigins()));
+        corsConfiguration.setAllowedHeaders(List.of(properties.allowedHeaders()));
+        corsConfiguration.setAllowedMethods(Stream.of(properties.allowedMethods())
                 .map(HttpMethod::name)
                 .toList());
-        corsConfiguration.setMaxAge(properties.getMaxAge());
-        corsConfiguration.setAllowPrivateNetwork(properties.getAllowPrivateNetwork());
-        corsConfiguration.setExposedHeaders(List.of(properties.getExposedHeaders()));
+        corsConfiguration.setMaxAge(properties.maxAge());
+        corsConfiguration.setAllowPrivateNetwork(properties.allowPrivateNetwork());
+        corsConfiguration.setExposedHeaders(List.of(properties.exposedHeaders()));
 
         var corsConfigurationSource = new UrlBasedCorsConfigurationSource();
         corsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
@@ -193,6 +193,6 @@ public class SecurityConfiguration {
      */
     @Bean
     public Algorithm algorithm(TokenProperties properties) {
-        return Algorithm.HMAC256(properties.getSecret());
+        return Algorithm.HMAC256(properties.secret());
     }
 }
