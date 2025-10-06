@@ -1,0 +1,62 @@
+package com.onixbyte.helix.config;
+
+import com.onixbyte.helix.properties.FileProperties;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.S3Configuration;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Optional;
+
+/**
+ * Configuration class for file storage services.
+ * <p>
+ * Enables configuration properties for both local and S3 file storage services. Individual service
+ * beans are created by their respective service classes to better support
+ * conditional configuration.
+ *
+ * @author zihluwang
+ * @since 1.0.0
+ */
+@Configuration
+@EnableConfigurationProperties({FileProperties.class})
+public class FileConfig {
+
+    @Bean
+    @ConditionalOnProperty(prefix = "app.file", name = "enabled", havingValue = "true")
+    public S3Client s3Client(FileProperties fileProperties) {
+        // initialise AWS credentials
+        var credentials = AwsBasicCredentials.create(
+                fileProperties.getAccessKeyId(),
+                fileProperties.getSecretAccessKey()
+        );
+
+        // prepare s3 client
+        var s3ClientBuilder = S3Client.builder()
+                .region(Region.of(fileProperties.getRegion()))
+                .credentialsProvider(StaticCredentialsProvider.create(credentials));
+
+        Optional.ofNullable(fileProperties.getEndpoint())
+                .ifPresent((endpoint) -> {
+                    try {
+                        s3ClientBuilder.endpointOverride(new URI(endpoint));
+                    } catch (URISyntaxException e) {
+                        throw new IllegalArgumentException("Endpoint is not valid.");
+                    }
+                });
+
+        s3ClientBuilder.serviceConfiguration(S3Configuration.builder()
+                .pathStyleAccessEnabled(fileProperties.isPathStyle())
+                .build()
+        );
+
+        return s3ClientBuilder.build();
+    }
+}
