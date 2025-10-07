@@ -1,6 +1,7 @@
 package com.onixbyte.helix.config;
 
 import com.auth0.jwt.algorithms.Algorithm;
+import com.onixbyte.helix.filter.TokenAuthenticationFilter;
 import com.onixbyte.helix.properties.CorsProperties;
 import com.onixbyte.helix.properties.TokenProperties;
 import com.onixbyte.helix.security.provider.UsernamePasswordAuthenticationProvider;
@@ -18,6 +19,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -53,7 +55,7 @@ import java.util.stream.Stream;
 @EnableWebSecurity
 @EnableMethodSecurity
 @EnableConfigurationProperties({TokenProperties.class, CorsProperties.class})
-public class SecurityConfiguration {
+public class SecurityConfig {
 
     /**
      * Creates a CORS configuration source based on application properties.
@@ -118,7 +120,8 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity httpSecurity,
-            CorsConfigurationSource corsConfigurationSource
+            CorsConfigurationSource corsConfigurationSource,
+            TokenAuthenticationFilter tokenAuthenticationFilter
     ) throws Exception {
         return httpSecurity
                 .cors((customiser) -> customiser
@@ -130,10 +133,9 @@ public class SecurityConfiguration {
                         .requestMatchers("/error", "/error/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/auth/logout").authenticated()
-                        .requestMatchers("/assets", "/assets/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                // .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

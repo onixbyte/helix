@@ -23,5 +23,5 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @EnableConfigurationProperties({MsalProperties.class})
-public class AuthenticationConfiguration {
+public class AuthenticationConfig {
 }

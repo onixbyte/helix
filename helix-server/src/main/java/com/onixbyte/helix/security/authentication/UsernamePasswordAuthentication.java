@@ -4,6 +4,7 @@ import com.onixbyte.helix.domain.entity.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
+import software.amazon.awssdk.services.s3.model.Grant;
 
 import java.util.Collection;
 import java.util.List;
@@ -25,6 +26,10 @@ public class UsernamePasswordAuthentication implements Authentication, Credentia
 
     public static UsernamePasswordAuthentication unauthenticated(String username, String password) {
         return new UsernamePasswordAuthentication(username, password, false, null, List.of());
+    }
+
+    public static UsernamePasswordAuthentication authenticated(User user, List<? extends GrantedAuthority> authorities) {
+        return new UsernamePasswordAuthentication(user.getUsername(), null, true, user, authorities);
     }
 
     @Override

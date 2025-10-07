@@ -4,20 +4,18 @@ import com.onixbyte.helix.domain.entity.Asset;
 import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.manager.AssetManager;
 import com.onixbyte.helix.properties.FileProperties;
+import com.onixbyte.helix.utils.SecurityUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import software.amazon.awssdk.services.s3.model.S3Object;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * Service interface for file storage operations.
@@ -65,6 +63,8 @@ public class AssetService {
             );
         }
 
+        var currentUser = SecurityUtil.getCurrentUser();
+
         var fullKey = buildFullKey(prefix, file.getOriginalFilename());
 
         var request = PutObjectRequest.builder()
@@ -78,7 +78,7 @@ public class AssetService {
 
         var asset = assetManager.save(Asset.builder()
                 .key(fullKey)
-                .uploadBy(1L)
+                .uploadBy(currentUser.getId())
                 .uploadTime(LocalDateTime.now())
                 .build());
 

@@ -1,5 +1,7 @@
 package com.onixbyte.helix.constant;
 
+import com.onixbyte.helix.config.AuthenticationConfig;
+
 /**
  * Enumeration of supported identity providers for user authentication.
  * <p>
@@ -14,7 +16,7 @@ package com.onixbyte.helix.constant;
  *
  * @author zihluwang
  * @since 1.0.0
- * @see com.onixbyte.helix.config.AuthenticationConfiguration
+ * @see AuthenticationConfig
  */
 public enum IdentityProvider {
 

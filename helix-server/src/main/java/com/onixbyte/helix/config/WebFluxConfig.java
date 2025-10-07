@@ -24,7 +24,7 @@ import org.springframework.web.reactive.function.client.WebClient;
  * @see Configuration
  */
 @Configuration
-public class WebFluxConfiguration {
+public class WebFluxConfig {
 
     /**
      * Creates a reactive WebClient for HTTP communication with external services.
