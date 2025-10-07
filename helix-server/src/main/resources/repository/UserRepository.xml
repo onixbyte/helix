@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onixbyte.helix.repository.UserRepository">
+    <select id="selectByUsername" parameterType="string">
+        SELECT id,
+               username,
+               password,
+               full_name,
+               email,
+               country_code,
+               phone_number,
+               avatar_url,
+               status,
+               department_id,
+               position_id,
+               created_at,
+               updated_at
+        FROM users
+        WHERE username = #{username}
+    </select>
+</mapper>

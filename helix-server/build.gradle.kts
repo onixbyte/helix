@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.spring.boot.starter.cache)
     implementation(libs.spring.boot.starter.security)
     implementation(libs.mybatis.starter.core)
+    implementation(libs.jackson.jsr310)
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.reactor.test)
     testImplementation(libs.spring.security.test)

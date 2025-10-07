@@ -1,5 +1,13 @@
 package com.onixbyte.helix.config;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.jsontype.impl.StdTypeResolverBuilder;
+import com.fasterxml.jackson.databind.type.TypeBindings;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -9,6 +17,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
+
+import java.time.Duration;
+import java.util.List;
 
 /**
  * Configuration class for Redis-based caching components.
@@ -52,11 +63,17 @@ public class CacheConfiguration {
         var _keySerializer = RedisSerializer.string();
         var _valueSerializer = new GenericJackson2JsonRedisSerializer();
 
+        _valueSerializer.configure((configurer) -> {
+            configurer.registerModule(new JavaTimeModule());
+            configurer.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        });
+
         var cacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
                 .serializeKeysWith(RedisSerializationContext.SerializationPair
                         .fromSerializer(_keySerializer))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair
-                        .fromSerializer(_valueSerializer));
+                        .fromSerializer(_valueSerializer))
+                .entryTtl(Duration.ofMinutes(90L));
 
         return RedisCacheManager.RedisCacheManagerBuilder
                 .fromConnectionFactory(connectionFactory)

@@ -10,6 +10,7 @@ onixbyteVersion = "3.2.0"
 awsSdkVersion = "2.25.48"
 commonsIoVersion = "2.16.1"
 mybatisVersion = "3.0.5"
+jacksonVersion = "2.19.2"
 
 [libraries]
 jwt-core = { group = "com.auth0", name = "java-jwt", version.ref = "javaJwtVersion" }
@@ -35,6 +36,7 @@ aws-sdk-s3 = { group = "software.amazon.awssdk", name = "s3" }
 commons-io = { group = "commons-io", name = "commons-io", version.ref = "commonsIoVersion" }
 mybatis-starter-core = { group = "org.mybatis.spring.boot", name = "mybatis-spring-boot-starter", version.ref = "mybatisVersion" }
 mybatis-starter-test = { group = "org.mybatis.spring.boot", name = "mybatis-spring-boot-starter-test", version.ref = "mybatisVersion" }
+jackson-jsr310 = { group = "com.fasterxml.jackson.datatype", name = "jackson-datatype-jsr310", version.ref = "jacksonVersion" }
 
 [plugins]
 

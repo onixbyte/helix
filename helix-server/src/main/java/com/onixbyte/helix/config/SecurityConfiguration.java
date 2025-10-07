@@ -3,6 +3,7 @@ package com.onixbyte.helix.config;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.onixbyte.helix.properties.CorsProperties;
 import com.onixbyte.helix.properties.TokenProperties;
+import com.onixbyte.helix.security.provider.UsernamePasswordAuthenticationProvider;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -170,12 +171,14 @@ public class SecurityConfiguration {
      * @see ProviderManager
      * @see AuthenticationManager
      */
-    // @Bean
-    // public AuthenticationManager authenticationManager(
-    // ) {
-    //     return new ProviderManager(
-    //     );
-    // }
+    @Bean
+    public AuthenticationManager authenticationManager(
+            UsernamePasswordAuthenticationProvider usernamePasswordAuthenticationProvider
+    ) {
+        return new ProviderManager(
+                usernamePasswordAuthenticationProvider
+        );
+    }
 
     /**
      * Creates the JWT signing algorithm using application token properties.
