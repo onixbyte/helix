@@ -1,13 +1,20 @@
 package com.onixbyte.helix.service;
 
+import com.onixbyte.helix.domain.entity.Asset;
+import com.onixbyte.helix.manager.AssetManager;
 import com.onixbyte.helix.properties.FileProperties;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.S3Object;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 /**
  * Service interface for file storage operations.
@@ -19,14 +26,20 @@ import java.io.IOException;
  * @since 1.0.0
  */
 @Service
-public class FileService {
+public class AssetService {
 
     private final FileProperties fileProperties;
     private final S3Client s3Client;
+    private final AssetManager assetManager;
 
-    public FileService(FileProperties fileProperties, S3Client s3Client) {
+    public AssetService(
+            FileProperties fileProperties,
+            S3Client s3Client,
+            AssetManager assetManager
+    ) {
         this.fileProperties = fileProperties;
         this.s3Client = s3Client;
+        this.assetManager = assetManager;
     }
 
     /**
@@ -40,6 +53,7 @@ public class FileService {
      *                                  etc.)
      * @throws RuntimeException         if the upload operation fails
      */
+    @Transactional(rollbackOn = {Throwable.class})
     public String uploadFile(String prefix, MultipartFile file) throws IOException {
         // todo prefix check
 
@@ -54,6 +68,12 @@ public class FileService {
 
         s3Client.putObject(request, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
 
+        var asset = assetManager.save(Asset.builder()
+                .key(fullKey)
+                .uploadBy(1L)
+                .uploadTime(LocalDateTime.now())
+                .build());
+
         var fileUrlBuilder = new StringBuilder(fileProperties.publicHost());
         if (fileProperties.pathStyle()) {
             fileUrlBuilder.append(fileProperties.bucket());
@@ -64,5 +84,21 @@ public class FileService {
 
     private String buildFullKey(String prefix, String fileName) {
         return String.format("%s/%s", prefix, fileName);
+    }
+
+    /**
+     * Delete file with given file ID.
+     *
+     * @param fileId ID of the file
+     */
+    public void deleteFile(Long fileId) {
+        // s3Client.deleteObject(DeleteObjectRequest.builder()
+        //         .bucket(fileProperties.bucket())
+        //         .key(fileKey)
+        //         .build());
+    }
+
+    public void listFiles() {
+
     }
 }

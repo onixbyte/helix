@@ -3,12 +3,11 @@ package com.onixbyte.helix.controller;
 import com.onixbyte.helix.constant.FilePrefixes;
 import com.onixbyte.helix.domain.web.response.FileUploadResponse;
 import com.onixbyte.helix.exception.BizException;
-import com.onixbyte.helix.service.FileService;
+import com.onixbyte.helix.service.AssetService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,20 +19,20 @@ import org.springframework.web.multipart.MultipartFile;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping("/files")
-public class FileController {
+@RequestMapping("/assets")
+public class AssetController {
 
-    private static final Logger log = LoggerFactory.getLogger(FileController.class);
+    private static final Logger log = LoggerFactory.getLogger(AssetController.class);
 
-    private final FileService fileService;
+    private final AssetService assetService;
 
     /**
      * Constructs a new FileController with the specified file service.
      *
-     * @param fileService the file service to use for file operations
+     * @param assetService the file service to use for file operations
      */
-    public FileController(FileService fileService) {
-        this.fileService = fileService;
+    public AssetController(AssetService assetService) {
+        this.assetService = assetService;
     }
 
     /**
@@ -52,7 +51,7 @@ public class FileController {
                 throw new BizException(HttpStatus.BAD_REQUEST, "File cannot be empty.");
             }
 
-            var fileUrl = fileService.uploadFile(FilePrefixes.UPLOADS, file);
+            var fileUrl = assetService.uploadFile(FilePrefixes.UPLOADS, file);
             
             return ResponseEntity.ok()
                     .header("Location", fileUrl)
@@ -73,6 +72,6 @@ public class FileController {
     public void deleteFile(
             @RequestParam String fileKey
     ) {
-
+        assetService.deleteFile(fileId);
     }
 }
