@@ -1,8 +1,10 @@
 package com.onixbyte.helix.service;
 
 import com.onixbyte.helix.domain.entity.Asset;
+import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.manager.AssetManager;
 import com.onixbyte.helix.properties.FileProperties;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,6 +16,7 @@ import software.amazon.awssdk.services.s3.model.S3Object;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -55,7 +58,12 @@ public class AssetService {
      */
     @Transactional(rollbackFor = {Throwable.class})
     public String uploadFile(String prefix, MultipartFile file) throws IOException {
-        // todo prefix check
+        if (Objects.isNull(prefix) || prefix.isBlank() || prefix.startsWith("/") || prefix.startsWith("..")) {
+            throw new BizException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Prefix must not be empty, and should not start with '/' or '..'."
+            );
+        }
 
         var fullKey = buildFullKey(prefix, file.getOriginalFilename());
 
