@@ -30,7 +30,13 @@ public class AuthController {
         this.tokenService = tokenService;
     }
 
-    @PostMapping("/username-password")
+    /**
+     * Perform login with username and password.
+     *
+     * @param request login request
+     * @return detailed user info and authentication token
+     */
+    @PostMapping("/login")
     public ResponseEntity<User> loginWithUsernameAndPassword(
             @RequestBody UsernamePasswordLoginRequest request
     ) {
