@@ -2,21 +2,19 @@
 javaJwtVersion = "4.5.0"
 postgresDriverVersion = "42.7.7"
 h2Version = "2.2.224"
-springVersion = "6.2.9"
 springSecurityVersion = "6.5.2"
 springBootVersion = "3.5.4"
-jpaVersion = "3.5.2"
 reactorVersion = "3.7.8"
 junitPlatformVersion = "1.12.2"
 onixbyteVersion = "3.2.0"
 awsSdkVersion = "2.25.48"
 commonsIoVersion = "2.16.1"
+mybatisFlexVersion = "1.11.3"
 
 [libraries]
 jwt-core = { group = "com.auth0", name = "java-jwt", version.ref = "javaJwtVersion" }
 postgres-driver = { group = "org.postgresql", name = "postgresql", version.ref = "postgresDriverVersion" }
 h2-database = { group = "com.h2database", name = "h2", version.ref = "h2Version" }
-spring-context = { group = "org.springframework", name = "spring-context", version.ref = "springVersion" }
 spring-boot-configurationProcessor = { group = "org.springframework.boot", name = "spring-boot-configuration-processor", version.ref = "springBootVersion" }
 spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web", version.ref = "springBootVersion" }
 spring-boot-starter-webFlux = { group = "org.springframework.boot", name = "spring-boot-starter-webflux", version.ref = "springBootVersion" }
@@ -24,7 +22,6 @@ spring-boot-starter-validation = { group = "org.springframework.boot", name = "s
 spring-boot-starter-redis = { group = "org.springframework.boot", name = "spring-boot-starter-data-redis", version.ref = "springBootVersion" }
 spring-boot-starter-cache = { group = "org.springframework.boot", name = "spring-boot-starter-cache", version.ref = "springBootVersion" }
 spring-boot-starter-security = { group = "org.springframework.boot", name = "spring-boot-starter-security", version.ref = "springBootVersion" }
-spring-boot-starter-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa", version.ref = "jpaVersion" }
 spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test", version.ref = "springBootVersion" }
 spring-security-test = { group = "org.springframework.security", name = "spring-security-test", version.ref = "springSecurityVersion" }
 reactor-test = { group = "io.projectreactor", name = "reactor-test", version.ref = "reactorVersion" }
@@ -36,6 +33,8 @@ onixbyte-identityGenerator = { group = "com.onixbyte", name = "identity-generato
 aws-sdk-bom = { group = "software.amazon.awssdk", name = "bom", version.ref = "awsSdkVersion" }
 aws-sdk-s3 = { group = "software.amazon.awssdk", name = "s3" }
 commons-io = { group = "commons-io", name = "commons-io", version.ref = "commonsIoVersion" }
+mybatisFlex-starter = { group = "com.mybatis-flex", name = "mybatis-flex-spring-boot3-starter", version.ref = "mybatisFlexVersion" }
+mybatisFlex-processor = { group = "com.mybatis-flex", name = "mybatis-flex-processor", version.ref = "mybatisFlexVersion" }
 
 [plugins]
 
