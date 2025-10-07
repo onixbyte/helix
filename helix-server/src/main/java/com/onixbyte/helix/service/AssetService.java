@@ -3,8 +3,8 @@ package com.onixbyte.helix.service;
 import com.onixbyte.helix.domain.entity.Asset;
 import com.onixbyte.helix.manager.AssetManager;
 import com.onixbyte.helix.properties.FileProperties;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -53,7 +53,7 @@ public class AssetService {
      *                                  etc.)
      * @throws RuntimeException         if the upload operation fails
      */
-    @Transactional(rollbackOn = {Throwable.class})
+    @Transactional(rollbackFor = {Throwable.class})
     public String uploadFile(String prefix, MultipartFile file) throws IOException {
         // todo prefix check
 

@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 /**
  * REST controller for file storage operations. Provides endpoints for uploading, downloading, and
- * deleting files using the configured storage service.
+ * deleting assets using the configured storage service.
  * 
  * @author zihluwang
  * @since 1.0.0
@@ -41,7 +41,7 @@ public class AssetController {
      * @param file the multipart file to upload
      * @return ResponseEntity containing the file URL and metadata, or error message
      */
-    @PreAuthorize("isAuthenticated()")
+    // @PreAuthorize("isAuthenticated()")
     @PostMapping
     public ResponseEntity<FileUploadResponse> uploadFile(
             @RequestParam MultipartFile file
@@ -68,9 +68,9 @@ public class AssetController {
         }
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id:\\d+}")
     public void deleteFile(
-            @RequestParam String fileKey
+            @PathVariable("id") Long fileId
     ) {
         assetService.deleteFile(fileId);
     }

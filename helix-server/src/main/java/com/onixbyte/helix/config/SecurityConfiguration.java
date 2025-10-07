@@ -129,6 +129,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/error", "/error/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/auth/logout").authenticated()
+                        .requestMatchers("/assets", "/assets/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 // .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

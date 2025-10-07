@@ -292,5 +292,6 @@ vite.config.ts.timestamp-*
 **/config/*.yml
 **/config/*.yaml
 **/config/*.properties
+test/**/*
 
 ### Frontend

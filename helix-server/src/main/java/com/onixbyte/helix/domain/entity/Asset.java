@@ -1,20 +1,10 @@
 package com.onixbyte.helix.domain.entity;
 
-import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@Entity(name = "assets")
 public class Asset {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "assets_id_seq_generator")
-    @SequenceGenerator(
-            name = "assets_id_seq_generator",
-            sequenceName = "assets_id_seq",
-            allocationSize = 1
-    )
     private Long id;
 
     private String key;

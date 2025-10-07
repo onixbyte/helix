@@ -5,6 +5,10 @@ spring:
     type: redis
     redis:
       time-to-live: PT1H30M
-  jpa:
-    hibernate:
-      ddl-auto: validate
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+  type-aliases-package: com.onixbyte.helix.domain.entity
+  type-handlers-package: com.onixbyte.helix.extension.mybatis.handler
+  mapper-locations: classpath:/repository/*.xml
