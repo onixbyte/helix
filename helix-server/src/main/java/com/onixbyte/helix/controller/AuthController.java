@@ -2,6 +2,7 @@ package com.onixbyte.helix.controller;
 
 import com.onixbyte.helix.domain.entity.User;
 import com.onixbyte.helix.domain.web.request.UsernamePasswordLoginRequest;
+import com.onixbyte.helix.domain.web.response.LoginSuccessResponse;
 import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.security.authentication.UsernamePasswordAuthentication;
 import com.onixbyte.helix.service.TokenService;
@@ -37,7 +38,7 @@ public class AuthController {
      * @return detailed user info and authentication token
      */
     @PostMapping("/login")
-    public ResponseEntity<User> loginWithUsernameAndPassword(
+    public LoginSuccessResponse loginWithUsernameAndPassword(
             @RequestBody UsernamePasswordLoginRequest request
     ) {
         var _authentication = authenticationManager.authenticate(UsernamePasswordAuthentication.unauthenticated(request.username(), request.password()));
@@ -48,8 +49,6 @@ public class AuthController {
 
         var token = tokenService.generateToken(authentication.getDetails());
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .header("Authorization", token)
-                .body(authentication.getDetails());
+        return new LoginSuccessResponse(token, authentication.getDetails());
     }
 }

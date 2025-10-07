@@ -31,7 +31,7 @@ public class TokenService {
         var issuedAt = LocalDateTime.now();
         var expiresAt = issuedAt.plus(tokenProperties.validTime());
 
-        return "Bearer " + JWT.create()
+        return JWT.create()
                 .withSubject(user.getUsername())
                 .withAudience("Helix Web")
                 .withIssuer(tokenProperties.issuer())
