@@ -9,7 +9,7 @@ junitPlatformVersion = "1.12.2"
 onixbyteVersion = "3.2.0"
 awsSdkVersion = "2.25.48"
 commonsIoVersion = "2.16.1"
-mybatisFlexVersion = "1.11.3"
+mybatisVersion = "3.0.5"
 
 [libraries]
 jwt-core = { group = "com.auth0", name = "java-jwt", version.ref = "javaJwtVersion" }
@@ -33,8 +33,8 @@ onixbyte-identityGenerator = { group = "com.onixbyte", name = "identity-generato
 aws-sdk-bom = { group = "software.amazon.awssdk", name = "bom", version.ref = "awsSdkVersion" }
 aws-sdk-s3 = { group = "software.amazon.awssdk", name = "s3" }
 commons-io = { group = "commons-io", name = "commons-io", version.ref = "commonsIoVersion" }
-mybatisFlex-starter = { group = "com.mybatis-flex", name = "mybatis-flex-spring-boot3-starter", version.ref = "mybatisFlexVersion" }
-mybatisFlex-processor = { group = "com.mybatis-flex", name = "mybatis-flex-processor", version.ref = "mybatisFlexVersion" }
+mybatis-starter-core = { group = "org.mybatis.spring.boot", name = "mybatis-spring-boot-starter", version.ref = "mybatisVersion" }
+mybatis-starter-test = { group = "org.mybatis.spring.boot", name = "mybatis-spring-boot-starter-test", version.ref = "mybatisVersion" }
 
 [plugins]
 
