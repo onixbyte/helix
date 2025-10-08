@@ -1,15 +1,13 @@
 package com.onixbyte.helix.controller;
 
 import com.onixbyte.helix.domain.entity.User;
+import com.onixbyte.helix.domain.web.request.QueryUserRequest;
 import com.onixbyte.helix.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
@@ -32,9 +30,10 @@ public class UserController {
     @GetMapping
     public Page<User> getUsers(
             @RequestParam(required = false, defaultValue = "1") Integer pageNum,
-            @RequestParam(required = false, defaultValue = "10") Integer pageSize
+            @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+            @ModelAttribute QueryUserRequest request
     ) {
         var pageRequest = PageRequest.of(pageNum - 1, pageSize, Sort.by(Sort.Order.asc("id")));
-        return userService.getUsers(pageRequest);
+        return userService.getUsers(pageRequest, request);
     }
 }

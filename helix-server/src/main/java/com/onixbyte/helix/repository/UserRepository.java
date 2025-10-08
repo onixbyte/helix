@@ -1,6 +1,7 @@
 package com.onixbyte.helix.repository;
 
 import com.onixbyte.helix.domain.entity.User;
+import com.onixbyte.helix.domain.web.request.QueryUserRequest;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -32,4 +33,11 @@ public interface UserRepository {
      * @return count of users
      */
     int countAll();
+
+    List<User> selectList(
+            @Param("pageable") Pageable pageable,
+            @Param("request") QueryUserRequest request
+    );
+
+    int count(@Param("request") QueryUserRequest request);
 }

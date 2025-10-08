@@ -2,6 +2,7 @@ package com.onixbyte.helix.manager;
 
 import com.onixbyte.helix.constant.CacheName;
 import com.onixbyte.helix.domain.entity.User;
+import com.onixbyte.helix.domain.web.request.QueryUserRequest;
 import com.onixbyte.helix.repository.UserRepository;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -35,9 +36,9 @@ public class UserManager {
      * @param pageable page request
      * @return page result
      */
-    public Page<User> queryPage(Pageable pageable) {
-        var result = userRepository.selectAll(pageable);
-        var total = userRepository.countAll();
+    public Page<User> queryPage(Pageable pageable, QueryUserRequest request) {
+        var result = userRepository.selectList(pageable, request);
+        var total = userRepository.count(request);
         return new PageImpl<>(result, pageable, total)
                 .map((user) -> {
                     user.setPassword(null);
