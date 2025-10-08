@@ -1,7 +1,6 @@
 package com.onixbyte.helix.config;
 
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.onixbyte.helix.extension.redis.serializer.JacksonSerialiser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -29,10 +28,10 @@ import java.time.Duration;
  * </ul>
  *
  * @author zihluwang
- * @since 1.0.0
  * @see RedisCacheManager
  * @see RedisTemplate
  * @see GenericJackson2JsonRedisSerializer
+ * @since 1.0.0
  */
 @Configuration
 public class CacheConfig {
@@ -52,20 +51,16 @@ public class CacheConfig {
      * @see RedisSerializationContext
      */
     @Bean
-    public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
+    public RedisCacheManager cacheManager(
+            RedisConnectionFactory connectionFactory
+    ) {
         var _keySerializer = RedisSerializer.string();
-        var _valueSerializer = new GenericJackson2JsonRedisSerializer();
-
-        _valueSerializer.configure((configurer) -> {
-            configurer.registerModule(new JavaTimeModule());
-            configurer.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        });
 
         var cacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
                 .serializeKeysWith(RedisSerializationContext.SerializationPair
                         .fromSerializer(_keySerializer))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair
-                        .fromSerializer(_valueSerializer))
+                        .fromSerializer(JacksonSerialiser.INSTANCE))
                 .entryTtl(Duration.ofMinutes(90L));
 
         return RedisCacheManager.RedisCacheManagerBuilder
@@ -91,11 +86,13 @@ public class CacheConfig {
      * @see RedisSerializer
      */
     @Bean
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
+    public RedisTemplate<String, Object> redisTemplate(
+            RedisConnectionFactory connectionFactory
+    ) {
         var redisTemplate = new RedisTemplate<String, Object>();
         redisTemplate.setConnectionFactory(connectionFactory);
         redisTemplate.setKeySerializer(RedisSerializer.string());
-        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        redisTemplate.setValueSerializer(JacksonSerialiser.INSTANCE);
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }

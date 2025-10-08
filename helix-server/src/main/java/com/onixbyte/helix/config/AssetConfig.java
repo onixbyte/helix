@@ -16,11 +16,10 @@ import java.net.URISyntaxException;
 import java.util.Optional;
 
 /**
- * Configuration class for file storage services.
+ * Configuration class for asset storage services.
  * <p>
- * Enables configuration properties for both local and S3 file storage services. Individual service
- * beans are created by their respective service classes to better support
- * conditional configuration.
+ * Enables configuration properties for S3 file storage services. Individual service beans are
+ * created by their respective service classes to better support conditional configuration.
  *
  * @author zihluwang
  * @since 1.0.0
@@ -29,6 +28,12 @@ import java.util.Optional;
 @EnableConfigurationProperties({AssetProperties.class})
 public class AssetConfig {
 
+    /**
+     * S3Client to store assets into S3 service.
+     *
+     * @param assetProperties asset properties
+     * @return an S3 Client reference to custom S3 configuration properties
+     */
     @Bean
     public S3Client s3Client(AssetProperties assetProperties) {
         // initialise AWS credentials
@@ -42,6 +47,7 @@ public class AssetConfig {
                 .region(Region.of(assetProperties.region()))
                 .credentialsProvider(StaticCredentialsProvider.create(credentials));
 
+        // override endpoint
         Optional.ofNullable(assetProperties.endpoint())
                 .ifPresent((endpoint) -> {
                     try {
@@ -51,6 +57,7 @@ public class AssetConfig {
                     }
                 });
 
+        // set path style
         s3ClientBuilder.serviceConfiguration(S3Configuration.builder()
                 .pathStyleAccessEnabled(assetProperties.pathStyle())
                 .build()
