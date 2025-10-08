@@ -1,6 +1,7 @@
 package com.onixbyte.helix.controller;
 
 import com.onixbyte.helix.domain.entity.User;
+import com.onixbyte.helix.domain.web.request.AddUserRequest;
 import com.onixbyte.helix.domain.web.request.QueryUserRequest;
 import com.onixbyte.helix.service.UserService;
 import org.springframework.data.domain.Page;
@@ -35,5 +36,11 @@ public class UserController {
     ) {
         var pageRequest = PageRequest.of(pageNum - 1, pageSize, Sort.by(Sort.Order.asc("id")));
         return userService.getUsers(pageRequest, request);
+    }
+
+    @PostMapping
+    @PreAuthorize("hasAnyRole('system:user:write')")
+    public User addUser(@RequestBody AddUserRequest request) {
+        return userService.addUser(request);
     }
 }

@@ -1,6 +1,6 @@
 package com.onixbyte.helix.constant;
 
-public class FilePrefixes {
+public class AssetPrefix {
 
     public static final String UPLOADS = "uploads";
 

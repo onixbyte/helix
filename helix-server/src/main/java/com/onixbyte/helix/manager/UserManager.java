@@ -3,11 +3,14 @@ package com.onixbyte.helix.manager;
 import com.onixbyte.helix.constant.CacheName;
 import com.onixbyte.helix.domain.entity.User;
 import com.onixbyte.helix.domain.web.request.QueryUserRequest;
+import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.repository.UserRepository;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -44,5 +47,14 @@ public class UserManager {
                     user.setPassword(null);
                     return user;
                 });
+    }
+
+    @CachePut(cacheNames = CacheName.USER, key = "#user.username")
+    public User save(User user) {
+        var affectedRows = userRepository.save(user);
+        if (affectedRows != 1) {
+            throw new BizException(HttpStatus.INTERNAL_SERVER_ERROR, "User save failed.");
+        }
+        return user;
     }
 }

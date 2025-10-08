@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onixbyte.helix.repository.RoleRepository">
+    <select id="areRolesExisted" resultType="boolean">
+        SELECT NOT EXISTS (
+        SELECT 1
+        FROM (
+        <foreach collection="roleIds" item="roleId" separator="UNION ALL">
+            SELECT #{roleId} AS id
+        </foreach>
+        <if test="roleIds.size() == 0">
+            SELECT NULL AS id WHERE FALSE
+        </if>
+        ) AS input_roles_temp
+        WHERE NOT EXISTS (
+        SELECT 1
+        FROM roles r
+        WHERE r.id = input_roles_temp.id
+        )
+        )
+    </select>
+</mapper>

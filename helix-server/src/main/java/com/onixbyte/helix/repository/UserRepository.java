@@ -40,4 +40,6 @@ public interface UserRepository {
     );
 
     int count(@Param("request") QueryUserRequest request);
+
+    int save(@Param("user") User user);
 }

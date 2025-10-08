@@ -1,6 +1,6 @@
 package com.onixbyte.helix.controller;
 
-import com.onixbyte.helix.constant.FilePrefixes;
+import com.onixbyte.helix.constant.AssetPrefix;
 import com.onixbyte.helix.domain.web.response.FileUploadResponse;
 import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.service.AssetService;
@@ -50,7 +50,7 @@ public class AssetController {
                 throw new BizException(HttpStatus.BAD_REQUEST, "File cannot be empty.");
             }
 
-            var fileUrl = assetService.uploadFile(FilePrefixes.UPLOADS, file);
+            var fileUrl = assetService.uploadFile(AssetPrefix.UPLOADS, file);
 
             return ResponseEntity.ok()
                     .header("Location", fileUrl)
