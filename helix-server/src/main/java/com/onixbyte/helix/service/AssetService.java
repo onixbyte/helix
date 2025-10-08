@@ -48,7 +48,7 @@ public class AssetService {
      * Uploads a file to the configured storage backend. The file will be validated according to the
      * storage configuration and stored with a unique filename to prevent conflicts.
      *
-     * @param prefix prefix to the file, should not started with a {@code /}
+     * @param prefix prefix to the file, should not started with a {@code /} or {@code ..}
      * @param file   the multipart file to upload
      * @return the URL or path that can be used to access the uploaded file
      * @throws IllegalArgumentException if the file is invalid (empty, too large, wrong extension,
