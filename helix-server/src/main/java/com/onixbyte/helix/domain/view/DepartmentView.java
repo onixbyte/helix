@@ -51,12 +51,12 @@ public class DepartmentView {
     /**
      * The timestamp when this department record was created.
      */
-    private LocalDateTime createTime;
+    private LocalDateTime createdAt;
 
     /**
      * The timestamp when this department record was last updated.
      */
-    private LocalDateTime updateTime;
+    private LocalDateTime updatedAt;
 
     /**
      * Default constructor for serialisation frameworks.
@@ -67,25 +67,25 @@ public class DepartmentView {
     /**
      * Constructs a new DepartmentView with all fields specified.
      *
-     * @param id         the unique identifier
-     * @param name       the name of the department
-     * @param parentId   the identifier of the parent department
-     * @param treePath   the complete path from root to this department
-     * @param sort       the sort order for displaying departments
-     * @param status     the current status
-     * @param createTime the creation timestamp
-     * @param updateTime the last update timestamp
+     * @param id        the unique identifier
+     * @param name      the name of the department
+     * @param parentId  the identifier of the parent department
+     * @param treePath  the complete path from root to this department
+     * @param sort      the sort order for displaying departments
+     * @param status    the current status
+     * @param createdAt the creation timestamp
+     * @param updatedAt the last update timestamp
      */
     public DepartmentView(Long id, String name, Long parentId, String treePath, Integer sort,
-                         Status status, LocalDateTime createTime, LocalDateTime updateTime) {
+                          Status status, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.name = name;
         this.parentId = parentId;
         this.treePath = treePath;
         this.sort = sort;
         this.status = status;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     /**
@@ -105,8 +105,8 @@ public class DepartmentView {
                 entity.getTreePath(),
                 entity.getSort(),
                 entity.getStatus(),
-                entity.getCreateTime(),
-                entity.getUpdateTime()
+                entity.getCreatedAt(),
+                entity.getUpdatedAt()
         );
     }
 
@@ -158,20 +158,20 @@ public class DepartmentView {
         this.status = status;
     }
 
-    public LocalDateTime getCreateTime() {
-        return createTime;
+    public LocalDateTime getcreatedAt() {
+        return createdAt;
     }
 
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
+    public void setcreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdateTime() {
-        return updateTime;
+    public LocalDateTime getupdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdateTime(LocalDateTime updateTime) {
-        this.updateTime = updateTime;
+    public void setupdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     @Override
@@ -185,13 +185,13 @@ public class DepartmentView {
                 Objects.equals(treePath, that.treePath) &&
                 Objects.equals(sort, that.sort) &&
                 status == that.status &&
-                Objects.equals(createTime, that.createTime) &&
-                Objects.equals(updateTime, that.updateTime);
+                Objects.equals(createdAt, that.createdAt) &&
+                Objects.equals(updatedAt, that.updatedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, parentId, treePath, sort, status, createTime, updateTime);
+        return Objects.hash(id, name, parentId, treePath, sort, status, createdAt, updatedAt);
     }
 
     @Override
@@ -203,8 +203,8 @@ public class DepartmentView {
                 ", treePath='" + treePath + '\'' +
                 ", sort=" + sort +
                 ", status=" + status +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
                 '}';
     }
 
@@ -230,8 +230,8 @@ public class DepartmentView {
         private String treePath;
         private Integer sort;
         private Status status;
-        private LocalDateTime createTime;
-        private LocalDateTime updateTime;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
 
         private DepartmentViewBuilder() {
         }
@@ -266,13 +266,13 @@ public class DepartmentView {
             return this;
         }
 
-        public DepartmentViewBuilder createTime(LocalDateTime createTime) {
-            this.createTime = createTime;
+        public DepartmentViewBuilder createdAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
             return this;
         }
 
-        public DepartmentViewBuilder updateTime(LocalDateTime updateTime) {
-            this.updateTime = updateTime;
+        public DepartmentViewBuilder updatedAt(LocalDateTime updatedAt) {
+            this.updatedAt = updatedAt;
             return this;
         }
 
@@ -282,7 +282,7 @@ public class DepartmentView {
          * @return a new DepartmentView instance
          */
         public DepartmentView build() {
-            return new DepartmentView(id, name, parentId, treePath, sort, status, createTime, updateTime);
+            return new DepartmentView(id, name, parentId, treePath, sort, status, createdAt, updatedAt);
         }
     }
 }

@@ -83,7 +83,7 @@ public class Department {
      * and provides audit information about when the department was established.
      * </p>
      */
-    private LocalDateTime createTime;
+    private LocalDateTime createdAt;
 
     /**
      * The timestamp when this department record was last updated.
@@ -92,7 +92,7 @@ public class Department {
      * department entity and provides audit information about the most recent modification.
      * </p>
      */
-    private LocalDateTime updateTime;
+    private LocalDateTime updatedAt;
 
     public Long getId() {
         return id;
@@ -142,20 +142,20 @@ public class Department {
         this.status = status;
     }
 
-    public LocalDateTime getCreateTime() {
-        return createTime;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdateTime() {
-        return updateTime;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdateTime(LocalDateTime updateTime) {
-        this.updateTime = updateTime;
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     /**
@@ -175,36 +175,36 @@ public class Department {
      * with all field values provided at instantiation time.
      * </p>
      *
-     * @param id the unique identifier for the department
-     * @param name the name of the department
-     * @param parentId the identifier of the parent department (null for root departments)
-     * @param treePath the complete hierarchical path to this department
-     * @param sort the sort order for display purposes
-     * @param status the current status of the department
-     * @param createTime the timestamp when the department was created
-     * @param updateTime the timestamp when the department was last updated
+     * @param id        the unique identifier for the department
+     * @param name      the name of the department
+     * @param parentId  the identifier of the parent department (null for root departments)
+     * @param treePath  the complete hierarchical path to this department
+     * @param sort      the sort order for display purposes
+     * @param status    the current status of the department
+     * @param createdAt the timestamp when the department was created
+     * @param updatedAt the timestamp when the department was last updated
      */
-    public Department(Long id, String name, Long parentId, String treePath, Integer sort, Status status, LocalDateTime createTime, LocalDateTime updateTime) {
+    public Department(Long id, String name, Long parentId, String treePath, Integer sort, Status status, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.name = name;
         this.parentId = parentId;
         this.treePath = treePath;
         this.sort = sort;
         this.status = status;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Department that = (Department) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(parentId, that.parentId) && Objects.equals(treePath, that.treePath) && Objects.equals(sort, that.sort) && status == that.status && Objects.equals(createTime, that.createTime) && Objects.equals(updateTime, that.updateTime);
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(parentId, that.parentId) && Objects.equals(treePath, that.treePath) && Objects.equals(sort, that.sort) && status == that.status && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, parentId, treePath, sort, status, createTime, updateTime);
+        return Objects.hash(id, name, parentId, treePath, sort, status, createdAt, updatedAt);
     }
 
     @Override
@@ -216,8 +216,8 @@ public class Department {
                 ", treePath='" + treePath + '\'' +
                 ", sort=" + sort +
                 ", status=" + status +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
                 '}';
     }
 
@@ -243,8 +243,8 @@ public class Department {
         private String treePath;
         private Integer sort;
         private Status status;
-        private LocalDateTime createTime;
-        private LocalDateTime updateTime;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
 
         private DepartmentBuilder() {
         }
@@ -279,13 +279,13 @@ public class Department {
             return this;
         }
 
-        public DepartmentBuilder createTime(LocalDateTime createTime) {
-            this.createTime = createTime;
+        public DepartmentBuilder createdAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
             return this;
         }
 
-        public DepartmentBuilder updateTime(LocalDateTime updateTime) {
-            this.updateTime = updateTime;
+        public DepartmentBuilder updatedAt(LocalDateTime updatedAt) {
+            this.updatedAt = updatedAt;
             return this;
         }
 
@@ -295,7 +295,7 @@ public class Department {
          * @return a new Department instance
          */
         public Department build() {
-            return new Department(id, name, parentId, treePath, sort, status, createTime, updateTime);
+            return new Department(id, name, parentId, treePath, sort, status, createdAt, updatedAt);
         }
     }
 }
