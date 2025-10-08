@@ -3,7 +3,7 @@ package com.onixbyte.helix.service;
 import com.onixbyte.helix.domain.entity.Asset;
 import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.manager.AssetManager;
-import com.onixbyte.helix.properties.FileProperties;
+import com.onixbyte.helix.properties.AssetProperties;
 import com.onixbyte.helix.utils.SecurityUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
@@ -29,16 +30,16 @@ import java.util.Objects;
 @Service
 public class AssetService {
 
-    private final FileProperties fileProperties;
+    private final AssetProperties assetProperties;
     private final S3Client s3Client;
     private final AssetManager assetManager;
 
     public AssetService(
-            FileProperties fileProperties,
+            AssetProperties assetProperties,
             S3Client s3Client,
             AssetManager assetManager
     ) {
-        this.fileProperties = fileProperties;
+        this.assetProperties = assetProperties;
         this.s3Client = s3Client;
         this.assetManager = assetManager;
     }
@@ -68,7 +69,7 @@ public class AssetService {
         var fullKey = buildFullKey(prefix, file.getOriginalFilename());
 
         var request = PutObjectRequest.builder()
-                .bucket(fileProperties.bucket())
+                .bucket(assetProperties.bucket())
                 .key(fullKey)
                 .contentType(file.getContentType())
                 .contentLength(file.getSize())
@@ -82,9 +83,9 @@ public class AssetService {
                 .uploadTime(LocalDateTime.now())
                 .build());
 
-        var fileUrlBuilder = new StringBuilder(fileProperties.publicHost());
-        if (fileProperties.pathStyle()) {
-            fileUrlBuilder.append(fileProperties.bucket());
+        var fileUrlBuilder = new StringBuilder(assetProperties.publicHost());
+        if (assetProperties.pathStyle()) {
+            fileUrlBuilder.append(assetProperties.bucket());
         }
         fileUrlBuilder.append("/").append(fullKey);
         return fileUrlBuilder.toString();
@@ -95,15 +96,24 @@ public class AssetService {
     }
 
     /**
-     * Delete file with given file ID.
+     * Delete file with given asset ID.
      *
-     * @param fileId ID of the file
+     * @param assetId ID of the asset
      */
-    public void deleteFile(Long fileId) {
-        // s3Client.deleteObject(DeleteObjectRequest.builder()
-        //         .bucket(fileProperties.bucket())
-        //         .key(fileKey)
-        //         .build());
+    @Transactional(rollbackFor = Throwable.class)
+    public void deleteAsset(Long assetId) {
+        var currentUser = SecurityUtil.getCurrentUser();
+        var asset = assetManager.queryByAssetId(assetId);
+
+        if (!Objects.equals(currentUser.getId(), asset.getUploadBy())) {
+            throw new BizException(HttpStatus.FORBIDDEN, "You are not able to delete an asset that is not uploaded by you.");
+        }
+
+        assetManager.deleteById(assetId);
+        s3Client.deleteObject(DeleteObjectRequest.builder()
+                .bucket(assetProperties.bucket())
+                .key(asset.getKey())
+                .build());
     }
 
     public void listFiles() {

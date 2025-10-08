@@ -70,8 +70,8 @@ public class AssetController {
 
     @DeleteMapping("/{id:\\d+}")
     public void deleteFile(
-            @PathVariable("id") Long fileId
+            @PathVariable("id") Long assetId
     ) {
-        assetService.deleteFile(fileId);
+        assetService.deleteAsset(assetId);
     }
 }

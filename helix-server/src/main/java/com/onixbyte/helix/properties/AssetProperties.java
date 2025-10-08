@@ -28,8 +28,8 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
  * @author zihluwang
  * @since 1.0.0
  */
-@ConfigurationProperties(prefix = "app.file")
-public record FileProperties(
+@ConfigurationProperties(prefix = "app.asset")
+public record AssetProperties(
         String endpoint,
         String publicHost,
         @DefaultValue("false") boolean pathStyle,

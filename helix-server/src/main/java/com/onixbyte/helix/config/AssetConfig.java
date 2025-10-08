@@ -1,6 +1,6 @@
 package com.onixbyte.helix.config;
 
-import com.onixbyte.helix.properties.FileProperties;
+import com.onixbyte.helix.properties.AssetProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -26,24 +26,24 @@ import java.util.Optional;
  * @since 1.0.0
  */
 @Configuration
-@EnableConfigurationProperties({FileProperties.class})
-public class FileConfig {
+@EnableConfigurationProperties({AssetProperties.class})
+public class AssetConfig {
 
     @Bean
     @ConditionalOnProperty(prefix = "app.file", name = "enabled", havingValue = "true")
-    public S3Client s3Client(FileProperties fileProperties) {
+    public S3Client s3Client(AssetProperties assetProperties) {
         // initialise AWS credentials
         var credentials = AwsBasicCredentials.create(
-                fileProperties.accessKeyId(),
-                fileProperties.secretAccessKey()
+                assetProperties.accessKeyId(),
+                assetProperties.secretAccessKey()
         );
 
         // prepare s3 client
         var s3ClientBuilder = S3Client.builder()
-                .region(Region.of(fileProperties.region()))
+                .region(Region.of(assetProperties.region()))
                 .credentialsProvider(StaticCredentialsProvider.create(credentials));
 
-        Optional.ofNullable(fileProperties.endpoint())
+        Optional.ofNullable(assetProperties.endpoint())
                 .ifPresent((endpoint) -> {
                     try {
                         s3ClientBuilder.endpointOverride(new URI(endpoint));
@@ -53,7 +53,7 @@ public class FileConfig {
                 });
 
         s3ClientBuilder.serviceConfiguration(S3Configuration.builder()
-                .pathStyleAccessEnabled(fileProperties.pathStyle())
+                .pathStyleAccessEnabled(assetProperties.pathStyle())
                 .build()
         );
 

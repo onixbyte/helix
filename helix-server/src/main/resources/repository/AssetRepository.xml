@@ -6,4 +6,18 @@
         INSERT INTO assets(key, upload_by, upload_time)
         VALUES (#{asset.key}, #{asset.uploadBy}, #{asset.uploadTime})
     </insert>
+
+    <select id="selectById" parameterType="long" resultType="asset">
+        SELECT id,
+               key,
+               upload_by,
+               upload_time
+        FROM assets
+        WHERE id = #{assetId}
+    </select>
+
+    <delete id="delete" parameterType="long">
+        DELETE FROM assets
+        WHERE id = #{assetId}
+    </delete>
 </mapper>

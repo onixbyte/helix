@@ -19,4 +19,8 @@ public interface AssetRepository {
      * @return an asset metadata with ID
      */
     int save(@Param("asset") Asset asset);
+
+    Asset selectById(@Param("assetId") Long assetId);
+
+    int delete(@Param("assetId") Long assetId);
 }
