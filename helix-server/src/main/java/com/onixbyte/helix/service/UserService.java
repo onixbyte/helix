@@ -13,6 +13,7 @@ import com.onixbyte.helix.properties.AssetProperties;
 import com.onixbyte.identitygenerator.IdentityGenerator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,19 +28,21 @@ public class UserService {
     private final AssetProperties assetProperties;
     private final RoleManager roleManager;
     private final UserRoleManager userRoleManager;
+    private final PasswordEncoder passwordEncoder;
 
     public UserService(
             UserManager userManager,
             IdentityGenerator<Long> userIdentityGenerator,
             AssetProperties assetProperties,
             RoleManager roleManager,
-            UserRoleManager userRoleManager
-    ) {
+            UserRoleManager userRoleManager,
+            PasswordEncoder passwordEncoder) {
         this.userManager = userManager;
         this.userIdentityGenerator = userIdentityGenerator;
         this.assetProperties = assetProperties;
         this.roleManager = roleManager;
         this.userRoleManager = userRoleManager;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Page<User> getUsers(Pageable pageable, QueryUserRequest request) {
@@ -61,7 +64,7 @@ public class UserService {
         var user = userManager.save(User.builder()
                 .id(userIdentityGenerator.nextId())
                 .username(request.username())
-                .password(request.password())
+                .password(passwordEncoder.encode(request.password()))
                 .fullName(request.fullName())
                 .email(request.email())
                 .countryCode(request.countryCode())
