@@ -115,8 +115,4 @@ public class AssetService {
                 .key(asset.getKey())
                 .build());
     }
-
-    public void listFiles() {
-
-    }
 }
