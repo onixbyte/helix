@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -40,7 +41,7 @@ public class UserController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('system:user:write')")
-    public User addUser(@RequestBody AddUserRequest request) {
+    public User addUser(@Validated @RequestBody AddUserRequest request) {
         return userService.addUser(request);
     }
 }
