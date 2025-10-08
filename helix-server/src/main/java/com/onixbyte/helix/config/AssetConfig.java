@@ -30,7 +30,6 @@ import java.util.Optional;
 public class AssetConfig {
 
     @Bean
-    @ConditionalOnProperty(prefix = "app.file", name = "enabled", havingValue = "true")
     public S3Client s3Client(AssetProperties assetProperties) {
         // initialise AWS credentials
         var credentials = AwsBasicCredentials.create(
