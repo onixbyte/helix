@@ -19,4 +19,34 @@
         FROM users
         WHERE username = #{username}
     </select>
+
+    <select id="selectAll" parameterType="org.springframework.data.domain.Pageable"
+            resultType="user">
+        SELECT id,
+               username,
+               password,
+               full_name,
+               email,
+               country_code,
+               phone_number,
+               avatar_url,
+               status,
+               department_id,
+               position_id,
+               created_at,
+               updated_at
+        FROM users
+        <if test="pageable != null and pageable.sort != null">
+            ORDER BY
+            <foreach collection="pageable.sort" item="order" separator=", ">
+                ${order.property} ${order.direction}
+            </foreach>
+            LIMIT #{pageable.pageSize} OFFSET #{pageable.offset}
+        </if>
+    </select>
+
+    <select id="countAll" resultType="int">
+        SELECT COUNT(*)
+        FROM users
+    </select>
 </mapper>
