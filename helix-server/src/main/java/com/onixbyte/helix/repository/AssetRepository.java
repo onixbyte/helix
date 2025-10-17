@@ -20,7 +20,19 @@ public interface AssetRepository {
      */
     int save(@Param("asset") Asset asset);
 
+    /**
+     * Select asset by ID.
+     *
+     * @param assetId asset ID
+     * @return asset information
+     */
     Asset selectById(@Param("assetId") Long assetId);
 
+    /**
+     * Delete asset by ID.
+     *
+     * @param assetId asset ID
+     * @return affected rows
+     */
     int delete(@Param("assetId") Long assetId);
 }

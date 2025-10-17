@@ -45,6 +45,16 @@ public class BizException extends RuntimeException {
     /**
      * Constructs a new business exception with the specified HTTP status and message.
      *
+     * @param message the detailed error message explaining the business logic violation
+     */
+    public BizException(String message) {
+        super(message);
+        this.status = HttpStatus.INTERNAL_SERVER_ERROR;
+    }
+
+    /**
+     * Constructs a new business exception with the specified HTTP status and message.
+     *
      * @param status  the HTTP status code to associate with this exception
      * @param message the detailed error message explaining the business logic violation
      */

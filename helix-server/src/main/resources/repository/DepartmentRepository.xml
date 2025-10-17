@@ -4,14 +4,22 @@
 <mapper namespace="com.onixbyte.helix.repository.DepartmentRepository">
     <select id="selectAll" resultType="department">
         SELECT id,
-               name,
-               parent_id,
-               tree_path,
-               sort,
-               status,
-               created_at,
-               updated_at
+        name,
+        parent_id,
+        tree_path,
+        sort,
+        status,
+        created_at,
+        updated_at
         FROM departments
-        ORDER BY id
+        <if test="pageRequest.paged">
+            OFFSET #{pageRequest.offset} LIMIT #{pageRequest.pageSize}
+        </if>
+        <if test="pageRequest.sort != null and pageRequest.sort.sorted">
+            ORDER BY
+            <foreach collection="pageRequest.sort.orders" item="order">
+                ${order.property} ${order.direction}
+            </foreach>
+        </if>
     </select>
 </mapper>

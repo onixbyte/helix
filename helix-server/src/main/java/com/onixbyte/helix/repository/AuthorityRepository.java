@@ -9,5 +9,11 @@ import java.util.List;
 @Repository
 public interface AuthorityRepository {
 
+    /**
+     * Select authorities that is granted to the specific user.
+     *
+     * @param userId user ID
+     * @return authorities
+     */
     List<Authority> selectByUserId(@Param("userId") Long userId);
 }
