@@ -3,7 +3,6 @@ package com.onixbyte.helix.filter;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.manager.AuthorityManager;
 import com.onixbyte.helix.manager.UserManager;
 import com.onixbyte.helix.security.authentication.UsernamePasswordAuthentication;
@@ -11,7 +10,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -22,6 +22,8 @@ import java.util.Objects;
 
 @Component
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
+
+    private final static Logger log = LoggerFactory.getLogger(TokenAuthenticationFilter.class);
 
     private final Algorithm algorithm;
     private final UserManager userManager;
@@ -71,7 +73,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             filterChain.doFilter(request, response);
         } catch (JWTVerificationException e) {
-            throw new BizException(HttpStatus.UNAUTHORIZED, "User token invalid.");
+            log.error("JWT verification failed.", e);
+            filterChain.doFilter(request, response);
         }
     }
 }
