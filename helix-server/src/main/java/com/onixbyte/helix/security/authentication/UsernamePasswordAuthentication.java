@@ -4,8 +4,6 @@ import com.onixbyte.helix.domain.entity.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
-import software.amazon.awssdk.services.s3.model.Grant;
-
 import java.util.Collection;
 import java.util.List;
 
