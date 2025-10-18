@@ -77,7 +77,7 @@ public class AssetService {
 
         s3Client.putObject(request, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
 
-        var asset = assetManager.save(Asset.builder()
+        assetManager.save(Asset.builder()
                 .key(fullKey)
                 .uploadBy(currentUser.getId())
                 .uploadTime(LocalDateTime.now())

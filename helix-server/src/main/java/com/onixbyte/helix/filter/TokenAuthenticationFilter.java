@@ -3,7 +3,6 @@ package com.onixbyte.helix.filter;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.onixbyte.helix.domain.entity.Authority;
 import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.manager.AuthorityManager;
 import com.onixbyte.helix.manager.UserManager;

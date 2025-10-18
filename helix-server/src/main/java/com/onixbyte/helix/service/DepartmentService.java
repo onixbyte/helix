@@ -1,5 +1,6 @@
 package com.onixbyte.helix.service;
 
+import com.onixbyte.helix.domain.common.PageRequest;
 import com.onixbyte.helix.domain.entity.Department;
 import com.onixbyte.helix.domain.model.TreeNode;
 import com.onixbyte.helix.manager.DepartmentManager;
@@ -17,7 +18,7 @@ public class DepartmentService {
     }
 
     public List<TreeNode<Department>> getDepartmentTree() {
-        var departments = departmentManager.queryAll();
+        var departments = departmentManager.selectAll(PageRequest.unpaged());
         return departmentManager.buildTree(departments);
     }
 }

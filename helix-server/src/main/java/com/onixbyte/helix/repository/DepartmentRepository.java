@@ -15,5 +15,5 @@ public interface DepartmentRepository {
      *
      * @return all departments
      */
-    List<Department> selectAll(@Param("paginator") PageRequest pageRequest);
+    List<Department> selectAll(@Param("pageRequest") PageRequest pageRequest);
 }

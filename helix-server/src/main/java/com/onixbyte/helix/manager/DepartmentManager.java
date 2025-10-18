@@ -1,5 +1,6 @@
 package com.onixbyte.helix.manager;
 
+import com.onixbyte.helix.domain.common.PageRequest;
 import com.onixbyte.helix.domain.entity.Department;
 import com.onixbyte.helix.domain.model.TreeNode;
 import com.onixbyte.helix.repository.DepartmentRepository;
@@ -16,8 +17,8 @@ public class DepartmentManager {
         this.departmentRepository = departmentRepository;
     }
 
-    public List<Department> queryAll() {
-        return departmentRepository.selectAll();
+    public List<Department> selectAll(PageRequest pageRequest) {
+        return departmentRepository.selectAll(pageRequest);
     }
 
     /**

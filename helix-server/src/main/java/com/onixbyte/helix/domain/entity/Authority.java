@@ -2,8 +2,6 @@ package com.onixbyte.helix.domain.entity;
 
 import com.onixbyte.helix.constant.Status;
 import org.springframework.security.core.GrantedAuthority;
-import software.amazon.awssdk.services.s3.model.Grant;
-
 import java.time.LocalDateTime;
 import java.util.Objects;
 

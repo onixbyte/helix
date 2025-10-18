@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.onixbyte.helix.repository.DepartmentRepository">
-    <select id="selectAll" resultType="department">
+    <select id="selectAll" parameterType="com.onixbyte.helix.domain.common.PageRequest"
+            resultType="department">
         SELECT id,
         name,
         parent_id,
