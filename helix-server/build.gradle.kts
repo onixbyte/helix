@@ -39,6 +39,7 @@ dependencies {
     implementation(libs.spring.boot.starter.security)
     implementation(libs.mybatis.starter.core)
     implementation(libs.jackson.jsr310)
+    implementation(libs.jspecify.core)
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.reactor.test)
     testImplementation(libs.spring.security.test)
