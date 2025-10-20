@@ -5,9 +5,6 @@ spring:
     type: redis
     redis:
       time-to-live: PT1H30M
-  datasource:
-    hikari:
-      housekeeping-period-ms: 120000
 
 mybatis:
   configuration:
