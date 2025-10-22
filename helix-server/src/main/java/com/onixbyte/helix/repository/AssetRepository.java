@@ -34,5 +34,5 @@ public interface AssetRepository {
      * @param assetId asset ID
      * @return affected rows
      */
-    int delete(@Param("assetId") Long assetId);
+    int deleteById(@Param("assetId") Long assetId);
 }
