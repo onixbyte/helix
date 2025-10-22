@@ -5,6 +5,10 @@ spring:
     type: redis
     redis:
       time-to-live: PT1H30M
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 
 mybatis:
   configuration:
