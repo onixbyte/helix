@@ -9,4 +9,6 @@ public class CacheName {
     public static final String ASSET = "asset";
 
     public static final String SETTING = "setting";
+
+    public static final String CAPTCHA = "captcha";
 }

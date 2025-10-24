@@ -1,6 +1,10 @@
 package com.onixbyte.helix.domain.entity;
 
+import com.onixbyte.helix.exception.BizException;
+import org.springframework.http.HttpStatus;
+
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Setting {
 
@@ -79,6 +83,36 @@ public class Setting {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String fetchValueOrDefault() {
+        if (Objects.nonNull(value) && !value.isBlank()) {
+            return value;
+        }
+        return defaultValue;
+    }
+
+    public boolean asBoolean() {
+        var val = fetchValueOrDefault();
+        return Boolean.parseBoolean(val);
+    }
+
+    public Integer asInt() {
+        try {
+            var val = fetchValueOrDefault();
+            return Integer.parseInt(val);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    public Long asLong() {
+        try {
+            var val = fetchValueOrDefault();
+            return Long.parseLong(val);
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
     public static SettingBuilder builder() {
