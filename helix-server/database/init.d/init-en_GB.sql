@@ -228,7 +228,7 @@ CREATE TABLE assets
 (
     id          BIGSERIAL    NOT NULL PRIMARY KEY,
     key         VARCHAR(255) NOT NULL UNIQUE,
-    upload_by BIGINT       NOT NULL REFERENCES users (id),
+    upload_by   BIGINT       NOT NULL REFERENCES users (id),
     upload_time TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -237,3 +237,21 @@ COMMENT ON COLUMN assets.id IS 'The unique identifier for the asset, automatical
 COMMENT ON COLUMN assets.key IS 'The unique key or path of the asset within the storage system.';
 COMMENT ON COLUMN assets.upload_by IS 'The unique ID of the user who uploaded this asset, referencing the ID in the users table.';
 COMMENT ON COLUMN assets.upload_time IS 'The timestamp indicating when the asset was uploaded to the system.';
+
+CREATE TABLE settings
+(
+    id            BIGSERIAL    NOT NULL PRIMARY KEY,
+    name          VARCHAR(255) NOT NULL,
+    description   VARCHAR(255) NULL,
+    value         VARCHAR(255) NULL,
+    default_value VARCHAR(255) NOT NULL,
+    created_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+COMMENT ON TABLE settings IS 'Hot-deployable application settings.';
+COMMENT ON COLUMN settings.id IS 'Setting unique identifier.';
+COMMENT ON COLUMN settings.name IS 'Setting name.';
+COMMENT ON COLUMN settings.description IS 'Setting description.';
+COMMENT ON COLUMN settings.value IS 'Setting current value.';
+COMMENT ON COLUMN settings.default_value IS 'Setting default value.';
