@@ -7,4 +7,8 @@ public class CacheName {
     public static final String AUTHORITIES_OF_USER = "authorities::user";
 
     public static final String ASSET = "asset";
+
+    public static final String SETTING = "setting";
+
+    public static final String CAPTCHA = "captcha";
 }
