@@ -131,6 +131,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((customiser) -> customiser
                         .requestMatchers("/error", "/error/**").permitAll()
+                        .requestMatchers("/captcha", "/captcha/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/auth/logout").authenticated()
                         .anyRequest().authenticated()

@@ -22,13 +22,14 @@ java {
 }
 
 dependencies {
+    implementation(libs.commons.io)
     implementation(platform(libs.aws.sdk.bom))
     implementation(libs.aws.sdk.s3)
-    implementation(libs.commons.io)
     implementation(platform(libs.onixbyte.versionCatalogue))
     implementation(libs.onixbyte.tuple)
     implementation(libs.onixbyte.commonToolbox)
     implementation(libs.onixbyte.identityGenerator)
+    implementation(libs.onixbyte.captcha)
     implementation(libs.jwt.core)
     implementation(libs.spring.boot.configurationProcessor)
     implementation(libs.spring.boot.starter.web)
