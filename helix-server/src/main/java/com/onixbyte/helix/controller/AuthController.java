@@ -4,6 +4,7 @@ import com.onixbyte.helix.domain.web.request.UsernamePasswordLoginRequest;
 import com.onixbyte.helix.domain.web.response.LoginSuccessResponse;
 import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.security.authentication.UsernamePasswordAuthentication;
+import com.onixbyte.helix.service.CaptchaService;
 import com.onixbyte.helix.service.TokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +22,12 @@ public class AuthController {
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
+    private final CaptchaService captchaService;
 
-    public AuthController(AuthenticationManager authenticationManager, TokenService tokenService) {
+    public AuthController(AuthenticationManager authenticationManager, TokenService tokenService, CaptchaService captchaService) {
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
+        this.captchaService = captchaService;
     }
 
     /**
@@ -37,6 +40,14 @@ public class AuthController {
     public LoginSuccessResponse loginWithUsernameAndPassword(
             @RequestBody UsernamePasswordLoginRequest request
     ) {
+        if (captchaService.isCaptchaEnabled()) {
+            var uuid = request.uuid();
+            var rawCaptcha = captchaService.getCaptcha(uuid);
+            if (!rawCaptcha.equalsIgnoreCase(request.captcha())) {
+                throw new BizException(HttpStatus.BAD_REQUEST, "验证码错误");
+            }
+        }
+
         var _authentication = authenticationManager.authenticate(UsernamePasswordAuthentication.unauthenticated(request.username(), request.password()));
         if (!(_authentication instanceof UsernamePasswordAuthentication authentication)) {
             log.error("Type mismatched, required type is UsernamePasswordAuthentication but got {}.", _authentication.getClass());
