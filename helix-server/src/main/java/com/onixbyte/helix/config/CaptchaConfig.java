@@ -2,7 +2,7 @@ package com.onixbyte.helix.config;
 
 import com.onixbyte.captcha.Producer;
 import com.onixbyte.captcha.impl.DefaultCaptchaProducer;
-import com.onixbyte.captcha.text.impl.DefaultTextCreator;
+import com.onixbyte.captcha.text.impl.DefaultTextProducer;
 import com.onixbyte.helix.properties.CaptchaProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -16,7 +16,7 @@ public class CaptchaConfig {
     @Bean
     @ConditionalOnProperty(prefix = "app.captcha", name = "enabled", havingValue = "true")
     public Producer producer(CaptchaProperties captchaProperties) {
-        var textProducer = DefaultTextCreator.builder()
+        var textProducer = DefaultTextProducer.builder()
                 .length(captchaProperties.length())
                 .build();
         return DefaultCaptchaProducer.builder()
