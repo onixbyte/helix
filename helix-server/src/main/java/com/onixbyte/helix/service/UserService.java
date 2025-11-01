@@ -102,6 +102,9 @@ public class UserService {
     }
 
     public User getUser(Long id) {
-        return userManager.queryById(id);
+        var user = userManager.queryById(id);
+        // Hide user password.
+        user.setPassword(null);
+        return user;
     }
 }
