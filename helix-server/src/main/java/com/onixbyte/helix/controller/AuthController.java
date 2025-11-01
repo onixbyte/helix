@@ -10,10 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/auth")
@@ -43,6 +46,10 @@ public class AuthController {
         if (captchaService.isCaptchaEnabled()) {
             var uuid = request.uuid();
             var rawCaptcha = captchaService.getCaptcha(uuid);
+
+            if (Objects.isNull(rawCaptcha) || rawCaptcha.isBlank()) {
+                throw new BizException(HttpStatus.BAD_REQUEST, "未找到验证码");
+            }
             if (!rawCaptcha.equalsIgnoreCase(request.captcha())) {
                 throw new BizException(HttpStatus.BAD_REQUEST, "验证码错误");
             }

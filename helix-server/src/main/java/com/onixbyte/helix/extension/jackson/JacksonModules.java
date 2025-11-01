@@ -17,10 +17,23 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.YearMonth;
 
+/**
+ * Commonly used Jackson modules.
+ *
+ * @author zihluwang
+ */
 public class JacksonModules {
 
+    /**
+     * App-level jackson module for java time supports.
+     */
     public static final SimpleModule JAVA_TIME_MODULE = initialiseJavaTimeModule();
 
+    /**
+     * Initialise module to add support to jackson for Java Time.
+     *
+     * @return jackson time module
+     */
     private static SimpleModule initialiseJavaTimeModule() {
         var module = new JavaTimeModule();
         module.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(Formatters.DATE_TIME_FORMATTER));

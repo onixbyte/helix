@@ -28,7 +28,7 @@ public class UnauthorizedAuthenticationEntryPoint implements AuthenticationEntry
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write(objectMapper.writeValueAsString(new BizExceptionResponse(
                 LocalDateTime.now(),
-                "认证失败，请重新登录。"
+                authException.getMessage()
         )));
         response.getWriter().flush();
     }

@@ -41,6 +41,7 @@ dependencies {
     implementation(libs.mybatis.starter.core)
     implementation(libs.jackson.jsr310)
     implementation(libs.jspecify.core)
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.reactor.test)
     testImplementation(libs.spring.security.test)

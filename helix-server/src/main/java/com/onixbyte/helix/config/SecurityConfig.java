@@ -20,6 +20,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -139,7 +140,7 @@ public class SecurityConfig {
                 )
                 .exceptionHandling((exceptionHandling) -> exceptionHandling
                         .authenticationEntryPoint(unauthorizedAuthenticationEntryPoint))
-                .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(tokenAuthenticationFilter, ExceptionTranslationFilter.class)
                 .build();
     }
 
