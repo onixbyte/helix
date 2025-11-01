@@ -96,4 +96,22 @@
                 #{user.countryCode}, #{user.phoneNumber}, #{user.avatarUrl}, #{user.status},
                 #{user.departmentId}, #{user.positionId}, #{user.createdAt}, #{user.updatedAt})
     </insert>
+
+    <select id="selectById" parameterType="long" resultType="user">
+        SELECT id,
+               username,
+               password,
+               full_name,
+               email,
+               country_code,
+               phone_number,
+               avatar_url,
+               status,
+               department_id,
+               position_id,
+               created_at,
+               updated_at
+        FROM users
+        WHERE id = #{id}
+    </select>
 </mapper>

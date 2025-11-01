@@ -2,6 +2,7 @@ package com.onixbyte.helix.service;
 
 import com.onixbyte.helix.constant.AssetPrefix;
 import com.onixbyte.helix.constant.UserStatus;
+import com.onixbyte.helix.domain.entity.Authority;
 import com.onixbyte.helix.domain.entity.User;
 import com.onixbyte.helix.domain.entity.UserRole;
 import com.onixbyte.helix.domain.web.request.AddUserRequest;
@@ -10,14 +11,20 @@ import com.onixbyte.helix.manager.RoleManager;
 import com.onixbyte.helix.manager.UserManager;
 import com.onixbyte.helix.manager.UserRoleManager;
 import com.onixbyte.helix.properties.AssetProperties;
+import com.onixbyte.helix.security.authentication.UsernamePasswordAuthentication;
+import com.onixbyte.helix.utils.SecurityUtil;
 import com.onixbyte.identitygenerator.IdentityGenerator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -92,5 +99,9 @@ public class UserService {
         }
 
         return user;
+    }
+
+    public User getUser(Long id) {
+        return userManager.queryById(id);
     }
 }

@@ -57,4 +57,8 @@ public class UserManager {
         }
         return user;
     }
+
+    public User queryById(Long id) {
+        return userRepository.selectById(id);
+    }
 }

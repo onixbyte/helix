@@ -28,8 +28,8 @@ public class UserController {
      * @param pageSize page size
      * @return paginated user list
      */
-    @PreAuthorize("hasAnyAuthority('system:user:read')")
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('system:user:read')")
     public Page<User> getUsers(
             @RequestParam(required = false, defaultValue = "1") Integer pageNum,
             @RequestParam(required = false, defaultValue = "10") Integer pageSize,
@@ -37,6 +37,12 @@ public class UserController {
     ) {
         var pageRequest = PageRequest.of(pageNum - 1, pageSize, Sort.by(Sort.Order.asc("id")));
         return userService.getUsers(pageRequest, request);
+    }
+
+    @GetMapping("/{id:\\d+}")
+    @PreAuthorize("hasAnyAuthority('system:user_detail:read') or (isAuthenticated() and authentication.details.id = #id)")
+    public User getUser(@PathVariable Long id) {
+        return userService.getUser(id);
     }
 
     @PostMapping
