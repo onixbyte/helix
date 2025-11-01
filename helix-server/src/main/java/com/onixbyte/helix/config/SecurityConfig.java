@@ -4,6 +4,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.onixbyte.helix.filter.TokenAuthenticationFilter;
 import com.onixbyte.helix.properties.CorsProperties;
 import com.onixbyte.helix.properties.TokenProperties;
+import com.onixbyte.helix.security.entrypoint.UnauthorizedAuthenticationEntryPoint;
 import com.onixbyte.helix.security.provider.UsernamePasswordAuthenticationProvider;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -121,8 +122,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(
             HttpSecurity httpSecurity,
             CorsConfigurationSource corsConfigurationSource,
-            TokenAuthenticationFilter tokenAuthenticationFilter
-    ) throws Exception {
+            TokenAuthenticationFilter tokenAuthenticationFilter,
+            UnauthorizedAuthenticationEntryPoint unauthorizedAuthenticationEntryPoint) throws Exception {
         return httpSecurity
                 .cors((customiser) -> customiser
                         .configurationSource(corsConfigurationSource))
@@ -136,6 +137,8 @@ public class SecurityConfig {
                         .requestMatchers("/auth/logout").authenticated()
                         .anyRequest().authenticated()
                 )
+                .exceptionHandling((exceptionHandling) -> exceptionHandling
+                        .authenticationEntryPoint(unauthorizedAuthenticationEntryPoint))
                 .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
