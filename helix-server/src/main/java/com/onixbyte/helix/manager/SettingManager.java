@@ -15,12 +15,10 @@ public class SettingManager {
         this.settingRepository = settingRepository;
     }
 
-    @Cacheable(cacheNames = CacheName.SETTING, key = "#name")
     public Setting getSetting(String name) {
         return settingRepository.selectOneByName(name);
     }
 
-    @Cacheable(cacheNames = CacheName.SETTING, key = "#result.name", unless = "#result == null")
     public Setting getSetting(Long id) {
         return settingRepository.selectOneById(id);
     }

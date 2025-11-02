@@ -1,11 +1,16 @@
 package com.onixbyte.helix.service;
 
 import com.onixbyte.captcha.Producer;
+import com.onixbyte.helix.constant.CacheName;
 import com.onixbyte.helix.constant.FileFormat;
+import com.onixbyte.helix.constant.SettingName;
 import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.manager.CaptchaManager;
+import com.onixbyte.helix.manager.CaptchaSettingManager;
+import com.onixbyte.helix.manager.SettingManager;
 import com.onixbyte.tuple.ImmutableBiTuple;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FastByteArrayOutputStream;
 
@@ -18,10 +23,12 @@ import java.util.UUID;
 public class CaptchaService {
 
     private final CaptchaManager captchaManager;
+    private final CaptchaSettingManager captchaSettingManager;
 
     @Autowired
-    public CaptchaService(CaptchaManager captchaManager) {
+    public CaptchaService(CaptchaManager captchaManager, CaptchaSettingManager captchaSettingManager) {
         this.captchaManager = captchaManager;
+        this.captchaSettingManager = captchaSettingManager;
     }
 
     private Producer producer;
@@ -38,7 +45,7 @@ public class CaptchaService {
      * the captcha code
      */
     public ImmutableBiTuple<String, String> buildCaptcha() {
-        if (isCaptchaEnabled()) {
+        if (captchaSettingManager.isCaptchaEnabled()) {
             // 生成 UUID 及验证码
             var uuid = UUID.randomUUID().toString().replaceAll("-", "");
             var captchaCode = producer.createText();
@@ -59,10 +66,6 @@ public class CaptchaService {
         } else {
             return null;
         }
-    }
-
-    public boolean isCaptchaEnabled() {
-        return captchaManager.isCaptchaEnabled();
     }
 
     public String getCaptcha(String uuid) {

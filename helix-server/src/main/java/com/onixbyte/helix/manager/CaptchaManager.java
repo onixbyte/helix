@@ -2,6 +2,7 @@ package com.onixbyte.helix.manager;
 
 import com.onixbyte.helix.constant.CacheName;
 import com.onixbyte.helix.properties.CaptchaProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.stereotype.Component;
@@ -12,9 +13,9 @@ import java.util.Objects;
 public class CaptchaManager {
 
     private final Cache captchaCache;
-    private final CaptchaProperties captchaProperties;
 
-    public CaptchaManager(RedisCacheManager cacheManager, CaptchaProperties captchaProperties) {
+    @Autowired
+    public CaptchaManager(RedisCacheManager cacheManager) {
         var _captchaCache = cacheManager.getCache(CacheName.CAPTCHA);
 
         if (Objects.isNull(_captchaCache)) {
@@ -22,7 +23,6 @@ public class CaptchaManager {
         }
 
         this.captchaCache = _captchaCache;
-        this.captchaProperties = captchaProperties;
     }
 
     public void setCaptcha(String uuid, String captchaCode) {
@@ -33,9 +33,5 @@ public class CaptchaManager {
         var captcha = captchaCache.get(uuid, String.class);
         captchaCache.evict(uuid);
         return captcha;
-    }
-
-    public boolean isCaptchaEnabled() {
-        return captchaProperties.enabled();
     }
 }

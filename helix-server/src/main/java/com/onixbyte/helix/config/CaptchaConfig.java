@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Configuration;
 public class CaptchaConfig {
 
     @Bean
-    @ConditionalOnProperty(prefix = "app.captcha", name = "enabled", havingValue = "true")
     public Producer producer(CaptchaProperties captchaProperties) {
         var textProducer = DefaultTextProducer.builder()
                 .length(captchaProperties.length())

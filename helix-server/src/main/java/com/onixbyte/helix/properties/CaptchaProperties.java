@@ -5,7 +5,6 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 
 @ConfigurationProperties(prefix = "app.captcha")
 public record CaptchaProperties(
-        @DefaultValue("false") boolean enabled,
         @DefaultValue("6") int length
 ) {
 }
