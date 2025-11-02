@@ -14,7 +14,6 @@ CREATE TABLE departments
     id         BIGSERIAL PRIMARY KEY,
     name       VARCHAR(128) NOT NULL UNIQUE,
     parent_id  BIGINT       NULL REFERENCES departments (id),
-    tree_path  TEXT,
     sort       INT          NOT NULL DEFAULT 0,
     status     Status       NOT NULL DEFAULT 'ACTIVE',
     created_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -22,14 +21,14 @@ CREATE TABLE departments
 );
 
 --- Departments Data Insertion ---
-INSERT INTO departments (id, name, parent_id, tree_path, sort, status)
-VALUES (1, 'Company HQ', NULL, '/1/', 1, 'ACTIVE'::Status),
-       (2, 'Human Resources', 1, '/1/2/', 1, 'ACTIVE'::Status),
-       (3, 'Finance', 1, '/1/3/', 2, 'ACTIVE'::Status),
-       (4, 'Technology', 1, '/1/4/', 3, 'ACTIVE'::Status),
-       (5, 'IT Support', 4, '/1/4/5/', 1, 'ACTIVE'::Status),
-       (6, 'Software Development', 4, '/1/4/6/', 2, 'ACTIVE'::Status),
-       (7, 'Operations', 1, '/1/7/', 4, 'INACTIVE'::Status);
+INSERT INTO departments (id, name, parent_id, sort, status)
+VALUES (1, 'Company HQ', NULL, 1, 'ACTIVE'::Status),
+       (2, 'Human Resources', 1, 1, 'ACTIVE'::Status),
+       (3, 'Finance', 1, 2, 'ACTIVE'::Status),
+       (4, 'Technology', 1, 3, 'ACTIVE'::Status),
+       (5, 'IT Support', 4, 1, 'ACTIVE'::Status),
+       (6, 'Software Development', 4, 2, 'ACTIVE'::Status),
+       (7, 'Operations', 1, 4, 'INACTIVE'::Status);
 
 --- Positions Table ---
 DROP TABLE IF EXISTS positions CASCADE;
