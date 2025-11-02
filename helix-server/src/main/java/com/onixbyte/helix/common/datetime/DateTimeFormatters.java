@@ -2,7 +2,7 @@ package com.onixbyte.helix.common.datetime;
 
 import java.time.format.DateTimeFormatter;
 
-public class Formatters {
+public class DateTimeFormatters {
 
     public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 

@@ -1,7 +1,7 @@
 package com.onixbyte.helix.config;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.onixbyte.helix.extension.jackson.JacksonModules;
+import com.onixbyte.helix.common.jackson.JacksonModules;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

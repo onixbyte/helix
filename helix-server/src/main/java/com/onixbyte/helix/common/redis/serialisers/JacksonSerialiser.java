@@ -1,7 +1,7 @@
-package com.onixbyte.helix.extension.redis.serializer;
+package com.onixbyte.helix.common.redis.serialisers;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.onixbyte.helix.extension.jackson.JacksonModules;
+import com.onixbyte.helix.common.jackson.JacksonModules;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 
 /**
