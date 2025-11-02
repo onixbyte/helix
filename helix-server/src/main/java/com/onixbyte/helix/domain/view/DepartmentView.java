@@ -34,11 +34,6 @@ public class DepartmentView {
     private Long parentId;
 
     /**
-     * The complete path from root to this department in the hierarchy.
-     */
-    private String treePath;
-
-    /**
      * The sort order for displaying departments.
      */
     private Integer sort;
@@ -70,18 +65,16 @@ public class DepartmentView {
      * @param id        the unique identifier
      * @param name      the name of the department
      * @param parentId  the identifier of the parent department
-     * @param treePath  the complete path from root to this department
      * @param sort      the sort order for displaying departments
      * @param status    the current status
      * @param createdAt the creation timestamp
      * @param updatedAt the last update timestamp
      */
-    public DepartmentView(Long id, String name, Long parentId, String treePath, Integer sort,
+    public DepartmentView(Long id, String name, Long parentId, Integer sort,
                           Status status, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.name = name;
         this.parentId = parentId;
-        this.treePath = treePath;
         this.sort = sort;
         this.status = status;
         this.createdAt = createdAt;
@@ -102,7 +95,6 @@ public class DepartmentView {
                 entity.getId(),
                 entity.getName(),
                 entity.getParentId(),
-                entity.getTreePath(),
                 entity.getSort(),
                 entity.getStatus(),
                 entity.getCreatedAt(),
@@ -134,14 +126,6 @@ public class DepartmentView {
         this.parentId = parentId;
     }
 
-    public String getTreePath() {
-        return treePath;
-    }
-
-    public void setTreePath(String treePath) {
-        this.treePath = treePath;
-    }
-
     public Integer getSort() {
         return sort;
     }
@@ -158,19 +142,19 @@ public class DepartmentView {
         this.status = status;
     }
 
-    public LocalDateTime getcreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setcreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getupdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setupdatedAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -182,7 +166,6 @@ public class DepartmentView {
         return Objects.equals(id, that.id) &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(parentId, that.parentId) &&
-                Objects.equals(treePath, that.treePath) &&
                 Objects.equals(sort, that.sort) &&
                 status == that.status &&
                 Objects.equals(createdAt, that.createdAt) &&
@@ -191,7 +174,7 @@ public class DepartmentView {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, parentId, treePath, sort, status, createdAt, updatedAt);
+        return Objects.hash(id, name, parentId, sort, status, createdAt, updatedAt);
     }
 
     @Override
@@ -200,7 +183,6 @@ public class DepartmentView {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", parentId=" + parentId +
-                ", treePath='" + treePath + '\'' +
                 ", sort=" + sort +
                 ", status=" + status +
                 ", createdAt=" + createdAt +
@@ -227,7 +209,6 @@ public class DepartmentView {
         private Long id;
         private String name;
         private Long parentId;
-        private String treePath;
         private Integer sort;
         private Status status;
         private LocalDateTime createdAt;
@@ -248,11 +229,6 @@ public class DepartmentView {
 
         public DepartmentViewBuilder parentId(Long parentId) {
             this.parentId = parentId;
-            return this;
-        }
-
-        public DepartmentViewBuilder treePath(String treePath) {
-            this.treePath = treePath;
             return this;
         }
 
@@ -282,7 +258,7 @@ public class DepartmentView {
          * @return a new DepartmentView instance
          */
         public DepartmentView build() {
-            return new DepartmentView(id, name, parentId, treePath, sort, status, createdAt, updatedAt);
+            return new DepartmentView(id, name, parentId, sort, status, createdAt, updatedAt);
         }
     }
 }
