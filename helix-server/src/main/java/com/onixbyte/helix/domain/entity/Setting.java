@@ -1,17 +1,16 @@
 package com.onixbyte.helix.domain.entity;
 
-import com.onixbyte.helix.exception.BizException;
-import org.springframework.http.HttpStatus;
+import com.onixbyte.helix.constant.SettingType;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Optional;
 
 public class Setting {
 
     private Long id;
     private String name;
     private String description;
+    private SettingType type;
     private String value;
     private String defaultValue;
     private LocalDateTime createdAt;
@@ -54,6 +53,14 @@ public class Setting {
         this.description = description;
     }
 
+    public SettingType getType() {
+        return type;
+    }
+
+    public void setType(SettingType type) {
+        this.type = type;
+    }
+
     public String getValue() {
         return value;
     }
@@ -93,15 +100,22 @@ public class Setting {
         return defaultValue;
     }
 
-    public boolean asBoolean() {
+    public Boolean asBoolean() {
         var val = fetchValueOrDefault();
-        return Boolean.parseBoolean(val);
+        if (type == SettingType.BOOLEAN) {
+            return Boolean.parseBoolean(val);
+        } else {
+            return null;
+        }
     }
 
     public Integer asInt() {
         try {
             var val = fetchValueOrDefault();
-            return Integer.parseInt(val);
+            if (type == SettingType.INT) {
+                return Integer.parseInt(val);
+            }
+            return null;
         } catch (NumberFormatException e) {
             return null;
         }
@@ -110,7 +124,10 @@ public class Setting {
     public Long asLong() {
         try {
             var val = fetchValueOrDefault();
-            return Long.parseLong(val);
+            if (type == SettingType.INT) {
+                return Long.parseLong(val);
+            }
+            return null;
         } catch (NumberFormatException e) {
             return null;
         }

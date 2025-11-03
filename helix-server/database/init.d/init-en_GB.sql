@@ -2,10 +2,12 @@
 DROP TYPE IF EXISTS UserStatus CASCADE;
 DROP TYPE IF EXISTS Status CASCADE;
 DROP TYPE IF EXISTS IdentityProvider CASCADE;
+DROP TYPE IF EXISTS SettingType CASCADE;
 
 CREATE TYPE UserStatus AS ENUM ('ACTIVE', 'INACTIVE', 'LOCKED');
 CREATE TYPE Status AS ENUM ('ACTIVE', 'INACTIVE');
 CREATE TYPE IdentityProvider AS ENUM ('LOCAL', 'OIDC', 'MICROSOFT_ENTRA_ID', 'GOOGLE_OIDC', 'SAML');
+CREATE TYPE SettingType AS ENUM ('STRING', 'BOOLEAN', 'INT');
 
 --- Departments Table ---
 DROP TABLE IF EXISTS departments CASCADE;
@@ -237,11 +239,13 @@ COMMENT ON COLUMN assets.key IS 'The unique key or path of the asset within the 
 COMMENT ON COLUMN assets.upload_by IS 'The unique ID of the user who uploaded this asset, referencing the ID in the users table.';
 COMMENT ON COLUMN assets.upload_time IS 'The timestamp indicating when the asset was uploaded to the system.';
 
+DROP TABLE IF EXISTS settings;
 CREATE TABLE settings
 (
     id            BIGSERIAL    NOT NULL PRIMARY KEY,
     name          VARCHAR(255) NOT NULL,
     description   VARCHAR(255) NULL,
+    type          SettingType  NOT NULL,
     value         VARCHAR(255) NULL,
     default_value VARCHAR(255) NOT NULL,
     created_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -252,5 +256,10 @@ COMMENT ON TABLE settings IS 'Hot-deployable application settings.';
 COMMENT ON COLUMN settings.id IS 'Setting unique identifier.';
 COMMENT ON COLUMN settings.name IS 'Setting name.';
 COMMENT ON COLUMN settings.description IS 'Setting description.';
+COMMENT ON COLUMN settings.type IS 'The type of the value.';
 COMMENT ON COLUMN settings.value IS 'Setting current value.';
 COMMENT ON COLUMN settings.default_value IS 'Setting default value.';
+
+INSERT INTO settings(name, description, type, value, default_value)
+VALUES ('captcha-setting::enabled', 'Whether captcha is enabled.', 'BOOLEAN'::SettingType, 'true',
+        'false');
