@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/captcha")
 public class CaptchaController {
@@ -19,13 +21,9 @@ public class CaptchaController {
 
     @GetMapping
     public ResponseEntity<CaptchaResponse> getCaptcha() {
-        if (captchaService.isCaptchaEnabled()) {
-            var captchaTuple = captchaService.buildCaptcha();
-            return ResponseEntity.ok(new CaptchaResponse(
-                    captchaTuple.left(),
-                    captchaTuple.right())
-            );
-        }
-        return ResponseEntity.noContent().build();
+        var captchaTuple = captchaService.buildCaptcha();
+        return Optional.ofNullable(captchaTuple)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.noContent().build());
     }
 }
