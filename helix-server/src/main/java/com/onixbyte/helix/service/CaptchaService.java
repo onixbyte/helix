@@ -68,4 +68,8 @@ public class CaptchaService {
     public String getCaptcha(String uuid) {
         return captchaManager.getCaptcha(uuid);
     }
+
+    public boolean isCaptchaEnabled() {
+        return captchaSettingManager.isCaptchaEnabled();
+    }
 }
