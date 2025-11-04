@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
 public record UpdateUserRequest(
-        @NotBlank(message = "id cannot be empty.")
         Long id,
         @NotBlank(message = "Username cannot be empty.")
         String username,
