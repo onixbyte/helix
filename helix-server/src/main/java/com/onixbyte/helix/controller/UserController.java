@@ -3,7 +3,6 @@ package com.onixbyte.helix.controller;
 import com.onixbyte.helix.domain.entity.User;
 import com.onixbyte.helix.domain.web.request.AddUserRequest;
 import com.onixbyte.helix.domain.web.request.QueryUserRequest;
-import com.onixbyte.helix.domain.web.request.UpdateUserRequest;
 import com.onixbyte.helix.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,8 +28,8 @@ public class UserController {
      * @param pageSize page size
      * @return paginated user list
      */
-    @GetMapping
     @PreAuthorize("hasAnyAuthority('system:user:read')")
+    @GetMapping
     public Page<User> getUsers(
             @RequestParam(required = false, defaultValue = "1") Integer pageNum,
             @RequestParam(required = false, defaultValue = "10") Integer pageSize,
@@ -40,21 +39,9 @@ public class UserController {
         return userService.getUsers(pageRequest, request);
     }
 
-    @GetMapping("/{id:\\d+}")
-    @PreAuthorize("hasAnyAuthority('system:user_detail:read') or (isAuthenticated() and authentication.details.id = #id)")
-    public User getUser(@PathVariable Long id) {
-        return userService.getUser(id);
-    }
-
     @PostMapping
     @PreAuthorize("hasAnyRole('system:user:write')")
     public User addUser(@Validated @RequestBody AddUserRequest request) {
         return userService.addUser(request);
-    }
-
-    @PutMapping
-    @PreAuthorize("hasAnyRole('system:user:write')")
-    public User updateUser(@Validated @RequestBody UpdateUserRequest request) {
-        return userService.updateUser(request);
     }
 }
