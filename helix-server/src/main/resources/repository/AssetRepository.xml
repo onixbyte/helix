@@ -16,8 +16,9 @@
         WHERE id = #{assetId}
     </select>
 
-    <delete id="delete" parameterType="long">
-        DELETE FROM assets
+    <delete id="deleteById" parameterType="long">
+        DELETE
+        FROM assets
         WHERE id = #{assetId}
     </delete>
 </mapper>

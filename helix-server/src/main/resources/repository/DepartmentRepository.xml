@@ -7,7 +7,6 @@
         SELECT id,
         name,
         parent_id,
-        tree_path,
         sort,
         status,
         created_at,
@@ -23,4 +22,22 @@
             </foreach>
         </if>
     </select>
+
+    <select id="selectById" parameterType="long" resultType="department">
+        SELECT id,
+               name,
+               parent_id,
+               sort,
+               status,
+               created_at,
+               updated_at
+        FROM departments
+        WHERE id = #{id}
+    </select>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id" parameterType="department">
+        INSERT INTO departments(name, parent_id, sort, status, created_at, updated_at)
+        VALUES (#{entity.name}, #{entity.parentId}, #{entity.sort}, #{entity.status},
+                #{entity.createdAt}, #{entity.updatedAt})
+    </insert>
 </mapper>

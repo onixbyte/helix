@@ -35,7 +35,7 @@ public class AssetManager {
 
     @CacheEvict(cacheNames = CacheName.ASSET, key = "#assetId")
     public void deleteById(Long assetId) {
-        var affectedRows = assetRepository.delete(assetId);
+        var affectedRows = assetRepository.deleteById(assetId);
         if (affectedRows != 1) {
             throw new BizException(HttpStatus.INTERNAL_SERVER_ERROR, "Delete asset failed.");
         }

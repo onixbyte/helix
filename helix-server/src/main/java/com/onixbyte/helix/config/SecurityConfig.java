@@ -4,6 +4,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.onixbyte.helix.filter.TokenAuthenticationFilter;
 import com.onixbyte.helix.properties.CorsProperties;
 import com.onixbyte.helix.properties.TokenProperties;
+import com.onixbyte.helix.security.entrypoint.UnauthorizedAuthenticationEntryPoint;
 import com.onixbyte.helix.security.provider.UsernamePasswordAuthenticationProvider;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +20,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -121,8 +123,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(
             HttpSecurity httpSecurity,
             CorsConfigurationSource corsConfigurationSource,
-            TokenAuthenticationFilter tokenAuthenticationFilter
-    ) throws Exception {
+            TokenAuthenticationFilter tokenAuthenticationFilter,
+            UnauthorizedAuthenticationEntryPoint unauthorizedAuthenticationEntryPoint) throws Exception {
         return httpSecurity
                 .cors((customiser) -> customiser
                         .configurationSource(corsConfigurationSource))
@@ -131,11 +133,14 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((customiser) -> customiser
                         .requestMatchers("/error", "/error/**").permitAll()
+                        .requestMatchers("/captcha", "/captcha/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/auth/logout").authenticated()
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling((exceptionHandling) -> exceptionHandling
+                        .authenticationEntryPoint(unauthorizedAuthenticationEntryPoint))
+                .addFilterAfter(tokenAuthenticationFilter, ExceptionTranslationFilter.class)
                 .build();
     }
 

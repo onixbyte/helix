@@ -6,32 +6,9 @@ import org.springframework.cache.annotation.EnableCaching;
 
 /**
  * Main application class for the Helix server application.
- * <p>
- * This class serves as the entry point for the Helix Spring Boot application, providing the main
- * method that bootstraps the entire application context. The application is configured with several
- * key features and integrations:
- * <p>
- * <strong>MyBatis Integration:</strong> The {@link MapperScan} annotation automatically scans and
- * registers MyBatis mapper interfaces from the {@code com.onixbyte.helix.repository} package,
- * enabling seamless database operations through the MyBatis ORM framework.
- * <p>
- * <strong>Caching Support:</strong> The {@link EnableCaching} annotation activates Spring's caching
- * abstraction, allowing the application to leverage caching mechanisms for improved performance.
- * This enables the use of caching annotations such as {@code @Cacheable}, {@code @CacheEvict}, and
- * {@code @CachePut} throughout the application.
- * <p>
- * <strong>Auto-Configuration:</strong> The {@link SpringBootApplication} annotation combines
- * {@code @Configuration}, {@code @EnableAutoConfiguration}, and {@code @ComponentScan}, providing
- * comprehensive auto-configuration capabilities and component discovery for the entire application.
- * <p>
- * The Helix application is designed as a comprehensive business management system with role-based
- * access control (RBAC), user management, and organisational structure support. It provides RESTful
- * APIs for client applications and integrates with various external systems through configurable
- * identity providers.
  *
  * @author zihluwang
  * @see SpringBootApplication
- * @see MapperScan
  * @see EnableCaching
  * @see SpringApplication
  * @since 1.0.0

@@ -6,12 +6,16 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.onixbyte.helix.manager.AuthorityManager;
 import com.onixbyte.helix.manager.UserManager;
 import com.onixbyte.helix.security.authentication.UsernamePasswordAuthentication;
+import com.onixbyte.helix.security.entrypoint.UnauthorizedAuthenticationEntryPoint;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -28,18 +32,20 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private final Algorithm algorithm;
     private final UserManager userManager;
     private final AuthorityManager authorityManager;
+    private final UnauthorizedAuthenticationEntryPoint unauthorizedAuthenticationEntryPoint;
 
-    public TokenAuthenticationFilter(Algorithm algorithm, UserManager userManager, AuthorityManager authorityManager) {
+    public TokenAuthenticationFilter(Algorithm algorithm, UserManager userManager, AuthorityManager authorityManager, UnauthorizedAuthenticationEntryPoint unauthorizedAuthenticationEntryPoint) {
         this.algorithm = algorithm;
         this.userManager = userManager;
         this.authorityManager = authorityManager;
+        this.unauthorizedAuthenticationEntryPoint = unauthorizedAuthenticationEntryPoint;
     }
 
     @Override
     protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain
+            @NonNull HttpServletRequest request,
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
         var token = request.getHeader("Authorization");
         if (Objects.isNull(token) || token.isBlank()) {
@@ -73,8 +79,13 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             filterChain.doFilter(request, response);
         } catch (JWTVerificationException e) {
-            log.error("JWT verification failed.", e);
-            filterChain.doFilter(request, response);
+            log.warn("JWT verification failed for token: {}. Reason: {}", token, e.getMessage());
+            throw new BadCredentialsException("无效或过期的令牌，请重新登录。", e);
+            // unauthorizedAuthenticationEntryPoint.commence(request, response, new BadCredentialsException("无效或过期的令牌，请重新登录。", e));
+        } catch (Exception e) {
+            log.error("An unexpected error occurred during JWT authentication.", e);
+            throw new AuthenticationServiceException("由于内部错误无法认证，请稍后重试。", e);
+            // unauthorizedAuthenticationEntryPoint.commence(request, response, new AuthenticationServiceException("由于内部错误无法认证，请稍后重试。", e));
         }
     }
 }

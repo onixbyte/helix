@@ -1,6 +1,6 @@
 package com.onixbyte.helix.config;
 
-import com.onixbyte.helix.extension.redis.serializer.JacksonSerialiser;
+import com.onixbyte.helix.common.redis.serialisers.JacksonSerialiser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -61,7 +61,7 @@ public class CacheConfig {
                         .fromSerializer(_keySerializer))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair
                         .fromSerializer(JacksonSerialiser.INSTANCE))
-                .entryTtl(Duration.ofMinutes(90L));
+                .entryTtl(Duration.ofHours(2L));
 
         return RedisCacheManager.RedisCacheManagerBuilder
                 .fromConnectionFactory(connectionFactory)

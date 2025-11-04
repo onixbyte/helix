@@ -1,23 +1,78 @@
 spring:
   data:
     redis:
+      # Redis 主机
       host: ${REDIS_HOST:-localhost}
+      # Redis 端口
       port: ${REDIS_PORT:-6379}
+      # Redis 数据库索引
       database: ${REDIS_DATABASE_INDEX:-0}
-      # password: '#{REDIS_PASSWORD:-}'
+      # Redis 数据库密码
+      password: ${REDIS_PASSWORD:-}
   datasource:
+    # 数据库连接池类型
     type: com.zaxxer.hikari.HikariDataSource
+    # 数据库驱动类
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${PG_HOST:-localhost}:${PG_PORT:-5432}/${PG_DATABASE:-onixbyte_boot}
-    username: user
-    password: 1q2w3e!Q@W#E
+    # 数据库 URL
+    url: jdbc:postgresql://${PG_HOST:-localhost}:${PG_PORT:-5432}/${PG_DATABASE:-helix}
+    # 数据库用户
+    username: ${PG_USER}
+    # 数据库密码
+    password: ${PG_PASSWORD}
 
 app:
+  asset:
+    # 是否开启 S3 文件存储服务
+    enabled: true
+    # S3 服务端点（若使用非 AWS 提供的 S3 兼容 API，请添加该配置）
+#    endpoint: https://endpoint.s3.service
+    # S3 服务区域（详情请见 S3 服务提供商）
+#    region: apac
+    # 公开域名
+    public-host: https://s3.my.app
+    # 是否开启 Path Style
+    path-style: false
+    # 存储桶名称
+    bucket: dev
+    # S3 访问密钥 ID
+    access-key-id: ${S3_ACCESS_KEY_ID}
+    # S3 访问密钥机密
+    secret-access-key: ${S3_SECRET_ACCESS_KEY}
+  # 鉴权配置
   authentication:
+    # Microsoft Entra ID 鉴权配置
     msal:
+      # Microsoft Entra ID 提供的客户端 ID
       client-id: ${MSAL_CLIENT_ID}
+      # Microsoft Entra ID 提供的租户 ID
       tenant-id: ${MSAL_TENANT_ID}
+  # 令牌配置
   jwt:
-    issuer: ${TOKEN_ISSUER}
-    secret: ${TOKEN_SECRET}
+    # 令牌签发人
+    issuer: Helix Server
+    # 令牌机密
+    secret: ${TOKEN_SECRET:-1234567890abcdefghijklmnopqrstuv}
+    # 令牌有效期（Ref java.time.Duration）
     valid-time: PT2H
+  # 跨域配置
+  cors:
+    # 是否允许身份验证
+    allow-credentials: true
+    # 是否允许私有网络
+    allow-private-network: true
+    # 允许的请求头列表
+    allowed-headers: Content-Type
+    # 允许的请求方法列表（Ref org.springframework.http.HttpMethod）
+    allowed-methods:
+      - get
+      - post
+      - put
+      - patch
+      - delete
+    # 允许的来源域名
+    allowed-origins: '*'
+    # 要对外暴露的响应头列表
+    exposed-headers: X-Authorisation
+    # 跨域缓存时长
+    max-age: PT2H
