@@ -7,7 +7,6 @@ import com.onixbyte.helix.domain.entity.User;
 import com.onixbyte.helix.domain.entity.UserRole;
 import com.onixbyte.helix.domain.web.request.AddUserRequest;
 import com.onixbyte.helix.domain.web.request.QueryUserRequest;
-import com.onixbyte.helix.domain.web.request.UpdateUserRequest;
 import com.onixbyte.helix.manager.RoleManager;
 import com.onixbyte.helix.manager.UserManager;
 import com.onixbyte.helix.manager.UserRoleManager;
@@ -106,25 +105,6 @@ public class UserService {
         var user = userManager.queryById(id);
         // Hide user password.
         user.setPassword(null);
-        return user;
-    }
-
-    public User updateUser(UpdateUserRequest request) {
-        var createTime = LocalDateTime.now();
-
-        var user = userManager.updateUse(User.builder()
-                .id(request.id())
-                .username(request.username())
-                .fullName(request.fullName())
-                .email(request.email())
-                .countryCode(request.countryCode())
-                .phoneNumber(request.phoneNumber())
-                .avatarUrl(request.avatarUrl())
-                .status(request.status())
-                .departmentId(request.departmentId())
-                .positionId(request.positionId())
-                .updatedAt(createTime)
-                .build());
         return user;
     }
 }
