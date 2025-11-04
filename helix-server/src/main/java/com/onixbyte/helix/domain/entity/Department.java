@@ -47,6 +47,17 @@ public class Department {
     private Long parentId;
 
     /**
+     * The complete path from root to this department in the hierarchy.
+     * <p>
+     * This field contains a string representation of the department's position
+     * in the organisational tree, typically formatted as a path with separators
+     * (e.g., "/root/division/department"). This enables efficient querying of
+     * department hierarchies.
+     * </p>
+     */
+    private String treePath;
+
+    /**
      * The sort order for displaying departments.
      * <p>
      * This field determines the order in which departments should be displayed
@@ -107,6 +118,14 @@ public class Department {
         this.parentId = parentId;
     }
 
+    public String getTreePath() {
+        return treePath;
+    }
+
+    public void setTreePath(String treePath) {
+        this.treePath = treePath;
+    }
+
     public Integer getSort() {
         return sort;
     }
@@ -159,15 +178,17 @@ public class Department {
      * @param id        the unique identifier for the department
      * @param name      the name of the department
      * @param parentId  the identifier of the parent department (null for root departments)
+     * @param treePath  the complete hierarchical path to this department
      * @param sort      the sort order for display purposes
      * @param status    the current status of the department
      * @param createdAt the timestamp when the department was created
      * @param updatedAt the timestamp when the department was last updated
      */
-    public Department(Long id, String name, Long parentId, Integer sort, Status status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Department(Long id, String name, Long parentId, String treePath, Integer sort, Status status, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.name = name;
         this.parentId = parentId;
+        this.treePath = treePath;
         this.sort = sort;
         this.status = status;
         this.createdAt = createdAt;
@@ -178,12 +199,12 @@ public class Department {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Department that = (Department) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(parentId, that.parentId) && Objects.equals(sort, that.sort) && status == that.status && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(parentId, that.parentId) && Objects.equals(treePath, that.treePath) && Objects.equals(sort, that.sort) && status == that.status && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, parentId, sort, status, createdAt, updatedAt);
+        return Objects.hash(id, name, parentId, treePath, sort, status, createdAt, updatedAt);
     }
 
     @Override
@@ -192,6 +213,7 @@ public class Department {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", parentId=" + parentId +
+                ", treePath='" + treePath + '\'' +
                 ", sort=" + sort +
                 ", status=" + status +
                 ", createdAt=" + createdAt +
@@ -218,6 +240,7 @@ public class Department {
         private Long id;
         private String name;
         private Long parentId;
+        private String treePath;
         private Integer sort;
         private Status status;
         private LocalDateTime createdAt;
@@ -238,6 +261,11 @@ public class Department {
 
         public DepartmentBuilder parentId(Long parentId) {
             this.parentId = parentId;
+            return this;
+        }
+
+        public DepartmentBuilder treePath(String treePath) {
+            this.treePath = treePath;
             return this;
         }
 
@@ -267,7 +295,7 @@ public class Department {
          * @return a new Department instance
          */
         public Department build() {
-            return new Department(id, name, parentId, sort, status, createdAt, updatedAt);
+            return new Department(id, name, parentId, treePath, sort, status, createdAt, updatedAt);
         }
     }
 }

@@ -28,10 +28,10 @@ import java.time.Duration;
  *       - "https://example.com"
  *       - "https://app.example.com"
  *     allowed-methods:
- *       - get
- *       - post
- *       - put
- *       - deleteById
+ *       - GET
+ *       - POST
+ *       - PUT
+ *       - DELETE
  *     allowed-headers:
  *       - "Content-Type"
  *       - "Authorization"
@@ -48,10 +48,9 @@ import java.time.Duration;
  * making it compatible with Spring's property binding and validation frameworks.
  *
  * @param allowedHeaders      HTTP header names that are permitted in the actual request
- * @param allowedMethods      HTTP methods (e.g., get, post, put) that are permitted for
- *                            cross-origin requests (ref {@link HttpMethod})
- * @param allowedOrigins      origins (domains) that are allowed to make cross-origin requests,
- *                            use {@code '*'} to allow all origins.
+ * @param allowedMethods      HTTP methods (e.g., GET, POST, PUT) that are permitted for cross-origin requests
+ * @param allowedOrigins      origins (domains) that are allowed to make cross-origin requests. Use "*" to
+ *                            allow all origins.
  * @param allowCredentials    indicating whether the client is allowed to send credentials (cookies,
  *                            HTTP authentication) with the cross-origin request
  * @param allowPrivateNetwork A flag indicating whether requests from a private network IP address
@@ -64,7 +63,6 @@ import java.time.Duration;
  * @see ConfigurationProperties
  * @see org.springframework.web.cors.CorsConfiguration
  * @see org.springframework.web.servlet.config.annotation.CorsRegistry
- * @see HttpMethod
  * @since 1.0.0
  */
 @ConfigurationProperties(prefix = "app.cors")

@@ -1,7 +1,6 @@
 package com.onixbyte.helix.domain.common;
 
 import com.onixbyte.helix.exception.BizException;
-import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -201,7 +200,6 @@ public class PageRequest implements Pageable {
      *
      * @return the sorting parameters
      */
-    @NonNull
     @Override
     public Sort getSort() {
         return sort;
@@ -213,7 +211,6 @@ public class PageRequest implements Pageable {
      * @return the next {@link Pageable}
      * @throws UnsupportedOperationException if this is an unpaged request
      */
-    @NonNull
     @Override
     public PageRequest next() {
         if (!paged) {
@@ -229,7 +226,6 @@ public class PageRequest implements Pageable {
      * @return the previous or first {@link PageRequest}
      * @throws UnsupportedOperationException if this is an unpaged request
      */
-    @NonNull
     @Override
     public PageRequest previousOrFirst() {
         if (!paged) {
@@ -249,7 +245,6 @@ public class PageRequest implements Pageable {
      * @return the first {@link PageRequest}
      * @throws UnsupportedOperationException if this is an unpaged request
      */
-    @NonNull
     @Override
     public PageRequest first() {
         if (!paged) {
@@ -266,7 +261,6 @@ public class PageRequest implements Pageable {
      * @return a new {@link PageRequest}
      * @throws UnsupportedOperationException if this is an unpaged request
      */
-    @NonNull
     @Override
     public PageRequest withPage(int pageNumber) {
         if (!paged) {
