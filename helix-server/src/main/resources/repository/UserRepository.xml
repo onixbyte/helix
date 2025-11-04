@@ -2,6 +2,41 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.onixbyte.helix.repository.UserRepository">
+    <update id="update">
+        UPDATE users
+        SET
+        <if test="pageable != null and pageable.sort != null">
+            username = #{user.username},
+        </if>
+        <if test="pageable != null and pageable.sort != null">
+            full_name = #{user.fullName},
+        </if>
+        <if test="pageable != null and pageable.sort != null">
+            email = #{user.email},
+        </if>
+        <if test="pageable != null and pageable.sort != null">
+            country_code = #{user.countryCode},
+        </if>
+        <if test="pageable != null and pageable.sort != null">
+            phone_number = #{user.phoneNumber},
+        </if>
+        <if test="pageable != null and pageable.sort != null">
+            avatar_url = #{user.avatarUrl},
+        </if>
+        <if test="pageable != null and pageable.sort != null">
+            status = #{user.status},
+        </if>
+        <if test="pageable != null and pageable.sort != null">
+            department_id = #{user.departmentId},
+        </if>
+        <if test="pageable != null and pageable.sort != null">
+            position_id = #{user.positionId},
+        </if>
+        <if test="pageable != null and pageable.sort != null">
+            updated_at = #{user.updatedAt},
+        </if>
+            WHERE id = #{user.id};
+    </update>
     <select id="selectByUsername" parameterType="string">
         SELECT id,
                username,
