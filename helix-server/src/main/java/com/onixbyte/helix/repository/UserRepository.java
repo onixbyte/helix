@@ -44,4 +44,6 @@ public interface UserRepository {
     int save(@Param("user") User user);
 
     User selectById(@Param("id") Long id);
+
+    int update(@Param("user") User user);
 }
