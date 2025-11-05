@@ -12,7 +12,6 @@ public record UpdateUserRequest(
         @Positive(message = "User ID must be positive")
         Long id,
         String username,
-        @NotBlank(message = "Full name cannot be empty.")
         String fullName,
         String email,
         String countryCode,
