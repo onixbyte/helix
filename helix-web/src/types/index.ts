@@ -23,3 +23,8 @@ export type WecomConfig = {
    */
   agentId: string
 }
+
+export interface CaptchaResponse {
+  uuid: string
+  captcha: string
+}
