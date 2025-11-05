@@ -1,5 +1,15 @@
 import webClient from "@/service/web-client"
-import type { User, UserResponse } from "@/types"
+import type { CaptchaResponse, User, UserResponse } from "@/types"
+import { HttpStatus } from "@/constant"
+
+async function getCaptcha(): Promise<CaptchaResponse | null> {
+  const { data, status } = await webClient.get<CaptchaResponse | null>("/captcha")
+  if (status == HttpStatus.OK) {
+    return data as CaptchaResponse
+  } else {
+    return null
+  }
+}
 
 /**
  * Login with WeCom.
@@ -25,7 +35,7 @@ async function wecomLogin(code: string): Promise<UserResponse> {
  */
 async function msalLogin(msalToken: string): Promise<UserResponse> {
   const { data, headers } = await webClient.post<User>(`/auth/msal/login`, {
-    msalToken
+    msalToken,
   })
 
   const token = (headers as Record<string, string>).authorization ?? ""
@@ -36,4 +46,4 @@ async function msalLogin(msalToken: string): Promise<UserResponse> {
   }
 }
 
-export { wecomLogin, msalLogin }
+export { wecomLogin, msalLogin, getCaptcha }
