@@ -76,3 +76,7 @@ app:
     exposed-headers: X-Authorisation
     # 跨域缓存时长
     max-age: PT2H
+  # Captcha 配置
+  captcha:
+    # Captcha 长度
+    length: 6
