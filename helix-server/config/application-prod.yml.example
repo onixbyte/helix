@@ -64,12 +64,14 @@ app:
     # 允许的请求头列表
     allowed-headers: Content-Type
     # 允许的请求方法列表（Ref org.springframework.http.HttpMethod）
+    # 2025.11.6注
+    #   由于 Spring 解析问题，在此处使用小写的情况下会导致在请求头中存在 Origin 时出现 Invalid CORS Request 的问题，请务必使用大写
     allowed-methods:
-      - get
-      - post
-      - put
-      - patch
-      - delete
+      - GET
+      - POST
+      - PUT
+      - PATCH
+      - DELETE
     # 允许的来源域名
     allowed-origins: '*'
     # 要对外暴露的响应头列表

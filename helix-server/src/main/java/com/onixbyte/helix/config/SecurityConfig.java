@@ -21,7 +21,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -124,9 +123,10 @@ public class SecurityConfig {
             HttpSecurity httpSecurity,
             CorsConfigurationSource corsConfigurationSource,
             TokenAuthenticationFilter tokenAuthenticationFilter,
-            UnauthorizedAuthenticationEntryPoint unauthorizedAuthenticationEntryPoint) throws Exception {
+            UnauthorizedAuthenticationEntryPoint unauthorizedAuthenticationEntryPoint
+    ) throws Exception {
         return httpSecurity
-                .cors((customiser) -> customiser
+                .cors((cors) -> cors
                         .configurationSource(corsConfigurationSource))
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement((customiser) -> customiser
