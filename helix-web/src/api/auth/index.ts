@@ -21,17 +21,8 @@ async function getCaptcha(): Promise<CaptchaResponse | null> {
 async function usernamePasswordLogin(
   request: UsernamePasswordLoginRequest
 ): Promise<UserResponse | null> {
-  const { data, headers } = await webClient.post<User>("/auth/login", request)
-
-  const token = (headers as Record<string, string>).authorization ?? ""
-  if (!token) {
-    return Promise.reject(new Error("未获取到身份令牌，登录失败"))
-  }
-
-  return {
-    user: data,
-    token,
-  }
+  const { data } = await webClient.post<UserResponse>("/auth/login", request)
+  return data
 }
 
 /**
@@ -52,7 +43,7 @@ async function wecomLogin(code: string): Promise<UserResponse> {
 
   return {
     user: data,
-    token,
+    accessToken: token,
   }
 }
 
@@ -73,8 +64,8 @@ async function msalLogin(msalToken: string): Promise<UserResponse> {
 
   return {
     user: data,
-    token,
+    accessToken: token,
   }
 }
 
-export { wecomLogin, msalLogin, getCaptcha }
+export { usernamePasswordLogin, wecomLogin, msalLogin, getCaptcha }
