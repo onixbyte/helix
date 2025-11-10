@@ -1,6 +1,6 @@
 import { type MouseEvent, useCallback, useEffect, useState } from "react"
 import { Form, Input, Button, Card, message } from "antd"
-import moment from "moment"
+import dayjs from "dayjs"
 import type { CaptchaResponse, GeneralErrorResponse, UsernamePasswordLoginRequest } from "@/types"
 import * as AuthApi from "@/api/auth"
 import { useAppDispatch } from "@/store"
@@ -55,7 +55,7 @@ export default function LoginPage() {
               token: loginResponse.accessToken,
             })
           )
-          messageApi.success("登录成功", moment.duration({ second: 3 }).asSeconds())
+          messageApi.success("登录成功", dayjs.duration({ seconds: 3 }).asSeconds())
           await navigate("/")
         } else {
           messageApi.error("登录失败：服务器响应异常。")
@@ -63,7 +63,7 @@ export default function LoginPage() {
       } catch (errorInfo: unknown) {
         const error = errorInfo as AxiosError<GeneralErrorResponse>
         console.log(error)
-        messageApi.error(error.response?.data.message ?? "登录失败，请稍后再试")
+        messageApi.error(error.response?.data.message ?? "登录失败，请稍后再试", dayjs.duration({ seconds: 3 }).asSeconds())
       }
     },
     [dispatch, navigate, messageApi]
