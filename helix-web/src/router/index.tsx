@@ -3,23 +3,10 @@ import ProtectedRoute from "@/components/protected-route"
 import LoginPage from "@/page/login"
 import RegisterPage from "@/page/register"
 import HomePage from "@/page/home"
+import ErrorPage from "@/page/error"
+import NotFoundPage from "@/page/not-found"
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <ProtectedRoute />,
-    errorElement: (
-      <>
-        <div>Something went wrong.</div>
-      </>
-    ),
-    children: [
-      {
-        index: true,
-        element: <HomePage />
-      },
-    ],
-  },
   {
     path: "/login",
     element: <LoginPage />,
@@ -27,6 +14,21 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <RegisterPage />,
+  },
+  {
+    path: "/",
+    element: <ProtectedRoute />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        index: true,
+        element: <HomePage />,
+      },
+    ],
+  },
+  {
+    path: "*",
+    element: <NotFoundPage />,
   },
 ])
 
