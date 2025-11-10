@@ -1,27 +1,137 @@
-import { Link, Outlet } from "react-router"
-import passwordLogo from "@/assets/password.svg"
-import microsoftLogo from "@/assets/microsoft.svg"
-import UsernameAndPasswordLogin from "./username-and-password"
-import MsalLogin from "./msal-login"
+import { type MouseEvent, useCallback, useEffect, useState } from "react"
+import { Form, Input, Button, Card, message } from "antd"
+import moment from "moment"
+import type { CaptchaResponse, GeneralErrorResponse, UsernamePasswordLoginRequest } from "@/types"
+import * as AuthApi from "@/api/auth"
+import { useAppDispatch } from "@/store"
+import { loginSuccess } from "@/store/auth-slice"
+import { useNavigate } from "react-router"
+import type { AxiosError } from "axios"
 
-export default function Login() {
+export default function LoginPage() {
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+
+  const [messageApi, contextHolder] = message.useMessage()
+  const [form] = Form.useForm<UsernamePasswordLoginRequest>()
+
+  const [hasCaptcha, setHasCaptcha] = useState<boolean>(false)
+  const [captchaData, setCaptchaData] = useState<CaptchaResponse | null>()
+
+  const fetchCaptcha = useCallback(async () => {
+    try {
+      const response = await AuthApi.getCaptcha()
+      if (response) {
+        setHasCaptcha(true)
+        setCaptchaData(response)
+        form.setFieldValue("uuid", response.uuid)
+      } else {
+        setHasCaptcha(false)
+        setCaptchaData(null)
+        form.setFieldValue("uuid", null)
+      }
+    } catch (error) {
+      console.error("Failed to fetch captcha due to an error:", error)
+      setHasCaptcha(false)
+      setCaptchaData(null)
+      form.setFieldValue("uuid", null)
+    }
+  }, [form])
+
+  useEffect(() => {
+    void fetchCaptcha()
+  }, [fetchCaptcha])
+
+  const performLogin = useCallback(
+    async (values: UsernamePasswordLoginRequest) => {
+      try {
+        console.log("Login values:", values)
+
+        const loginResponse = await AuthApi.usernamePasswordLogin(values)
+        if (loginResponse) {
+          dispatch(
+            loginSuccess({
+              user: loginResponse.user,
+              token: loginResponse.accessToken,
+            })
+          )
+          messageApi.success("登录成功", moment.duration({ second: 3 }).asSeconds())
+          await navigate("/")
+        } else {
+          messageApi.error("登录失败：服务器响应异常。")
+        }
+      } catch (errorInfo: unknown) {
+        const error = errorInfo as AxiosError<GeneralErrorResponse>
+        console.log(error)
+        messageApi.error(error.response?.data.message ?? "登录失败，请稍后再试")
+      }
+    },
+    [dispatch, navigate, messageApi]
+  )
+
+  // 刷新验证码图片
+  const refreshCaptcha = (event: MouseEvent) => {
+    event.preventDefault()
+    void fetchCaptcha()
+  }
+
   return (
-    <div className="card bg-base-100 shadow-sm max-w-[660px] my-[50px] mx-auto">
-      <nav className="flex justify-center gap-4 navbar bg-base-100 shadow-sm">
-        <Link to="/login" className="hover:text-blue-300">
-          <img src={passwordLogo} alt="Password" className="inline-block w-[24px]" />
-          Username and Password
-        </Link>
-        <Link to="/login/msal" className="hover:text-blue-300 flex gap-1">
-          <img src={microsoftLogo} alt="Microsoft" className="inline-block w-[24px]" />
-          Microsoft Entra ID
-        </Link>
-      </nav>
-      <div className="card-body">
-        <Outlet />
-      </div>
+    <div>
+      {contextHolder}
+      <Card title="用户登录" className="w-[400px]! my-5! mx-auto!">
+        <Form<UsernamePasswordLoginRequest>
+          name="usernamePasswordLoginForm"
+          form={form}
+          onFinish={(values) => {
+            void performLogin(values)
+          }}
+          layout="vertical">
+          <Form.Item<UsernamePasswordLoginRequest>
+            label="用户名"
+            name="username"
+            rules={[{ required: true, message: "请输入用户名!" }]}>
+            <Input placeholder="请输入用户名" />
+          </Form.Item>
+          <Form.Item<UsernamePasswordLoginRequest>
+            label="密码"
+            name="password"
+            rules={[{ required: true, message: "请输入密码!" }]}>
+            <Input.Password placeholder="请输入密码" />
+          </Form.Item>
+
+          {hasCaptcha ? (
+            <>
+              <Form.Item<UsernamePasswordLoginRequest>
+                label="验证码"
+                name="captcha"
+                rules={[{ required: true, message: "请输入验证码!" }]}>
+                <div className="flex items-center gap-2">
+                  <Input placeholder="请输入验证码" className="flex-1!" />
+                  {captchaData?.captcha && (
+                    <img
+                      src={captchaData.captcha}
+                      alt="验证码"
+                      onClick={refreshCaptcha}
+                      className="cursor-pointer h-8 border border-gray-300"
+                    />
+                  )}
+                </div>
+              </Form.Item>
+              <Form.Item<UsernamePasswordLoginRequest> name="uuid" hidden>
+                <div>Placeholder</div>
+              </Form.Item>
+            </>
+          ) : null}
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit" block>
+              登录
+            </Button>
+          </Form.Item>
+        </Form>
+
+        {/* <Divider>第三方帐号登录</Divider> */}
+      </Card>
     </div>
   )
 }
-
-export { UsernameAndPasswordLogin, MsalLogin }

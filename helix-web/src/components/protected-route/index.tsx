@@ -3,11 +3,10 @@ import { useAppSelector } from "@/store"
 
 export default function ProtectedRoute() {
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
-
   const location = useLocation()
 
-  if (isAuthenticated) {
-    return <Navigate to="" state={{ from: location }} replace />
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace />
   }
 
   return <Outlet />

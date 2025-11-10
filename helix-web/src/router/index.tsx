@@ -1,7 +1,8 @@
 import { createBrowserRouter } from "react-router"
 import ProtectedRoute from "@/components/protected-route"
-import Login, { MsalLogin, UsernameAndPasswordLogin } from "@/page/login"
-import Register from "@/page/register"
+import LoginPage from "@/page/login"
+import RegisterPage from "@/page/register"
+import HomePage from "@/page/home"
 
 const router = createBrowserRouter([
   {
@@ -13,26 +14,20 @@ const router = createBrowserRouter([
       </>
     ),
     children: [
-    ]
+      {
+        index: true,
+        element: <HomePage />
+      },
+    ],
   },
   {
     path: "/login",
-    element: <Login />,
-    children: [
-      {
-        path: "username-password",
-        element: <UsernameAndPasswordLogin />
-      },
-      {
-        path: "msal",
-        element: <MsalLogin />
-      }
-    ]
+    element: <LoginPage />,
   },
   {
     path: "/register",
-    element: <Register />
-  }
+    element: <RegisterPage />,
+  },
 ])
 
 export default router

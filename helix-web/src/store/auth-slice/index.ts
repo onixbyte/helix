@@ -24,6 +24,7 @@ const authSlice = createSlice({
         token: string
       }>
     ) {
+      console.log("更新用户信息：", action.payload.user)
       state.isAuthenticated = true
       state.user = action.payload.user
       state.token = action.payload.token
