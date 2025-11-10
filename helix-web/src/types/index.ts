@@ -28,3 +28,10 @@ export interface CaptchaResponse {
   uuid: string
   captcha: string
 }
+
+export interface UsernamePasswordLoginRequest {
+  username: string
+  password: string
+  captcha?: string
+  uuid?: string
+}
