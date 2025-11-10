@@ -1,19 +1,22 @@
 import { type MouseEvent, useCallback, useEffect, useState } from "react"
-import { Form, Input, Button, Card, Divider, message } from "antd"
-import type { CaptchaResponse, UsernamePasswordLoginRequest } from "@/types"
+import { Form, Input, Button, Card, message } from "antd"
+import moment from "moment"
+import type { CaptchaResponse, GeneralErrorResponse, UsernamePasswordLoginRequest } from "@/types"
 import * as AuthApi from "@/api/auth"
 import { useAppDispatch } from "@/store"
 import { loginSuccess } from "@/store/auth-slice"
-import moment from "moment"
+import { useNavigate } from "react-router"
+import type { AxiosError } from "axios"
 
-export default function Login() {
+export default function LoginPage() {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
 
   const [messageApi, contextHolder] = message.useMessage()
   const [form] = Form.useForm<UsernamePasswordLoginRequest>()
 
   const [hasCaptcha, setHasCaptcha] = useState<boolean>(false)
-  const [captchaData, setCaptchaData] = useState<CaptchaResponse | undefined>(undefined) // 重命名为 captchaData 避免与类型混淆，并明确初始 undefined 状态
+  const [captchaData, setCaptchaData] = useState<CaptchaResponse | null>()
 
   const fetchCaptcha = useCallback(async () => {
     try {
@@ -21,19 +24,17 @@ export default function Login() {
       if (response) {
         setHasCaptcha(true)
         setCaptchaData(response)
-        // form.setFieldValue 是 form 实例上的方法，form 实例本身是稳定的
         form.setFieldValue("uuid", response.uuid)
       } else {
-        console.warn("API returned an empty or invalid captcha response.")
         setHasCaptcha(false)
-        setCaptchaData(undefined)
-        form.setFieldValue("uuid", undefined)
+        setCaptchaData(null)
+        form.setFieldValue("uuid", null)
       }
     } catch (error) {
       console.error("Failed to fetch captcha due to an error:", error)
       setHasCaptcha(false)
-      setCaptchaData(undefined)
-      form.setFieldValue("uuid", undefined)
+      setCaptchaData(null)
+      form.setFieldValue("uuid", null)
     }
   }, [form])
 
@@ -41,33 +42,32 @@ export default function Login() {
     void fetchCaptcha()
   }, [fetchCaptcha])
 
-  const performLogin = async () => {
-    try {
-      // 触发表单验证
-      const values = await form.validateFields()
-      console.log("Login values:", values)
+  const performLogin = useCallback(
+    async (values: UsernamePasswordLoginRequest) => {
+      try {
+        console.log("Login values:", values)
 
-      // 在这里可以调用实际的登录 API
-      const loginResponse = await AuthApi.usernamePasswordLogin(values)
-      console.log("Login successful:", loginResponse)
-      if (loginResponse) {
-        dispatch(
-          loginSuccess({
-            user: loginResponse.user,
-            token: loginResponse.accessToken,
-          })
-        )
-        message.open({
-          type: "success",
-          content: "登录成功",
-          duration: moment.duration({ second: 3 }).asSeconds(),
-        })
+        const loginResponse = await AuthApi.usernamePasswordLogin(values)
+        if (loginResponse) {
+          dispatch(
+            loginSuccess({
+              user: loginResponse.user,
+              token: loginResponse.accessToken,
+            })
+          )
+          messageApi.success("登录成功", moment.duration({ second: 3 }).asSeconds())
+          await navigate("/")
+        } else {
+          messageApi.error("登录失败：服务器响应异常。")
+        }
+      } catch (errorInfo: unknown) {
+        const error = errorInfo as AxiosError<GeneralErrorResponse>
+        console.log(error)
+        messageApi.error(error.response?.data.message ?? "登录失败，请稍后再试")
       }
-    } catch (errorInfo) {
-      console.error("Login validation failed:", errorInfo)
-      // 如果验证失败，可以显示 Ant Design 的校验信息
-    }
-  }
+    },
+    [dispatch, navigate, messageApi]
+  )
 
   // 刷新验证码图片
   const refreshCaptcha = (event: MouseEvent) => {
@@ -82,7 +82,9 @@ export default function Login() {
         <Form<UsernamePasswordLoginRequest>
           name="usernamePasswordLoginForm"
           form={form}
-          onFinish={() => void performLogin()}
+          onFinish={(values) => {
+            void performLogin(values)
+          }}
           layout="vertical">
           <Form.Item<UsernamePasswordLoginRequest>
             label="用户名"
@@ -103,15 +105,14 @@ export default function Login() {
                 label="验证码"
                 name="captcha"
                 rules={[{ required: true, message: "请输入验证码!" }]}>
-                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <Input placeholder="请输入验证码" style={{ flex: 1 }} />{" "}
-                  {/* Input 占据剩余空间 */}
+                <div className="flex items-center gap-2">
+                  <Input placeholder="请输入验证码" className="flex-1!" />
                   {captchaData?.captcha && (
                     <img
                       src={captchaData.captcha}
                       alt="验证码"
                       onClick={refreshCaptcha}
-                      style={{ cursor: "pointer", height: "32px", border: "1px solid #d9d9d9" }}
+                      className="cursor-pointer h-8 border border-gray-300"
                     />
                   )}
                 </div>
@@ -129,7 +130,7 @@ export default function Login() {
           </Form.Item>
         </Form>
 
-        <Divider>第三方帐号登录</Divider>
+        {/* <Divider>第三方帐号登录</Divider> */}
       </Card>
     </div>
   )

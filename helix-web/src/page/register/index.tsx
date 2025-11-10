@@ -1,3 +1,3 @@
-export default function Register() {
+export default function RegisterPage() {
   return <></>
 }

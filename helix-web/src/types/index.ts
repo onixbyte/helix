@@ -1,10 +1,16 @@
 export interface User {
   id: number
   username: string
-  name: string
-  msalOpenId: string
-  dingTalkOpenId: string
-  wecomOpenId: string
+  fullName: string
+  email: string
+  countryCode: string
+  phoneNumber: string
+  avatarUrl: string
+  status: "ACTIVE" | "INACTIVE"
+  departmentId: number
+  positionId: number
+  createdAt: string
+  updatedAt: string
 }
 
 export interface UserResponse {
@@ -34,4 +40,9 @@ export interface UsernamePasswordLoginRequest {
   password: string
   captcha?: string
   uuid?: string
+}
+
+export interface GeneralErrorResponse {
+  message: string
+  timestamp: string
 }
