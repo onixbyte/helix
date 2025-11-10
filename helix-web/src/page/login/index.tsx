@@ -1,12 +1,12 @@
 import { type MouseEvent, useCallback, useEffect, useState } from "react"
+import { useNavigate } from "react-router"
 import { Form, Input, Button, Card, message } from "antd"
 import dayjs from "dayjs"
+import type { AxiosError } from "axios"
 import type { CaptchaResponse, GeneralErrorResponse, UsernamePasswordLoginRequest } from "@/types"
 import * as AuthApi from "@/api/auth"
 import { useAppDispatch } from "@/store"
 import { loginSuccess } from "@/store/auth-slice"
-import { useNavigate } from "react-router"
-import type { AxiosError } from "axios"
 
 export default function LoginPage() {
   const dispatch = useAppDispatch()
