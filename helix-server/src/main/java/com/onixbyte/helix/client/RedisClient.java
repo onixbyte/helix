@@ -45,4 +45,8 @@ public class RedisClient {
     public Long decrement(String key) {
         return redisTemplate.opsForValue().decrement(key);
     }
+
+    public boolean delete(String key) {
+        return redisTemplate.delete(key);
+    }
 }

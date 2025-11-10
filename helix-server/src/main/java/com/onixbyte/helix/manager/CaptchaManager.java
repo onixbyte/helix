@@ -1,37 +1,39 @@
 package com.onixbyte.helix.manager;
 
+import com.onixbyte.helix.client.RedisClient;
 import com.onixbyte.helix.constant.CacheName;
 import com.onixbyte.helix.properties.CaptchaProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.util.Objects;
 
 @Component
 public class CaptchaManager {
 
-    private final Cache captchaCache;
+    private final RedisClient redisClient;
 
     @Autowired
-    public CaptchaManager(RedisCacheManager cacheManager) {
-        var _captchaCache = cacheManager.getCache(CacheName.CAPTCHA);
-
-        if (Objects.isNull(_captchaCache)) {
-            throw new IllegalStateException("无法获取缓存数据");
-        }
-
-        this.captchaCache = _captchaCache;
+    public CaptchaManager(RedisClient redisClient) {
+        this.redisClient = redisClient;
     }
 
     public void setCaptcha(String uuid, String captchaCode) {
-        captchaCache.put(uuid, captchaCode);
+        redisClient.set(buildCacheKey(uuid), captchaCode, Duration.ofMinutes(5L));
     }
 
     public String getCaptcha(String uuid) {
-        var captcha = captchaCache.get(uuid, String.class);
-        captchaCache.evict(uuid);
+        var key = buildCacheKey(uuid);
+        var captcha = redisClient.get(key, String.class);
+        redisClient.delete(key);
         return captcha;
+    }
+
+    private String buildCacheKey(String uuid) {
+        return "captcha::" + uuid;
     }
 }

@@ -57,8 +57,8 @@ public class CaptchaService {
         var captchaImage = producer.createImage(captchaCode);
         try (var byteArrayOutputStream = new FastByteArrayOutputStream()) {
             ImageIO.write(captchaImage, FileFormat.IMAGE_JPEG, byteArrayOutputStream);
-            var captchaDataUrl = "data:image/jpeg;base64," + Base64.getEncoder()
-                    .encodeToString(byteArrayOutputStream.toByteArray());
+            var captchaDataUrl = "data:image/jpeg;base64," +
+                    Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray());
             return new CaptchaResponse(captchaDataUrl, uuid);
         } catch (IOException e) {
             throw new BizException("无法生成验证码图片。");
