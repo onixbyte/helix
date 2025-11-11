@@ -31,6 +31,7 @@ export default function LoginPage() {
   const [messageApi, contextHolder] = message.useMessage()
   const [form] = Form.useForm<UsernamePasswordLoginRequest>()
 
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [hasCaptcha, setHasCaptcha] = useState<boolean>(false)
   const [captchaData, setCaptchaData] = useState<CaptchaResponse | null>()
 
@@ -180,43 +181,75 @@ export default function LoginPage() {
   }
 
   return (
-    <div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       {contextHolder}
-      <Card title="用户登录" className="w-[400px]! my-5! mx-auto!">
+
+      {/* 背景装饰元素 */}
+      <div className="absolute top-0 left-0 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70"></div>
+      <div className="absolute top-0 right-0 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-70"></div>
+      <div className="absolute bottom-0 left-1/2 w-72 h-72 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-70"></div>
+
+      <Card
+        title={
+          <div className="text-center py-4">
+            <h1 className="text-2xl font-bold text-gray-800 mb-2">欢迎回来</h1>
+            <p className="text-gray-600 text-sm">请登录您的账户</p>
+          </div>
+        }
+        className="w-full max-w-md shadow-2xl border-0 backdrop-blur-sm bg-white/90 relative z-10"
+        styles={{
+          body: {
+            padding: "32px",
+          },
+        }}>
         <Form<UsernamePasswordLoginRequest>
           name="usernamePasswordLoginForm"
           form={form}
           onFinish={(values) => {
             void performLogin(values)
           }}
-          layout="vertical">
+          layout="vertical"
+          className="space-y-4">
           <Form.Item<UsernamePasswordLoginRequest>
-            label="用户名"
+            label={<span className="text-gray-700 font-medium">用户名</span>}
             name="username"
             rules={[{ required: true, message: "请输入用户名!" }]}>
-            <Input placeholder="请输入用户名" />
+            <Input
+              placeholder="请输入用户名"
+              size="large"
+              className="rounded-lg border-gray-300 hover:border-blue-400 focus:border-blue-500 transition-colors"
+            />
           </Form.Item>
+
           <Form.Item<UsernamePasswordLoginRequest>
-            label="密码"
+            label={<span className="text-gray-700 font-medium">密码</span>}
             name="password"
             rules={[{ required: true, message: "请输入密码!" }]}>
-            <Input.Password placeholder="请输入密码" />
+            <Input.Password
+              placeholder="请输入密码"
+              size="large"
+              className="rounded-lg border-gray-300 hover:border-blue-400 focus:border-blue-500 transition-colors"
+            />
           </Form.Item>
 
           {hasCaptcha ? (
             <>
               <Form.Item<UsernamePasswordLoginRequest>
-                label="验证码"
+                label={<span className="text-gray-700 font-medium">验证码</span>}
                 name="captcha"
                 rules={[{ required: true, message: "请输入验证码!" }]}>
-                <div className="flex items-center gap-2">
-                  <Input placeholder="请输入验证码" className="flex-1!" />
+                <div className="flex items-center gap-3">
+                  <Input
+                    placeholder="请输入验证码"
+                    size="large"
+                    className="rounded-lg border-gray-300 hover:border-blue-400 focus:border-blue-500 transition-colors"
+                  />
                   {captchaData?.captcha && (
                     <img
                       src={captchaData.captcha}
                       alt="验证码"
                       onClick={refreshCaptcha}
-                      className="cursor-pointer h-8 border border-gray-300"
+                      className="cursor-pointer h-10 border border-gray-300 rounded-lg transition-transform hover:scale-105"
                     />
                   )}
                 </div>
@@ -227,25 +260,98 @@ export default function LoginPage() {
             </>
           ) : null}
 
-          <Form.Item>
-            <Button type="primary" htmlType="submit" block>
-              登录
+          <Form.Item className="mb-0">
+            <Button
+              type="primary"
+              htmlType="submit"
+              block
+              size="large"
+              loading={isLoading}
+              className="h-12 rounded-lg font-semibold text-base bg-gradient-to-r from-blue-500 to-purple-600 border-0 hover:from-blue-600 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl">
+              {isLoading ? "登录中..." : "登录"}
             </Button>
           </Form.Item>
         </Form>
 
-        <Divider>第三方帐号登录</Divider>
-        <div className="flex flex-wrap justify-center gap-4 px-6">
-          <Button icon={<DingTalkFilled />} size="large" onClick={performDingTalkLogin} />
-          <Button icon={<DiscordFilled />} size="large" onClick={performDiscordLogin} />
-          <Button icon={<EmailFilled />} size="large" onClick={performEmailLogin} />
-          <Button icon={<GithubFilled />} size="large" onClick={performGithubLogin} />
-          <Button icon={<GitlabFilled />} size="large" onClick={performGitlabLogin} />
-          <Button icon={<GoogleFilled />} size="large" onClick={performGoogleLogin} />
-          <Button icon={<LarkFilled />} size="large" onClick={performLarkLogin} />
-          <Button icon={<MicrosoftFilled />} size="large" onClick={performMsalLogin} />
-          <Button icon={<SlackFilled />} size="large" onClick={performSlackLogin} />
-          <Button icon={<WeComFilled />} size="large" onClick={performWeComLogin} />
+        <Divider className="my-6 text-gray-400">
+          <span className="text-gray-500 text-sm font-medium">第三方帐号登录</span>
+        </Divider>
+
+        <div className="grid grid-cols-5 gap-4 justify-items-center w-full">
+          <Button
+            icon={<DingTalkFilled className="text-blue-600" />}
+            size="large"
+            onClick={performDingTalkLogin}
+            className="w-14 h-12 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 hover:border-blue-300 transition-all duration-300 shadow-sm hover:shadow-md flex items-center justify-center"
+            title="钉钉登录"
+          />
+          <Button
+            icon={<DiscordFilled className="text-indigo-600" />}
+            size="large"
+            onClick={performDiscordLogin}
+            className="w-14 h-12 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 hover:border-indigo-300 transition-all duration-300 shadow-sm hover:shadow-md flex items-center justify-center"
+            title="Discord登录"
+          />
+          <Button
+            icon={<EmailFilled className="text-red-600" />}
+            size="large"
+            onClick={performEmailLogin}
+            className="w-14 h-12 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 hover:border-red-300 transition-all duration-300 shadow-sm hover:shadow-md flex items-center justify-center"
+            title="邮箱登录"
+          />
+          <Button
+            icon={<GithubFilled className="text-gray-800" />}
+            size="large"
+            onClick={performGithubLogin}
+            className="w-14 h-12 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-400 transition-all duration-300 shadow-sm hover:shadow-md flex items-center justify-center"
+            title="GitHub登录"
+          />
+          <Button
+            icon={<GitlabFilled className="text-orange-600" />}
+            size="large"
+            onClick={performGitlabLogin}
+            className="w-14 h-12 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 hover:border-orange-300 transition-all duration-300 shadow-sm hover:shadow-md flex items-center justify-center"
+            title="GitLab登录"
+          />
+          <Button
+            icon={<GoogleFilled className="text-red-500" />}
+            size="large"
+            onClick={performGoogleLogin}
+            className="w-14 h-12 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 hover:border-red-300 transition-all duration-300 shadow-sm hover:shadow-md flex items-center justify-center"
+            title="Google登录"
+          />
+          <Button
+            icon={<LarkFilled className="text-blue-700" />}
+            size="large"
+            onClick={performLarkLogin}
+            className="w-14 h-12 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 hover:border-blue-400 transition-all duration-300 shadow-sm hover:shadow-md flex items-center justify-center"
+            title="飞书登录"
+          />
+          <Button
+            icon={<MicrosoftFilled className="text-blue-600" />}
+            size="large"
+            onClick={performMsalLogin}
+            className="w-14 h-12 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 hover:border-blue-300 transition-all duration-300 shadow-sm hover:shadow-md flex items-center justify-center"
+            title="Microsoft登录"
+          />
+          <Button
+            icon={<SlackFilled className="text-purple-600" />}
+            size="large"
+            onClick={performSlackLogin}
+            className="w-14 h-12 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 hover:border-purple-300 transition-all duration-300 shadow-sm hover:shadow-md flex items-center justify-center"
+            title="Slack登录"
+          />
+          <Button
+            icon={<WeComFilled className="text-green-600" />}
+            size="large"
+            onClick={performWeComLogin}
+            className="w-14 h-12 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 hover:border-green-300 transition-all duration-300 shadow-sm hover:shadow-md flex items-center justify-center"
+            title="企业微信登录"
+          />
+        </div>
+
+        <div className="mt-8 text-center">
+          <p className="text-gray-500 text-xs">&copy; 2024 Your Company. All rights reserved.</p>
         </div>
       </Card>
     </div>
