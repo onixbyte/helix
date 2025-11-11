@@ -1,3 +1,6 @@
+import type { GetProps } from "antd"
+import type Icon from "@ant-design/icons"
+
 export interface User {
   id: number
   username: string
@@ -46,3 +49,5 @@ export interface GeneralErrorResponse {
   message: string
   timestamp: string
 }
+
+export type CustomIconComponentProps = GetProps<typeof Icon>

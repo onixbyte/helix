@@ -1,16 +1,32 @@
 import { type MouseEvent, useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router"
-import { Form, Input, Button, Card, message } from "antd"
+import { Form, Input, Button, Card, message, Divider } from "antd"
 import dayjs from "dayjs"
 import type { AxiosError } from "axios"
 import type { CaptchaResponse, GeneralErrorResponse, UsernamePasswordLoginRequest } from "@/types"
 import * as AuthApi from "@/api/auth"
 import { useAppDispatch } from "@/store"
 import { loginSuccess } from "@/store/auth-slice"
+import {
+  DingTalkFilled,
+  GoogleFilled,
+  LarkFilled,
+  MicrosoftFilled,
+  SlackFilled,
+  WeComFilled,
+  GitlabFilled,
+  DiscordFilled,
+  EmailFilled,
+} from "@/components/icon"
+import { useMsal } from "@azure/msal-react"
+import { doMsalLogin } from "@/service/auth/msal"
+import { GithubFilled } from "@ant-design/icons"
 
 export default function LoginPage() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+
+  const msalContext = useMsal()
 
   const [messageApi, contextHolder] = message.useMessage()
   const [form] = Form.useForm<UsernamePasswordLoginRequest>()
@@ -42,6 +58,9 @@ export default function LoginPage() {
     void fetchCaptcha()
   }, [fetchCaptcha])
 
+  /**
+   * 用户名密码登录
+   */
   const performLogin = useCallback(
     async (values: UsernamePasswordLoginRequest) => {
       try {
@@ -72,10 +91,92 @@ export default function LoginPage() {
     [dispatch, navigate, messageApi]
   )
 
-  // 刷新验证码图片
+  /**
+   * 刷新验证码图片
+   */
   const refreshCaptcha = (event: MouseEvent) => {
     event.preventDefault()
     void fetchCaptcha()
+  }
+
+  /**
+   * 使用 Microsoft Entra ID 登录
+   */
+  const performMsalLogin = () => {
+    console.log("使用 Microsoft 账号登录")
+    // void doMsalLogin(msalContext.instance, dispatch, () => void navigate("/"))
+  }
+
+  /**
+   * 使用 DingTalk 登录
+   */
+  const performDingTalkLogin = () => {
+    console.log("使用钉钉登录")
+    // todo implement this
+  }
+
+  /**
+   * 使用 WeCom 登录
+   */
+  const performWeComLogin = () => {
+    console.log("使用企业微信登录")
+    // todo implement this
+  }
+
+  /**
+   * 使用 Lark 登录
+   */
+  const performLarkLogin = () => {
+    console.log("使用飞书登录")
+    // todo implement this
+  }
+
+  /**
+   * 使用 Slack 登录
+   */
+  const performSlackLogin = () => {
+    console.log("使用 Slack 登录")
+    // todo implement this
+  }
+
+  /**
+   * 使用 Github 登录
+   */
+  const performGithubLogin = () => {
+    console.log("使用 GitHub 登录")
+    // todo implement this
+  }
+
+  /**
+   * 使用 Google 登录
+   */
+  const performGoogleLogin = () => {
+    console.log("使用 Google 登录")
+    // todo implement this
+  }
+
+  /**
+   * 使用 Gitlab 登录
+   */
+  const performGitlabLogin = () => {
+    console.log("使用 Gitlab 登录")
+    // todo implement this
+  }
+
+  /**
+   * 使用 Discord 登录
+   */
+  const performDiscordLogin = () => {
+    console.log("使用 Discord 登录")
+    // todo implement this
+  }
+
+  /**
+   * 使用 Email 登录
+   */
+  const performEmailLogin = () => {
+    console.log("使用 Email 登录")
+    // todo implement this
   }
 
   return (
@@ -133,7 +234,19 @@ export default function LoginPage() {
           </Form.Item>
         </Form>
 
-        {/* <Divider>第三方帐号登录</Divider> */}
+        <Divider>第三方帐号登录</Divider>
+        <div className="flex flex-wrap justify-center gap-4 px-6">
+          <Button icon={<DingTalkFilled />} size="large" onClick={performDingTalkLogin} />
+          <Button icon={<DiscordFilled />} size="large" onClick={performDiscordLogin} />
+          <Button icon={<EmailFilled />} size="large" onClick={performEmailLogin} />
+          <Button icon={<GithubFilled />} size="large" onClick={performGithubLogin} />
+          <Button icon={<GitlabFilled />} size="large" onClick={performGitlabLogin} />
+          <Button icon={<GoogleFilled />} size="large" onClick={performGoogleLogin} />
+          <Button icon={<LarkFilled />} size="large" onClick={performLarkLogin} />
+          <Button icon={<MicrosoftFilled />} size="large" onClick={performMsalLogin} />
+          <Button icon={<SlackFilled />} size="large" onClick={performSlackLogin} />
+          <Button icon={<WeComFilled />} size="large" onClick={performWeComLogin} />
+        </div>
       </Card>
     </div>
   )
