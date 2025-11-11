@@ -1,34 +1,43 @@
-import { createBrowserRouter } from "react-router"
-import ProtectedRoute from "@/components/protected-route"
-import LoginPage from "@/page/login"
-import RegisterPage from "@/page/register"
-import HomePage from "@/page/home"
+import type { ComponentType } from "react"
+import { createBrowserRouter } from "react-router-dom"
 import ErrorPage from "@/page/error"
-import NotFoundPage from "@/page/not-found"
+
+/**
+ * 懒加载组件
+ * @param importer
+ */
+function lazyLoading<T extends { default: ComponentType<unknown> }>(importer: () => Promise<T>) {
+  return async () => {
+    const module = await importer()
+    return {
+      Component: module.default,
+    }
+  }
+}
 
 const router = createBrowserRouter([
   {
     path: "/login",
-    element: <LoginPage />,
+    lazy: lazyLoading(() => import("@/page/login")),
   },
   {
     path: "/register",
-    element: <RegisterPage />,
+    lazy: lazyLoading(() => import("@/page/register")),
   },
   {
     path: "/",
-    element: <ProtectedRoute />,
+    lazy: lazyLoading(() => import("@/components/protected-route")),
     errorElement: <ErrorPage />,
     children: [
       {
         index: true,
-        element: <HomePage />,
+        lazy: lazyLoading(() => import("@/page/home")),
       },
     ],
   },
   {
     path: "*",
-    element: <NotFoundPage />,
+    lazy: lazyLoading(() => import("@/page/not-found")),
   },
 ])
 

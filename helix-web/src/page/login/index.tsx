@@ -63,7 +63,10 @@ export default function LoginPage() {
       } catch (errorInfo: unknown) {
         const error = errorInfo as AxiosError<GeneralErrorResponse>
         console.log(error)
-        messageApi.error(error.response?.data.message ?? "登录失败，请稍后再试", dayjs.duration({ seconds: 3 }).asSeconds())
+        messageApi.error(
+          error.response?.data.message ?? "登录失败，请稍后再试",
+          dayjs.duration({ seconds: 3 }).asSeconds()
+        )
       }
     },
     [dispatch, navigate, messageApi]
