@@ -68,4 +68,12 @@ async function msalLogin(msalToken: string): Promise<UserResponse> {
   }
 }
 
-export { usernamePasswordLogin, wecomLogin, msalLogin, getCaptcha }
+/**
+ * Fetch register enabling setting.
+ */
+async function fetchRegisterEnabled() {
+  const { data } = await webClient.get<boolean>("/auth/register-enabled")
+  return data
+}
+
+export { usernamePasswordLogin, wecomLogin, msalLogin, getCaptcha, fetchRegisterEnabled }
