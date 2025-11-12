@@ -25,6 +25,10 @@ public class RedisClient {
         redisTemplate.opsForValue().set(key, value, timeout);
     }
 
+    public Object get(String key) {
+        return redisTemplate.opsForValue().get(key);
+    }
+
     public <T> T get(String key, Class<T> type) {
         var value = redisTemplate.opsForValue().get(key);
         if (Objects.isNull(value)) {
