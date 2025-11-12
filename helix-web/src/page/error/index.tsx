@@ -9,7 +9,10 @@ import { Link } from "react-router-dom"
  */
 export default function ErrorPage({ message = "发生了未知错误，请稍后再试" }) {
   return (
-    <div className="flex justify-center items-center min-h-screen bg-red-50 font-sans text-gray-800 p-5">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+      <div className="absolute top-0 left-0 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70"></div>
+      <div className="absolute top-0 right-0 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-70"></div>
+      <div className="absolute bottom-0 left-1/2 w-72 h-72 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-70"></div>
       <div className="text-center bg-white p-10 lg:p-14 rounded-xl shadow-lg md:shadow-xl max-w-xl w-full">
         <h1 className="text-5xl md:text-6xl mb-5 leading-none">⚠️</h1>
         <h2 className="text-3xl md:text-4xl text-red-600 m-0 font-bold mb-4">

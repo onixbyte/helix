@@ -6,7 +6,11 @@ import { Link } from "react-router"
  */
 export default function NotFoundPage() {
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 font-sans text-gray-800 p-5">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+      <div className="absolute top-0 left-0 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70"></div>
+      <div className="absolute top-0 right-0 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-70"></div>
+      <div className="absolute bottom-0 left-1/2 w-72 h-72 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-70"></div>
+
       <div className="text-center bg-white p-10 lg:p-14 rounded-xl shadow-lg md:shadow-xl max-w-xl w-full">
         <h1 className="text-7xl lg:text-8xl text-amber-500 m-0 font-bold tracking-wider">404</h1>
         <h2 className="text-3xl md:text-4xl text-gray-700 mt-4 mb-6">找不到页面</h2>
