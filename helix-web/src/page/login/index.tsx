@@ -31,7 +31,7 @@ export default function LoginPage() {
   const [messageApi, contextHolder] = message.useMessage()
   const [form] = Form.useForm<UsernamePasswordLoginRequest>()
 
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  // const [isLoading, setIsLoading] = useState<boolean>(false)
   const [hasCaptcha, setHasCaptcha] = useState<boolean>(false)
   const [captchaData, setCaptchaData] = useState<CaptchaResponse | null>()
 
@@ -266,9 +266,8 @@ export default function LoginPage() {
               htmlType="submit"
               block
               size="large"
-              loading={isLoading}
               className="h-12 rounded-lg font-semibold text-base bg-gradient-to-r from-blue-500 to-purple-600 border-0 hover:from-blue-600 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl">
-              {isLoading ? "登录中..." : "登录"}
+              登录
             </Button>
           </Form.Item>
         </Form>
