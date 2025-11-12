@@ -1,21 +1,21 @@
-package com.onixbyte.helix.service;
+package com.onixbyte.helix.client;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.onixbyte.helix.domain.entity.User;
 import com.onixbyte.helix.properties.TokenProperties;
 import com.onixbyte.helix.utils.DateTimeUtil;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
-@Service
-public class TokenService {
+@Component
+public class TokenClient {
 
     private final Algorithm algorithm;
     private final TokenProperties tokenProperties;
 
-    public TokenService(Algorithm algorithm, TokenProperties tokenProperties) {
+    public TokenClient(Algorithm algorithm, TokenProperties tokenProperties) {
         this.algorithm = algorithm;
         this.tokenProperties = tokenProperties;
     }

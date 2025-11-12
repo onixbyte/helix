@@ -13,4 +13,6 @@ public class CacheName {
     public static final String CAPTCHA = "captcha";
 
     public static final String CAPTCHA_SETTING = "captcha-setting";
+
+    public static final String AUTH_SETTING = "auth-setting";
 }
