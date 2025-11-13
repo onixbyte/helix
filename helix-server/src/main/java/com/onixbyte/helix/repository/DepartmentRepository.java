@@ -16,8 +16,4 @@ public interface DepartmentRepository {
      * @return all departments
      */
     List<Department> selectAll(@Param("pageRequest") PageRequest pageRequest);
-
-    Department selectById(@Param("id") Long id);
-
-    int save(@Param("entity") Department department);
 }

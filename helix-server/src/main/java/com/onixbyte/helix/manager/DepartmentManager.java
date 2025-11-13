@@ -3,7 +3,6 @@ package com.onixbyte.helix.manager;
 import com.onixbyte.helix.domain.common.PageRequest;
 import com.onixbyte.helix.domain.entity.Department;
 import com.onixbyte.helix.domain.model.TreeNode;
-import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.repository.DepartmentRepository;
 import org.springframework.stereotype.Component;
 
@@ -100,17 +99,5 @@ public class DepartmentManager {
                 sortChildrenRecursively(node.children());
             }
         }
-    }
-
-    public Department selectOneById(Long id) {
-        return departmentRepository.selectById(id);
-    }
-
-    public Department save(Department department) {
-        var affectedRows = departmentRepository.save(department);
-        if (affectedRows != 1) {
-            throw new BizException("部门保存失败");
-        }
-        return department;
     }
 }

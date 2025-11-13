@@ -2,9 +2,10 @@ package com.onixbyte.helix.controller;
 
 import com.onixbyte.helix.domain.entity.Department;
 import com.onixbyte.helix.domain.model.TreeNode;
-import com.onixbyte.helix.domain.web.request.AddDepartmentRequest;
 import com.onixbyte.helix.service.DepartmentService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -21,10 +22,5 @@ public class DepartmentController {
     @GetMapping("/tree")
     public List<TreeNode<Department>> getDepartmentTree() {
         return departmentService.getDepartmentTree();
-    }
-
-    @PostMapping
-    public Department addDepartment(@RequestBody AddDepartmentRequest request) {
-        return departmentService.addDepartment(request);
     }
 }
