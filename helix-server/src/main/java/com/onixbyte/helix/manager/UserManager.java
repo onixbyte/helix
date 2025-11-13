@@ -57,4 +57,16 @@ public class UserManager {
         }
         return user;
     }
+
+    public User queryById(Long id) {
+        return userRepository.selectById(id);
+    }
+
+    public User update(User user) {
+        var affectedRows = userRepository.update(user);
+        if (affectedRows != 1) {
+            throw new BizException(HttpStatus.INTERNAL_SERVER_ERROR, "User update failed.");
+        }
+        return user;
+    }
 }

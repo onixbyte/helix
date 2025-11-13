@@ -33,20 +33,20 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         if (!(authentication instanceof UsernamePasswordAuthentication usernamePasswordAuthentication)) {
-            throw new BizException(HttpStatus.INTERNAL_SERVER_ERROR, "Cannot authenticate user with given authentication.");
+            throw new BizException(HttpStatus.INTERNAL_SERVER_ERROR, "用户认证失败，请稍后再试。");
         }
 
         // get user from database
         var user = userManager.queryByUsername(usernamePasswordAuthentication.getPrincipal());
         if (Objects.isNull(user)) {
             log.error("User {} is trying to authenticate but no user found.", usernamePasswordAuthentication.getPrincipal());
-            throw new BizException(HttpStatus.UNAUTHORIZED, "Username or password is incorrect.");
+            throw new BizException(HttpStatus.UNAUTHORIZED, "用户名或密码错误。");
         }
 
         // validate password
         if (!passwordEncoder.matches(usernamePasswordAuthentication.getCredentials(), user.getPassword())) {
             log.error("User {} is trying to authenticate but password is incorrect.", usernamePasswordAuthentication.getPrincipal());
-            throw new BizException(HttpStatus.UNAUTHORIZED, "Username or password is incorrect.");
+            throw new BizException(HttpStatus.UNAUTHORIZED, "用户名或密码错误。");
         }
 
         // erase credentials

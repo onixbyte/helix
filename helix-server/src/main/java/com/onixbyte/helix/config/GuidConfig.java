@@ -1,6 +1,7 @@
 package com.onixbyte.helix.config;
 
 import com.onixbyte.identitygenerator.IdentityGenerator;
+import com.onixbyte.identitygenerator.impl.SequentialUuidGenerator;
 import com.onixbyte.identitygenerator.impl.SnowflakeIdentityGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

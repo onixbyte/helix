@@ -1,24 +1,17 @@
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 import { Provider as ReduxProvider } from "react-redux"
-import { BrowserRouter, Route, Routes } from "react-router"
+import { RouterProvider } from "react-router"
+import "@ant-design/v5-patch-for-react-19"
+import "@/config/dayjs-config"
 import store from "@/store"
 import "./index.css"
-import ProtectedRoute from "@/components/protected-route"
-import Login, { MsalLogin, UsernameAndPasswordLogin } from "@/page/login"
+import router from "@/router"
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ReduxProvider store={store}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="login" element={<Login />}>
-            <Route index element={<UsernameAndPasswordLogin />} />
-            <Route path="msal" element={<MsalLogin />}></Route>
-          </Route>
-          <Route path="/" element={<ProtectedRoute />}></Route>
-        </Routes>
-      </BrowserRouter>
+      <RouterProvider router={router} />
     </ReduxProvider>
   </StrictMode>
 )
