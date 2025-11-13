@@ -3,7 +3,7 @@ import type { CaptchaResponse, User, UsernamePasswordLoginRequest, UserResponse 
 import { HttpStatus } from "@/constant"
 
 /**
- * Get captcha image and captcha id.
+ * 获取验证码图片及验证码 UUID
  */
 async function getCaptcha(): Promise<CaptchaResponse | null> {
   const { data, status } = await webClient.get<CaptchaResponse | null>("/captcha")
@@ -15,8 +15,8 @@ async function getCaptcha(): Promise<CaptchaResponse | null> {
 }
 
 /**
- * Login with username and password.
- * @param request
+ * 使用用户名密码登录
+ * @param request 用户名密码
  */
 async function usernamePasswordLogin(
   request: UsernamePasswordLoginRequest
@@ -26,8 +26,8 @@ async function usernamePasswordLogin(
 }
 
 /**
- * Login with WeCom.
- * @param code wecom authorisation code
+ * 使用企业微信登录
+ * @param code 由企业微信提供的身份验证 code
  */
 async function wecomLogin(code: string): Promise<UserResponse> {
   const urlSearchParams = new URLSearchParams()
@@ -48,8 +48,8 @@ async function wecomLogin(code: string): Promise<UserResponse> {
 }
 
 /**
- * Login with Microsoft Entra ID.
- * @param msalToken an identification token provided by Microsoft Entra ID
+ * 使用 Microsoft Entra 登录
+ * @param msalToken 由 Microsoft Entra 提供的用户身份令牌
  */
 async function msalLogin(msalToken: string): Promise<UserResponse> {
   const { data, headers } = await webClient.post<User>(`/auth/msal/login`, {
@@ -69,7 +69,7 @@ async function msalLogin(msalToken: string): Promise<UserResponse> {
 }
 
 /**
- * Fetch register enabling setting.
+ * 获取注册功能是否启用
  */
 async function fetchRegisterEnabled() {
   const { data } = await webClient.get<boolean>("/auth/register-enabled")

@@ -4,7 +4,7 @@ import { Form, Input, Button, Card, message, Divider } from "antd"
 import dayjs from "dayjs"
 import type { AxiosError } from "axios"
 import type { CaptchaResponse, GeneralErrorResponse, UsernamePasswordLoginRequest } from "@/types"
-import * as AuthApi from "@/api/auth"
+import { AuthApi } from "@/api"
 import { useAppDispatch } from "@/store"
 import { loginSuccess } from "@/store/auth-slice"
 import {

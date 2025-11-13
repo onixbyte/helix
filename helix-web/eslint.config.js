@@ -37,7 +37,6 @@ export default tseslint.config([
       "@typescript-eslint/no-confusing-void-expression": 0,
       "@typescript-eslint/no-empty-object-type": 0,
       "react-refresh/only-export-components": 0,
-      "react-hooks/exhaustive-deps": 0
     },
   },
 ])

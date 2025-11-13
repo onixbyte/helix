@@ -12,19 +12,30 @@ export default function RegisterPage() {
   const navigate = useNavigate()
 
   useEffect(() => {
+    let cancelled = false
+
     AuthApi.fetchRegisterEnabled()
       .then((enabled) => {
-        if (!enabled) {
+        if (!enabled && !cancelled) {
           void messageApi
             .error("注册功能暂未开放", dayjs.duration({ seconds: 3 }).asSeconds())
-            .then(() => void navigate("/login"))
+            .then(() => {
+              if (!cancelled) {
+                void navigate("/login")
+              }
+            })
         }
       })
       .catch((reason: unknown) => {
+        if (cancelled) return
         const error = reason as AxiosError<GeneralErrorResponse>
         void messageApi.error(error.response?.data.message ?? "发生未知错误，请稍后再试")
       })
-  }, [])
+
+    return () => {
+      cancelled = true
+    }
+  }, [messageApi, navigate])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">

@@ -2,9 +2,9 @@ import React from "react"
 import { Link } from "react-router-dom"
 
 /**
- * General error page, with a custom error message.
+ * 携带错误信息的通用错误展示页
  *
- * @param message custom error message, default to `发生了未知错误，请稍后再试`
+ * @param message 自定义的错误信息，默认为`发生了未知错误，请稍后再试`
  * @constructor
  */
 export default function ErrorPage({ message = "发生了未知错误，请稍后再试" }) {

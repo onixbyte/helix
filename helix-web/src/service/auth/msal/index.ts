@@ -20,8 +20,8 @@ export async function doMsalLogin(
       scopes: ["openid", "profile", "email"],
     })
 
-    const { token, user } = await AuthApi.msalLogin(response.idToken)
-    dispatch(loginSuccess({ user, token }))
+    const { accessToken, user } = await AuthApi.msalLogin(response.idToken)
+    dispatch(loginSuccess({ user, token: accessToken }))
     if (onSuccess) onSuccess()
   } catch (err) {
     console.error("MSAL login failed", err)
