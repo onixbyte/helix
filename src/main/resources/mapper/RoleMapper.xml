@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onixbyte.helix.mapper.RoleMapper">
+    <select id="areRolesExisted" resultType="boolean">
+        SELECT NOT EXISTS (
+        SELECT 1
+        FROM (
+        <foreach collection="roleIds" item="roleId" separator="UNION ALL">
+            SELECT #{roleId} AS id
+        </foreach>
+        <if test="roleIds.size() == 0">
+            SELECT NULL AS id WHERE FALSE
+        </if>
+        ) AS input_roles_temp
+        WHERE NOT EXISTS (
+        SELECT 1
+        FROM roles r
+        WHERE r.id = input_roles_temp.id
+        )
+        )
+    </select>
+
+    <select id="selectAll" resultType="role">
+        SELECT id,
+               name,
+               code,
+               sort,
+               default_value,
+               description,
+               status,
+               created_at,
+               updated_at
+        FROM roles
+        <where>
+            <if test="wrapper.name != null and wrapper.name != ''">
+                AND name LIKE '%' || #{wrapper.name} || '%'
+            </if>
+            <if test="wrapper.code != null and wrapper.code != ''">
+                AND code = #{wrapper.code}
+            </if>
+            <if test="wrapper.status != null">
+                AND status = #{wrapper.status}::STATUS
+            </if>
+        </where>
+        <if test="pageable != null and pageable.sort != null">
+            ORDER BY
+            <foreach collection="pageable.sort" item="order" separator=", ">
+                ${order.property} ${order.direction}
+            </foreach>
+            LIMIT #{pageable.pageSize} OFFSET #{pageable.offset}
+        </if>
+    </select>
+
+    <select id="count" parameterType="com.onixbyte.helix.domain.database.query.wrapper.QueryRoleWrapper">
+        SELECT COUNT(*)
+        FROM roles
+        <where>
+            <if test="wrapper.name != null and wrapper.name != ''">
+                AND name LIKE '%' || #{wrapper.name} || '%'
+            </if>
+            <if test="wrapper.code != null and wrapper.code != ''">
+                AND code = #{wrapper.code}
+            </if>
+            <if test="wrapper.status != null">
+                AND status = #{wrapper.status}::STATUS
+            </if>
+        </where>
+    </select>
+</mapper>

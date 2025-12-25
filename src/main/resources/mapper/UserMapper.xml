@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onixbyte.helix.mapper.UserMapper">
+    <select id="selectByUsername" parameterType="string">
+        SELECT id,
+               username,
+               password,
+               full_name,
+               email,
+               region_abbreviation,
+               phone_number,
+               avatar_url,
+               status,
+               department_id,
+               position_id,
+               created_at,
+               updated_at
+        FROM users
+        WHERE username = #{username}
+    </select>
+
+    <select id="selectAll" parameterType="org.springframework.data.domain.Pageable"
+            resultType="user">
+        SELECT id,
+               username,
+               password,
+               full_name,
+               email,
+               region_abbreviation,
+               phone_number,
+               avatar_url,
+               status,
+               department_id,
+               position_id,
+               created_at,
+               updated_at
+        FROM users
+        <if test="pageable != null and pageable.sort != null">
+            ORDER BY
+            <foreach collection="pageable.sort" item="order" separator=", ">
+                ${order.property} ${order.direction}
+            </foreach>
+            LIMIT #{pageable.pageSize} OFFSET #{pageable.offset}
+        </if>
+    </select>
+
+    <select id="countAll" resultType="int">
+        SELECT COUNT(*)
+        FROM users
+    </select>
+
+    <select id="selectList" resultType="user">
+        SELECT id,
+               username,
+               password,
+               full_name,
+               email,
+               region_abbreviation,
+               phone_number,
+               avatar_url,
+               status,
+               department_id,
+               position_id,
+               created_at,
+               updated_at
+        FROM users
+        <where>
+            <if test="wrapper.departmentId != null">
+                AND department_id IN (WITH RECURSIVE SubDepartments AS (
+                SELECT id
+                FROM departments
+                WHERE id = #{wrapper.departmentId}
+                UNION ALL
+                SELECT d.id
+                FROM departments d
+                INNER JOIN SubDepartments sd
+                ON d.parent_id = sd.id)
+                SELECT id
+                FROM SubDepartments)
+            </if>
+            <if test="wrapper.username != null and wrapper.username != ''">
+                AND username LIKE '%' || #{wrapper.username} || '%'
+            </if>
+            <if test="wrapper.regionAbbreviation != null and wrapper.regionAbbreviation != ''">
+                AND region_abbreviation = #{wrapper.regionAbbreviation}
+            </if>
+            <if test="wrapper.phoneNumber != null and wrapper.phoneNumber != ''">
+                AND phone_number = #{wrapper.phoneNumber}
+            </if>
+            <if test="wrapper.status != null">
+                AND status = #{wrapper.status}::USER_STATUS
+            </if>
+            <if test="wrapper.createdAtStart != null">
+                AND created_at >= #{wrapper.createdAtStart}
+            </if>
+            <if test="wrapper.createdAtEnd != null">
+                AND created_at <![CDATA[<=]]> #{wrapper.createdAtEnd}
+            </if>
+        </where>
+        <if test="pageable != null and pageable.sort != null">
+            ORDER BY
+            <foreach collection="pageable.sort" item="order" separator=", ">
+                ${order.property} ${order.direction}
+            </foreach>
+            LIMIT #{pageable.pageSize} OFFSET #{pageable.offset}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        SELECT COUNT(*)
+        FROM users
+        <where>
+            <if test="wrapper.departmentId != null">
+                AND department_id IN (WITH RECURSIVE SubDepartments AS (
+                SELECT id
+                FROM departments
+                WHERE id = #{wrapper.departmentId}
+                UNION ALL
+                SELECT d.id
+                FROM departments d
+                INNER JOIN SubDepartments sd
+                ON d.parent_id = sd.id)
+                SELECT id
+                FROM SubDepartments)
+            </if>
+            <if test="wrapper.username != null and wrapper.username != ''">
+                AND username LIKE '%' || #{wrapper.username} || '%'
+            </if>
+            <if test="wrapper.regionAbbreviation != null and wrapper.regionAbbreviation != ''">
+                AND region_abbreviation = #{wrapper.regionAbbreviation}
+            </if>
+            <if test="wrapper.phoneNumber != null and wrapper.phoneNumber != ''">
+                AND phone_number = #{wrapper.phoneNumber}
+            </if>
+            <if test="wrapper.status != null">
+                AND status = #{wrapper.status}::USER_STATUS
+            </if>
+            <if test="wrapper.createdAtStart != null">
+                AND created_at >= #{wrapper.createdAtStart}
+            </if>
+            <if test="wrapper.createdAtEnd != null">
+                AND created_at <![CDATA[<=]]> #{wrapper.createdAtEnd}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectWithDetailByUserId" parameterType="long" resultType="com.onixbyte.helix.domain.web.response.UserDetailResponse">
+        SELECT u.id,
+               u.username,
+               u.full_name,
+               u.email,
+               u.region_abbreviation,
+               u.phone_number,
+               u.avatar_url,
+               u.status,
+               u.department_id,
+               d.name AS department_name,
+               u.position_id,
+               p.name AS position_name,
+               u.created_at,
+               u.updated_at
+        FROM users u
+                 LEFT JOIN departments d ON u.department_id = d.id
+                 LEFT JOIN positions p ON u.position_id = p.id
+        WHERE u.id = #{id}
+    </select>
+
+    <select id="selectListWithDetails" resultType="com.onixbyte.helix.domain.web.response.UserDetailResponse">
+        SELECT u.id,
+               u.username,
+               u.full_name,
+               u.email,
+               u.region_abbreviation,
+               u.phone_number,
+               u.avatar_url,
+               u.status,
+               u.department_id,
+               d.name AS department_name,
+               u.position_id,
+               p.name AS position_name,
+               u.created_at,
+               u.updated_at
+        FROM users u
+        LEFT JOIN departments d ON u.department_id = d.id
+        LEFT JOIN positions p ON u.position_id = p.id
+        <where>
+            <if test="wrapper.departmentId != null">
+                AND department_id IN (WITH RECURSIVE SubDepartments AS (
+                SELECT id
+                FROM departments
+                WHERE id = #{wrapper.departmentId}
+                UNION ALL
+                SELECT d.id
+                FROM departments d
+                INNER JOIN SubDepartments sd
+                ON d.parent_id = sd.id)
+                SELECT id
+                FROM SubDepartments)
+            </if>
+            <if test="wrapper.username != null and wrapper.username != ''">
+                AND username LIKE '%' || #{wrapper.username} || '%'
+            </if>
+            <if test="wrapper.regionAbbreviation != null and wrapper.regionAbbreviation != ''">
+                AND region_abbreviation = #{wrapper.regionAbbreviation}
+            </if>
+            <if test="wrapper.phoneNumber != null and wrapper.phoneNumber != ''">
+                AND phone_number = #{wrapper.phoneNumber}
+            </if>
+            <if test="wrapper.status != null">
+                AND u.status = #{wrapper.status}::USER_STATUS
+            </if>
+            <if test="wrapper.createdAtStart != null">
+                AND u.created_at >= #{wrapper.createdAtStart}
+            </if>
+            <if test="wrapper.createdAtEnd != null">
+                AND u.created_at <![CDATA[<=]]> #{wrapper.createdAtEnd}
+            </if>
+        </where>
+        <if test="pageable != null and pageable.sort != null">
+            ORDER BY
+            <foreach collection="pageable.sort" item="order" separator=", ">
+                ${order.property} ${order.direction}
+            </foreach>
+            LIMIT #{pageable.pageSize} OFFSET #{pageable.offset}
+        </if>
+    </select>
+</mapper>

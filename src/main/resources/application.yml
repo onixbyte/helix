@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: helix-server
+  cache:
+    type: redis
+    redis:
+      time-to-live: PT1H30M
+  jpa:
+    properties:
+      hibernate:
+        transaction:
+          jta:
+            # No need to use distributed transaction manager for 1 datasource.
+            platform: org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  datasource:
+    hikari:
+      minimum-idle: 1
+      maximum-pool-size: 10
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    map-underscore-to-camel-case: true
+  type-aliases-package: com.onixbyte.helix.domain.entity
+  type-handlers-package: com.onixbyte.helix.extension.mybatis.handler
+  mapper-locations: classpath:/mapper/*.xml
