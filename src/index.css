@@ -1,0 +1,13 @@
+@layer theme, base, antd, components, utilities;
+@import "tailwindcss";
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#root {
+    height: 100%;
+}
