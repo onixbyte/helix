@@ -305,4 +305,17 @@ public class Role {
             return new Role(id, name, code, sort, defaultValue, description, status, createdAt, updatedAt);
         }
     }
+
+    @PrePersist
+    private void onInsert() {
+        var currentTime = LocalDateTime.now();
+        this.createdAt = currentTime;
+        this.updatedAt = currentTime;
+    }
+
+    @PreUpdate
+    private void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
 }

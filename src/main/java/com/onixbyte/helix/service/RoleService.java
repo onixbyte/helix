@@ -3,6 +3,7 @@ package com.onixbyte.helix.service;
 import com.onixbyte.helix.constant.Status;
 import com.onixbyte.helix.domain.database.query.wrapper.QueryRoleWrapper;
 import com.onixbyte.helix.domain.entity.Role;
+import com.onixbyte.helix.domain.web.request.AddRoleRequest;
 import com.onixbyte.helix.domain.web.request.QueryRoleRequest;
 import com.onixbyte.helix.manager.RoleManager;
 import org.apache.commons.lang3.StringUtils;
@@ -38,5 +39,24 @@ public class RoleService {
                 .ifPresent(wrapper::setStatus);
 
         return roleManager.selectAll(pageable, wrapper);
+    }
+
+    public Role addRole(AddRoleRequest request) {
+        var isDefaultRole = Optional.ofNullable(request.defaultValue())
+                .orElse(false);
+        var status = Optional.ofNullable(request.status())
+                .map(Status::valueOf)
+                .orElse(Status.ACTIVE);
+
+        var role = Role.builder()
+                .name(request.name())
+                .code(request.code())
+                .sort(request.sort())
+                .defaultValue(isDefaultRole)
+                .description(request.description())
+                .status(status)
+                .build();
+
+        return roleManager.save(role);
     }
 }

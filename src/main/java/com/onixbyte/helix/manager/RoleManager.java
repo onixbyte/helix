@@ -42,4 +42,8 @@ public class RoleManager {
 
         return new PageImpl<>(records, pageable, total);
     }
+
+    public Role save(Role role) {
+        return roleRepository.save(role);
+    }
 }
