@@ -10,6 +10,7 @@ export default function AddRoleDialogue({ form }: AddRoleDialogueProps) {
     <RoleDisplayForm
       form={form}
       initialValues={{
+        id: null,
         name: "",
         code: "",
         sort: 0,
@@ -17,6 +18,7 @@ export default function AddRoleDialogue({ form }: AddRoleDialogueProps) {
         defaultValue: false,
         status: "ACTIVE",
       }}
+      mode="add"
     />
   )
 }

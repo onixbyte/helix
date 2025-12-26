@@ -17,6 +17,8 @@ import type { QueryRoleForm } from "@/types/form"
 import type { Status } from "@/types/constant"
 import AddRoleDialogue from "@/components/add-role-dialogue"
 import type { RoleFormValues } from "@/components/role-display-form"
+import EditRoleDialogue from "@/components/edit-role-dialogue"
+import { addRole } from "@/api/role"
 
 export default function RolePage() {
   const { message, modal } = App.useApp()
@@ -94,6 +96,48 @@ export default function RolePage() {
           console.error("用户取消添加角色")
         }
       )
+      .finally(() => {
+        addRoleForm.resetFields()
+      })
+  }
+
+  const onEditRoleFinish = async () => {
+    try {
+      const values = await editRoleForm.validateFields()
+      console.log(values)
+      // await RoleApi.addRole(values)
+      void message.success(`角色 ${values.name} 修改成功`)
+      return true
+    } catch (error: unknown) {
+      if (error instanceof Error && error.message.includes("Validation Failed")) {
+        return false
+      } else if (axios.isAxiosError<GeneralErrorResponse>(error)) {
+        void message.error(error.response?.data.message ?? "创建失败，请稍后再试")
+      }
+      return false
+    }
+  }
+
+  const handleEditRole = (role: Role) => {
+    modal
+      .confirm({
+        title: "修改用户",
+        content: <EditRoleDialogue form={editRoleForm} initialValues={role} />,
+        width: 600,
+        onOk: onEditRoleFinish,
+      })
+      .then(
+        () => {
+          const formValues = queryForm.getFieldsValue()
+          queryRoles(pageNum, pageSize, formValues)
+        },
+        () => {
+          console.error("用户取消添加角色")
+        }
+      )
+      .finally(() => {
+        editRoleForm.resetFields()
+      })
   }
 
   useEffect(() => {
@@ -194,7 +238,7 @@ export default function RolePage() {
             render: (role: Role) => (
               <>
                 <Space.Compact>
-                  <Button variant="solid" onClick={() => {}}>
+                  <Button variant="solid" onClick={() => handleEditRole(role)}>
                     修改
                   </Button>
                   <Button variant="solid" danger>

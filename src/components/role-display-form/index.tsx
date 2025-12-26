@@ -1,10 +1,13 @@
 import { App, Form, type FormInstance, Input, InputNumber, Select, Switch } from "antd"
 import { type Status, StatusOptions } from "@/types/constant"
+import type { FormMode } from "@/types/form"
+import { useEffect, useMemo } from "react"
 
 /**
  * Role form values.
  */
 export interface RoleFormValues {
+  id: number | string | null
   name: string
   code: string
   sort: number
@@ -18,12 +21,22 @@ export interface RoleFormValues {
  */
 export interface RoleDisplayFormProps {
   initialValues?: RoleFormValues
-  isEditing?: boolean
   form: FormInstance<RoleFormValues>
-  isAdding?: boolean
+  mode: FormMode
 }
 
-export default function RoleDisplayForm({ initialValues, form }: RoleDisplayFormProps) {
+export default function RoleDisplayForm({ initialValues, form, mode }: RoleDisplayFormProps) {
+  const isEditing = useMemo<boolean>(() => mode == "edit", [mode])
+
+  // Initialise form values
+  useEffect(() => {
+    if (initialValues) {
+      form.setFieldsValue(initialValues)
+    } else {
+      form.resetFields()
+    }
+  }, [initialValues, form])
+
   return (
     <Form<RoleFormValues>
       form={form}
@@ -31,6 +44,9 @@ export default function RoleDisplayForm({ initialValues, form }: RoleDisplayForm
       layout="vertical"
       labelAlign="right"
       validateTrigger="onBlur">
+      <Form.Item<RoleFormValues> label="角色编号" hidden={!isEditing} name="id">
+        <Input disabled />
+      </Form.Item>
       <Form.Item<RoleFormValues>
         label="角色名称"
         name="name"
@@ -56,7 +72,7 @@ export default function RoleDisplayForm({ initialValues, form }: RoleDisplayForm
         <InputNumber />
       </Form.Item>
       <Form.Item<RoleFormValues> label="是否为默认角色" name="defaultValue">
-        <Switch />
+        <Switch disabled={isEditing}/>
       </Form.Item>
       <Form.Item<RoleFormValues> label="角色状态" name="status">
         <Select<Status> options={StatusOptions} />

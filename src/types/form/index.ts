@@ -3,6 +3,8 @@ import type { CountryCode as RegionAbbreviation } from "libphonenumber-js"
 import type { Status } from "@/types/constant"
 import type { Dayjs } from "dayjs"
 
+export type FormMode = "add" | "edit"
+
 export interface UserFormValues extends Omit<
   User,
   "id" | "password" | "regionAbbreviation" | "departmentId" | "positionId" | "createdAt" | "updatedAt"
