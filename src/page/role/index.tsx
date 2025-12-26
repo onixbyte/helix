@@ -42,7 +42,7 @@ export default function RolePage() {
 
     RoleApi.fetchRoles(queryRoleRequest)
       .then((response) => {
-        console.log("role response", response)
+        // console.log("role response", response)
         setPageNum(response.pageable.pageNumber + 1)
         setPageSize(response.pageable.pageSize)
         setTotalElementCount(response.totalElements)
@@ -104,8 +104,8 @@ export default function RolePage() {
   const onEditRoleFinish = async () => {
     try {
       const values = await editRoleForm.validateFields()
-      console.log(values)
-      // await RoleApi.addRole(values)
+      // console.log(values)
+      await RoleApi.editRole(values)
       void message.success(`角色 ${values.name} 修改成功`)
       return true
     } catch (error: unknown) {

@@ -29,3 +29,7 @@ export async function fetchRoles(
 export async function addRole(request: RoleFormValues) {
   return await webClient.post("/roles", request)
 }
+
+export async function editRole(request: RoleFormValues) {
+  return await webClient.put("/roles", request)
+}
