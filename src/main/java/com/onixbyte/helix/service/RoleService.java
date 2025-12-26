@@ -4,8 +4,10 @@ import com.onixbyte.helix.constant.Status;
 import com.onixbyte.helix.domain.database.query.wrapper.QueryRoleWrapper;
 import com.onixbyte.helix.domain.entity.Role;
 import com.onixbyte.helix.domain.web.request.AddRoleRequest;
+import com.onixbyte.helix.domain.web.request.EditRoleRequest;
 import com.onixbyte.helix.domain.web.request.QueryRoleRequest;
 import com.onixbyte.helix.manager.RoleManager;
+import jakarta.transaction.Transactional;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -58,5 +60,20 @@ public class RoleService {
                 .build();
 
         return roleManager.save(role);
+    }
+
+    @Transactional
+    public void editRole(EditRoleRequest request) {
+        roleManager.updateRole(Role.builder()
+                .id(request.id())
+                .name(request.name())
+                .code(request.code())
+                .sort(request.sort())
+                .defaultValue(request.defaultValue())
+                .description(request.description())
+                .status(Optional.ofNullable(request.status())
+                        .map(Status::valueOf)
+                        .orElse(null))
+                .build());
     }
 }

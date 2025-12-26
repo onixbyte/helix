@@ -2,6 +2,7 @@ package com.onixbyte.helix.controller;
 
 import com.onixbyte.helix.domain.entity.Role;
 import com.onixbyte.helix.domain.web.request.AddRoleRequest;
+import com.onixbyte.helix.domain.web.request.EditRoleRequest;
 import com.onixbyte.helix.domain.web.request.QueryRoleRequest;
 import com.onixbyte.helix.service.RoleService;
 import org.springframework.data.domain.Page;
@@ -34,6 +35,12 @@ public class RoleController {
     @PostMapping
     public ResponseEntity<Void> addRole(@Validated @RequestBody AddRoleRequest request) {
         roleService.addRole(request);
+        return ResponseEntity.ok(null);
+    }
+
+    @PutMapping
+    public ResponseEntity<Void> editRole(@Validated @RequestBody EditRoleRequest request) {
+        roleService.editRole(request);
         return ResponseEntity.ok(null);
     }
 }

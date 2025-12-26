@@ -11,7 +11,6 @@ import com.onixbyte.helix.domain.web.request.QueryUserRequest;
 import com.onixbyte.helix.domain.web.request.ResetPasswordRequest;
 import com.onixbyte.helix.domain.web.request.UpdateUserRequest;
 import com.onixbyte.helix.domain.web.response.UserDetailResponse;
-import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.manager.ApplicationManager;
 import com.onixbyte.helix.manager.RoleManager;
 import com.onixbyte.helix.manager.UserManager;
@@ -25,7 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -111,11 +109,12 @@ public class UserService {
         // Get role IDs
         var roleIds = Optional.ofNullable(request.roleIds())
                 .filter(CollectionUtils::isNotEmpty)
-                .orElseGet(() -> List.of(roleManager.getRole(Role.builder()
+                .orElseGet(() -> roleManager.getRoles(Role.builder()
                                 .defaultValue(true)
                                 .build())
+                        .stream()
                         .map(Role::getId)
-                        .orElseThrow(() -> new BizException("No default role specified."))));
+                        .toList());
 
         // Build bindings
         var userRoleBindings = roleIds
