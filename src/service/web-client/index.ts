@@ -1,9 +1,9 @@
 import axios, { type AxiosError } from "axios"
 import dayjs from "dayjs"
 import store from "@/store"
-import type { GeneralErrorResponse } from "@/types"
 import { HttpStatus } from "@/constant"
 import { logout } from "@/store/auth-slice"
+import type { GeneralErrorResponse } from "@/types/web/response"
 
 const webClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -25,14 +25,17 @@ webClient.interceptors.request.use(
   }
 )
 
-webClient.interceptors.response.use((response) => {
-  return response
-}, (error: unknown) => {
-  const err = error as AxiosError<GeneralErrorResponse>
-  if (err.response?.status == HttpStatus.UNAUTHORIZED) {
-    store.dispatch(logout())
+webClient.interceptors.response.use(
+  (response) => {
+    return response
+  },
+  (error: unknown) => {
+    const err = error as AxiosError<GeneralErrorResponse>
+    if (err.response?.status == HttpStatus.UNAUTHORIZED) {
+      store.dispatch(logout())
+    }
+    return Promise.reject(error as AxiosError)
   }
-  return Promise.reject(error as AxiosError)
-})
+)
 
 export default webClient

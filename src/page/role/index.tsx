@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
-import type { AxiosError } from "axios"
+import axios, { type AxiosError } from "axios"
 import { App, Button, Form, Input, Select, Space, Switch, Table } from "antd"
 import type { Role } from "@/types/entity"
 import { RoleApi } from "@/api"
 import type { QueryRoleRequest } from "@/types/web/request"
-import type { GeneralErrorResponse, RoleResponse } from "@/types/web/response"
+import type { GeneralErrorResponse } from "@/types/web/response"
 import {
   DeleteOutlined,
   ExportOutlined,
@@ -15,11 +15,15 @@ import {
 } from "@ant-design/icons"
 import type { QueryRoleForm } from "@/types/form"
 import type { Status } from "@/types/constant"
+import AddRoleDialogue from "@/components/add-role-dialogue"
+import type { RoleFormValues } from "@/components/role-display-form"
 
 export default function RolePage() {
-  const { message } = App.useApp()
+  const { message, modal } = App.useApp()
 
   const [queryForm] = Form.useForm<QueryRoleForm>()
+  const [addRoleForm] = Form.useForm<RoleFormValues>()
+  const [editRoleForm] = Form.useForm<RoleFormValues>()
   const [roles, setRoles] = useState<Role[]>([])
   const [pageNum, setPageNum] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(10)
@@ -53,6 +57,43 @@ export default function RolePage() {
     setRoles((prevRoles) =>
       prevRoles.map((role) => (role.id === roleId ? { ...role, status } : role))
     )
+  }
+
+  const onAddRoleFinish = async () => {
+    try {
+      const values = await addRoleForm.validateFields()
+      await RoleApi.addRole(values)
+      void message.success(`角色 ${values.name} 创建成功`)
+      return true
+    } catch (error: unknown) {
+      if (error instanceof Error && error.message.includes("Validation Failed")) {
+        return false
+      } else if (axios.isAxiosError<GeneralErrorResponse>(error)) {
+        void message.error(error.response?.data.message ?? "创建失败，请稍后再试")
+      }
+      return false
+    }
+  }
+
+  const handleAddRole = () => {
+    modal
+      .confirm({
+        title: "添加用户",
+        content: <AddRoleDialogue form={addRoleForm} />,
+        width: 600,
+        onOk: onAddRoleFinish,
+      })
+      .then(
+        () => {
+          addRoleForm.resetFields()
+          const formValues = queryForm.getFieldsValue()
+          queryRoles(pageNum, pageSize, formValues)
+        },
+        () => {
+          addRoleForm.resetFields()
+          console.error("用户取消添加角色")
+        }
+      )
   }
 
   useEffect(() => {
@@ -94,19 +135,19 @@ export default function RolePage() {
           />
         </Form.Item>
         <Form.Item<QueryRoleForm>>
-          <Space.Compact>
+          <Space>
             <Button color="primary" variant="solid" htmlType="submit" icon={<SearchOutlined />}>
               查询
             </Button>
             <Button color="orange" variant="solid" htmlType="reset" icon={<UndoOutlined />}>
               重置
             </Button>
-          </Space.Compact>
+          </Space>
         </Form.Item>
       </Form>
 
       <Space size={8}>
-        <Button variant="solid" type="primary" icon={<PlusOutlined />} onClick={() => {}}>
+        <Button variant="solid" type="primary" icon={<PlusOutlined />} onClick={handleAddRole}>
           新增
         </Button>
         <Button variant="solid" danger icon={<DeleteOutlined />}>
@@ -153,7 +194,9 @@ export default function RolePage() {
             render: (role: Role) => (
               <>
                 <Space.Compact>
-                  <Button variant="solid">修改</Button>
+                  <Button variant="solid" onClick={() => {}}>
+                    修改
+                  </Button>
                   <Button variant="solid" danger>
                     删除
                   </Button>

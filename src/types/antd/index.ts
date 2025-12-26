@@ -12,3 +12,10 @@ export interface AntTreeSelectOption<T> {
   selectable?: boolean
   checkable?: boolean
 }
+
+export interface AntSelectOptionItem {
+  label: string
+  value: string
+}
+
+export type AntSelectOption = AntSelectOptionItem[]

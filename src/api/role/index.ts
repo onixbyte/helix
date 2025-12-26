@@ -1,6 +1,7 @@
 import type { QueryRoleRequest } from "@/types/web/request"
 import webClient from "@/service/web-client"
 import type { PageResponse, RoleResponse } from "@/types/web/response"
+import type { RoleFormValues } from "@/components/role-display-form"
 
 export async function fetchRoles(
   request: QueryRoleRequest | null
@@ -23,4 +24,8 @@ export async function fetchRoles(
 
   const { data } = await webClient.get<RoleResponse>(`/roles?${params.toString()}`)
   return data
+}
+
+export async function addRole(request: RoleFormValues) {
+  return await webClient.post("/roles", request)
 }
