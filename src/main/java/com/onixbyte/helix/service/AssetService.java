@@ -5,6 +5,7 @@ import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.manager.AssetManager;
 import com.onixbyte.helix.properties.AssetProperties;
 import com.onixbyte.helix.utils.SecurityUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +35,7 @@ public class AssetService {
     private final S3Client s3Client;
     private final AssetManager assetManager;
 
+    @Autowired
     public AssetService(
             AssetProperties assetProperties,
             S3Client s3Client,

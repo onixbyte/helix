@@ -1,11 +1,11 @@
 package com.onixbyte.helix.manager;
 
-import com.onixbyte.helix.constant.Status;
 import com.onixbyte.helix.domain.database.query.wrapper.QueryRoleWrapper;
 import com.onixbyte.helix.domain.entity.Role;
 import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.mapper.RoleMapper;
 import com.onixbyte.helix.repository.RoleRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -20,6 +20,7 @@ public class RoleManager {
     private final RoleMapper roleMapper;
     private final RoleRepository roleRepository;
 
+    @Autowired
     public RoleManager(RoleMapper roleMapper, RoleRepository roleRepository) {
         this.roleMapper = roleMapper;
         this.roleRepository = roleRepository;

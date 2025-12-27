@@ -9,6 +9,7 @@ import com.onixbyte.helix.domain.web.request.QueryRoleRequest;
 import com.onixbyte.helix.manager.RoleManager;
 import jakarta.transaction.Transactional;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class RoleService {
 
     private final RoleManager roleManager;
 
+    @Autowired
     public RoleService(RoleManager roleManager) {
         this.roleManager = roleManager;
     }

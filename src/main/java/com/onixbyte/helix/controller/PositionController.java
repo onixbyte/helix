@@ -2,6 +2,7 @@ package com.onixbyte.helix.controller;
 
 import com.onixbyte.helix.domain.entity.Position;
 import com.onixbyte.helix.service.PositionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -16,6 +17,7 @@ public class PositionController {
 
     private final PositionService positionService;
 
+    @Autowired
     public PositionController(PositionService positionService) {
         this.positionService = positionService;
     }

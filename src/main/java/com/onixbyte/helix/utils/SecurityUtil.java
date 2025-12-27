@@ -7,10 +7,24 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+/**
+ * SecurityUtil helps to manipulate Spring Security.
+ *
+ * @author zihluwang
+ */
 public class SecurityUtil {
 
     private static final Logger log = LoggerFactory.getLogger(SecurityUtil.class);
 
+    private SecurityUtil() {
+    }
+
+    /**
+     * Get user information from {@link SecurityContextHolder}.
+     *
+     * @return user information
+     * @throws BizException if user information is not saved in {@link SecurityContextHolder}
+     */
     public static User getCurrentUser() {
         var _details = SecurityContextHolder.getContext()
                 .getAuthentication()

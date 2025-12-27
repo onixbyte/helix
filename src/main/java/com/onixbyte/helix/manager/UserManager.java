@@ -10,6 +10,7 @@ import com.onixbyte.helix.mapper.UserMapper;
 import com.onixbyte.helix.repository.UserRepository;
 import com.onixbyte.region.Region;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Example;
@@ -30,7 +31,12 @@ public class UserManager {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserManager(UserMapper userMapper, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    @Autowired
+    public UserManager(
+            UserMapper userMapper,
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder
+    ) {
         this.userMapper = userMapper;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;

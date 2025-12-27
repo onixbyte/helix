@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.onixbyte.helix.domain.entity.User;
 import com.onixbyte.helix.properties.TokenProperties;
 import com.onixbyte.helix.utils.DateTimeUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -31,6 +32,7 @@ public class TokenClient {
      * @param tokenProperties the configuration properties for the token, such as issuer and
      *                        validity period
      */
+    @Autowired
     public TokenClient(Algorithm algorithm, TokenProperties tokenProperties) {
         this.algorithm = algorithm;
         this.tokenProperties = tokenProperties;

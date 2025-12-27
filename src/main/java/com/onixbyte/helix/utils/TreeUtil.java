@@ -9,7 +9,15 @@ import org.springframework.http.HttpStatus;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * TreeUtil help to build a tree or forest of specified data.
+ *
+ * @author zihluwang
+ */
 public class TreeUtil {
+
+    private TreeUtil() {
+    }
 
     /**
      * Builds a tree from a flat list of items that implement Treeable.
@@ -40,7 +48,7 @@ public class TreeUtil {
 
         // Get root item and build root node
         var rootItem = rootItems.get(0);
-        var rootNode = new TreeNode<T>(rootItem);
+        var rootNode = new TreeNode<>(rootItem);
         idToNodeMap.remove(rootItem.getId());
 
         // Iterate through all departments to build the hierarchy.

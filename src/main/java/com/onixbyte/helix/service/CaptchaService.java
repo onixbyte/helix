@@ -51,14 +51,14 @@ public class CaptchaService {
             return null;
         }
 
-        // 生成 UUID 及验证码
+        // Generate UUID and captcha
         var uuid = UUID.randomUUID().toString().replaceAll("-", "");
         var captchaCode = producer.createText();
 
-        // 将验证码保存到缓存中
+        // Store UUID and captcha to cache
         captchaManager.setCaptcha(uuid, captchaCode);
 
-        // 生成验证码图片
+        // Generate captcha image
         var captchaImage = producer.createImage(captchaCode);
         try (var byteArrayOutputStream = new FastByteArrayOutputStream()) {
             ImageIO.write(captchaImage, FileType.Image.JPEG.getExtension(), byteArrayOutputStream);
@@ -68,9 +68,5 @@ public class CaptchaService {
         } catch (IOException e) {
             throw new BizException("无法生成验证码图片。");
         }
-    }
-
-    public String getCaptcha(String uuid) {
-        return captchaManager.getCaptcha(uuid);
     }
 }

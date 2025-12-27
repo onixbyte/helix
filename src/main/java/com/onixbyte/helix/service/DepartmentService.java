@@ -4,7 +4,7 @@ import com.onixbyte.helix.domain.entity.Department;
 import com.onixbyte.helix.domain.model.TreeNode;
 import com.onixbyte.helix.manager.DepartmentManager;
 import com.onixbyte.helix.utils.TreeUtil;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +15,7 @@ public class DepartmentService {
 
     private final DepartmentManager departmentManager;
 
+    @Autowired
     public DepartmentService(DepartmentManager departmentManager) {
         this.departmentManager = departmentManager;
     }

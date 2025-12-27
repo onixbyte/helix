@@ -7,6 +7,7 @@ import com.onixbyte.helix.manager.UserManager;
 import com.onixbyte.helix.security.authentication.UsernamePasswordAuthentication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -24,7 +25,12 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
     private final PasswordEncoder passwordEncoder;
     private final AuthorityManager authorityManager;
 
-    public UsernamePasswordAuthenticationProvider(UserManager userManager, PasswordEncoder passwordEncoder, AuthorityManager authorityManager) {
+    @Autowired
+    public UsernamePasswordAuthenticationProvider(
+            UserManager userManager,
+            PasswordEncoder passwordEncoder,
+            AuthorityManager authorityManager
+    ) {
         this.userManager = userManager;
         this.passwordEncoder = passwordEncoder;
         this.authorityManager = authorityManager;

@@ -3,6 +3,7 @@ package com.onixbyte.helix.manager;
 import com.onixbyte.helix.constant.CacheName;
 import com.onixbyte.helix.domain.entity.Authority;
 import com.onixbyte.helix.mapper.AuthorityMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ public class AuthorityManager {
 
     private final AuthorityMapper authorityMapper;
 
+    @Autowired
     public AuthorityManager(AuthorityMapper authorityMapper) {
         this.authorityMapper = authorityMapper;
     }

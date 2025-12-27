@@ -37,7 +37,6 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class ExceptionController {
 
-
     /**
      * Handles business logic exceptions thrown throughout the application.
      * <p>

@@ -1,12 +1,12 @@
 package com.onixbyte.helix.controller;
 
-import com.onixbyte.helix.domain.entity.User;
 import com.onixbyte.helix.domain.web.request.AddUserRequest;
 import com.onixbyte.helix.domain.web.request.QueryUserRequest;
 import com.onixbyte.helix.domain.web.request.ResetPasswordRequest;
 import com.onixbyte.helix.domain.web.request.UpdateUserRequest;
 import com.onixbyte.helix.domain.web.response.UserDetailResponse;
 import com.onixbyte.helix.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -21,6 +21,7 @@ public class UserController {
 
     private final UserService userService;
 
+    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }

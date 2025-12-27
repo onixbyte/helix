@@ -17,6 +17,7 @@ import com.onixbyte.helix.manager.UserManager;
 import com.onixbyte.helix.manager.UserRoleManager;
 import com.onixbyte.identitygenerator.IdentityGenerator;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,6 +37,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final ApplicationManager applicationManager;
 
+    @Autowired
     public UserService(
             UserManager userManager,
             IdentityGenerator<Long> userIdentityGenerator,

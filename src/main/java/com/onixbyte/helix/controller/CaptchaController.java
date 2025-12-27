@@ -2,6 +2,7 @@ package com.onixbyte.helix.controller;
 
 import com.onixbyte.helix.domain.web.response.CaptchaResponse;
 import com.onixbyte.helix.service.CaptchaService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ public class CaptchaController {
 
     private final CaptchaService captchaService;
 
+    @Autowired
     public CaptchaController(CaptchaService captchaService) {
         this.captchaService = captchaService;
     }

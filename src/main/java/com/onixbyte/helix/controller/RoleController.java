@@ -5,6 +5,7 @@ import com.onixbyte.helix.domain.web.request.AddRoleRequest;
 import com.onixbyte.helix.domain.web.request.EditRoleRequest;
 import com.onixbyte.helix.domain.web.request.QueryRoleRequest;
 import com.onixbyte.helix.service.RoleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -18,6 +19,7 @@ public class RoleController {
 
     private final RoleService roleService;
 
+    @Autowired
     public RoleController(RoleService roleService) {
         this.roleService = roleService;
     }
