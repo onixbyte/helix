@@ -19,6 +19,8 @@ import AddRoleDialogue from "@/components/add-role-dialogue"
 import type { RoleFormValues } from "@/components/role-display-form"
 import EditRoleDialogue from "@/components/edit-role-dialogue"
 import { addRole } from "@/api/role"
+import type { AntFormValidationError } from "@/types/antd"
+import { AntUtils } from "@/utils"
 
 export default function RolePage() {
   const { message, modal } = App.useApp()
@@ -62,19 +64,26 @@ export default function RolePage() {
   }
 
   const onAddRoleFinish = async () => {
-    try {
-      const values = await addRoleForm.validateFields()
-      await RoleApi.addRole(values)
-      void message.success(`角色 ${values.name} 创建成功`)
-      return true
-    } catch (error: unknown) {
-      if (error instanceof Error && error.message.includes("Validation Failed")) {
-        return false
-      } else if (axios.isAxiosError<GeneralErrorResponse>(error)) {
-        void message.error(error.response?.data.message ?? "创建失败，请稍后再试")
-      }
-      return false
-    }
+    addRoleForm
+      .validateFields()
+      .then(async (values) => {
+        try {
+          await RoleApi.addRole(values)
+          void message.success(`角色 ${values.name} 创建成功`)
+        } catch (error: unknown) {
+          if (axios.isAxiosError<GeneralErrorResponse>(error)) {
+            void message.error(error.response?.data.message ?? "创建失败，请稍后再试")
+          } else if (error instanceof Error) {
+            void message.error(error.message)
+          } else {
+            void message.error("发生未知错误，新增角色信息失败。")
+          }
+          return false
+        }
+      })
+      .catch((error: AntFormValidationError<RoleFormValues>) => {
+        void message.error(`角色信息检验失败：${AntUtils.getFieldErrorMessage(error)}`)
+      })
   }
 
   const handleAddRole = () => {
@@ -102,20 +111,16 @@ export default function RolePage() {
   }
 
   const onEditRoleFinish = async () => {
-    try {
-      const values = await editRoleForm.validateFields()
-      // console.log(values)
-      await RoleApi.editRole(values)
-      void message.success(`角色 ${values.name} 修改成功`)
-      return true
-    } catch (error: unknown) {
-      if (error instanceof Error && error.message.includes("Validation Failed")) {
-        return false
-      } else if (axios.isAxiosError<GeneralErrorResponse>(error)) {
-        void message.error(error.response?.data.message ?? "创建失败，请稍后再试")
-      }
-      return false
-    }
+    editRoleForm
+      .validateFields()
+      .then(async (values) => {
+        // console.log(values)
+        await RoleApi.editRole(values)
+        void message.success(`角色 ${values.name} 修改成功`)
+      })
+      .catch((error: AntFormValidationError<RoleFormValues>) => {
+        void message.error(`角色信息检验失败：${AntUtils.getFieldErrorMessage(error)}`)
+      })
   }
 
   const handleEditRole = (role: Role) => {

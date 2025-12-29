@@ -19,3 +19,16 @@ export interface AntSelectOptionItem {
 }
 
 export type AntSelectOption = AntSelectOptionItem[]
+
+export interface AntFieldError {
+  errors: string[]
+  name: string[]
+  warnings: unknown[]
+}
+
+export interface AntFormValidationError<T> {
+  values: T
+  message: string
+  outOfDate: boolean
+  errorFields: AntFieldError[]
+}
