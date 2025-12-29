@@ -45,4 +45,10 @@ public class RoleController {
         roleService.editRole(request);
         return ResponseEntity.ok(null);
     }
+
+    @DeleteMapping("/{id:\\d+}")
+    public ResponseEntity<Void> deleteRole(@PathVariable Long id) {
+        roleService.deleteRole(id);
+        return ResponseEntity.ok(null);
+    }
 }

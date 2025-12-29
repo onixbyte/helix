@@ -6,7 +6,10 @@ import com.onixbyte.helix.domain.entity.Role;
 import com.onixbyte.helix.domain.web.request.AddRoleRequest;
 import com.onixbyte.helix.domain.web.request.EditRoleRequest;
 import com.onixbyte.helix.domain.web.request.QueryRoleRequest;
+import com.onixbyte.helix.manager.RoleAuthorityManager;
 import com.onixbyte.helix.manager.RoleManager;
+import com.onixbyte.helix.manager.UserRoleManager;
+import com.onixbyte.helix.repository.UserRoleRepository;
 import jakarta.transaction.Transactional;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +23,18 @@ import java.util.Optional;
 public class RoleService {
 
     private final RoleManager roleManager;
+    private final RoleAuthorityManager roleAuthorityManager;
+    private final UserRoleManager userRoleManager;
 
     @Autowired
-    public RoleService(RoleManager roleManager) {
+    public RoleService(
+            RoleManager roleManager,
+            RoleAuthorityManager roleAuthorityManager,
+            UserRoleManager userRoleManager
+    ) {
         this.roleManager = roleManager;
+        this.roleAuthorityManager = roleAuthorityManager;
+        this.userRoleManager = userRoleManager;
     }
 
     public Page<Role> getRoles(Pageable pageable, QueryRoleRequest request) {
@@ -77,5 +88,12 @@ public class RoleService {
                         .map(Status::valueOf)
                         .orElse(null))
                 .build());
+    }
+
+    @Transactional
+    public void deleteRole(Long id) {
+        roleAuthorityManager.deleteByRoleId(id);
+        userRoleManager.deleteByRoleId(id);
+        roleManager.deleteRole(id);
     }
 }
