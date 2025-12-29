@@ -33,3 +33,7 @@ export async function addRole(request: RoleFormValues) {
 export async function editRole(request: RoleFormValues) {
   return await webClient.put("/roles", request)
 }
+
+export async function deleteRole(id: number | string) {
+  return await webClient.delete(`/roles/${id}`)
+}

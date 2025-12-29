@@ -69,10 +69,10 @@ export default function RoleDisplayForm({ initialValues, form, mode }: RoleDispl
           { required: true, message: "排序不能为空" },
           { type: "number", min: 0, max: Number.MAX_VALUE, message: "排序必须是正数" },
         ]}>
-        <InputNumber />
+        <InputNumber type="number" />
       </Form.Item>
       <Form.Item<RoleFormValues> label="是否为默认角色" name="defaultValue">
-        <Switch disabled={isEditing}/>
+        <Switch disabled={isEditing} />
       </Form.Item>
       <Form.Item<RoleFormValues> label="角色状态" name="status">
         <Select<Status> options={StatusOptions} />

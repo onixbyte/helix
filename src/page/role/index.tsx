@@ -18,9 +18,6 @@ import type { Status } from "@/types/constant"
 import AddRoleDialogue from "@/components/add-role-dialogue"
 import type { RoleFormValues } from "@/components/role-display-form"
 import EditRoleDialogue from "@/components/edit-role-dialogue"
-import { addRole } from "@/api/role"
-import type { AntFormValidationError } from "@/types/antd"
-import { AntUtils } from "@/utils"
 
 export default function RolePage() {
   const { message, modal } = App.useApp()
@@ -32,6 +29,8 @@ export default function RolePage() {
   const [pageNum, setPageNum] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(10)
   const [totalElementCount, setTotalElementCount] = useState<number>(0)
+  const [isLastPage, setIsLastPage] = useState<boolean>(false)
+  const [isFirstPage, setIsFirstPage] = useState<boolean>(false)
 
   const queryRoles = (pageNum: number, pageSize: number, queryRoleForm: QueryRoleForm | null) => {
     const queryRoleRequest: QueryRoleRequest = {
@@ -44,11 +43,12 @@ export default function RolePage() {
 
     RoleApi.fetchRoles(queryRoleRequest)
       .then((response) => {
-        // console.log("role response", response)
         setPageNum(response.pageable.pageNumber + 1)
         setPageSize(response.pageable.pageSize)
         setTotalElementCount(response.totalElements)
         setRoles(response.content.sort((role1, role2) => role1.sort - role2.sort))
+        setIsLastPage(response.last)
+        setIsFirstPage(response.first)
       })
       .catch((error) => {
         const err = error as AxiosError<GeneralErrorResponse>
@@ -64,26 +64,24 @@ export default function RolePage() {
   }
 
   const onAddRoleFinish = async () => {
-    addRoleForm
-      .validateFields()
-      .then(async (values) => {
-        try {
-          await RoleApi.addRole(values)
-          void message.success(`角色 ${values.name} 创建成功`)
-        } catch (error: unknown) {
-          if (axios.isAxiosError<GeneralErrorResponse>(error)) {
-            void message.error(error.response?.data.message ?? "创建失败，请稍后再试")
-          } else if (error instanceof Error) {
-            void message.error(error.message)
-          } else {
-            void message.error("发生未知错误，新增角色信息失败。")
-          }
-          return false
-        }
-      })
-      .catch((error: AntFormValidationError<RoleFormValues>) => {
-        void message.error(`角色信息检验失败：${AntUtils.getFieldErrorMessage(error)}`)
-      })
+    try {
+      const values = await addRoleForm.validateFields()
+      console.log(values)
+      await RoleApi.addRole(values)
+      void message.success(`角色 ${values.name} 创建成功`)
+      return true
+    } catch (error: unknown) {
+      if (axios.isAxiosError<GeneralErrorResponse>(error)) {
+        // 处理 Axios 请求错误
+        const serverMsg = error.response?.data?.message
+        void message.error(serverMsg ?? "服务异常，请稍后再试")
+      } else {
+        // 处理其他预期外的错误（如代码逻辑 Bug）
+        console.error("未知错误:", error)
+        void message.error("发生系统错误，请联系管理员")
+      }
+      return false
+    }
   }
 
   const handleAddRole = () => {
@@ -96,12 +94,10 @@ export default function RolePage() {
       })
       .then(
         () => {
-          addRoleForm.resetFields()
           const formValues = queryForm.getFieldsValue()
           queryRoles(pageNum, pageSize, formValues)
         },
         () => {
-          addRoleForm.resetFields()
           console.error("用户取消添加角色")
         }
       )
@@ -111,16 +107,22 @@ export default function RolePage() {
   }
 
   const onEditRoleFinish = async () => {
-    editRoleForm
-      .validateFields()
-      .then(async (values) => {
-        // console.log(values)
-        await RoleApi.editRole(values)
-        void message.success(`角色 ${values.name} 修改成功`)
-      })
-      .catch((error: AntFormValidationError<RoleFormValues>) => {
-        void message.error(`角色信息检验失败：${AntUtils.getFieldErrorMessage(error)}`)
-      })
+    try {
+      const values = await editRoleForm.validateFields()
+      console.log(values)
+      await RoleApi.editRole(values)
+      void message.success(`角色 ${values.name} 更新成功`)
+      return true
+    } catch (error: unknown) {
+      if (axios.isAxiosError<GeneralErrorResponse>(error)) {
+        const serverMsg = error.response?.data?.message
+        void message.error(serverMsg ?? "后端服务异常，请稍后再试")
+      } else {
+        console.error("未知错误:", error)
+        void message.error("发生系统错误，请联系管理员")
+      }
+      return false
+    }
   }
 
   const handleEditRole = (role: Role) => {
@@ -142,6 +144,42 @@ export default function RolePage() {
       )
       .finally(() => {
         editRoleForm.resetFields()
+      })
+  }
+
+  const onDeleteRoleFinish = async (role: Role) => {
+    try {
+      await RoleApi.deleteRole(role.id)
+      void message.info(`角色 ${role.name} 删除成功`)
+
+      // Refresh roles
+      if (roles.length == 1 && isLastPage && !isFirstPage) {
+        setPageNum(pageNum - 1)
+      } else {
+        // Execute refresh manually
+        const searchParams = queryForm.getFieldsValue()
+        queryRoles(pageNum, pageSize, searchParams)
+      }
+
+      return true
+    } catch (error: unknown) {
+      if (axios.isAxiosError<GeneralErrorResponse>(error)) {
+        const serverMsg = error.response?.data?.message
+        void message.error(serverMsg ?? "服务异常，请稍后再试")
+      } else {
+        console.error("未知错误:", error)
+        void message.error("发生系统错误，请联系管理员")
+      }
+      return false
+    }
+  }
+
+  const handleDeleteRole = async (role: Role) => {
+    modal
+      .confirm({
+        title: "删除角色确认",
+        content: <>删除角色会同步解除该角色与用户的绑定关系，确定要删除吗？</>,
+        onOk: () => onDeleteRoleFinish(role),
       })
   }
 
@@ -246,7 +284,7 @@ export default function RolePage() {
                   <Button variant="solid" onClick={() => handleEditRole(role)}>
                     修改
                   </Button>
-                  <Button variant="solid" danger>
+                  <Button variant="solid" danger onClick={() => handleDeleteRole(role)}>
                     删除
                   </Button>
                 </Space.Compact>
