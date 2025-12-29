@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { useNavigate } from "react-router"
-import { Avatar, Breadcrumb, Dropdown, Layout, Menu, type MenuProps, Modal, Space } from "antd"
+import { App, Avatar, Breadcrumb, Dropdown, Layout, Menu, type MenuProps, Modal, Space } from "antd"
 import { DownOutlined } from "@ant-design/icons"
 import { ApplicationLogo } from "@/components/icon"
 import { useAppDispatch, useAppSelector } from "@/store"
@@ -10,6 +10,7 @@ import { MenuApi } from "@/api"
 import type { AxiosError } from "axios"
 import type { TreeNode } from "@/types/tree"
 import type { MenuItem } from "@/types/entity"
+import { AppUtils } from "@/utils"
 
 const { Header, Footer, Sider, Content } = Layout
 type AntMenuItem = Required<MenuProps>["items"][number]
@@ -82,12 +83,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     },
   ]
 
+  const appTitle = useMemo<string>(() => AppUtils.getAppTitle(), [])
+
   return (
-    <Layout className="h-[100%]">
-      <Header className="flex items-center justify-between bg-gradient-to-br from-blue-50 to-indigo-100">
+    <Layout className="h-full">
+      <Header className="flex items-center justify-between bg-linear-to-br from-blue-50 to-indigo-100">
         <div className="flex gap-4 items-center">
           <ApplicationLogo className="text-4xl" />
-          <span className="text-xl">Onixbyte Hi-Tech Co., Ltd</span>
+          <span className="text-xl">{appTitle}</span>
         </div>
 
         <div className="flex gap-4 items-center">

@@ -19,7 +19,15 @@ interface ImportMetaEnv {
    */
   readonly VITE_MSAL_TENANT_ID: string
 
+  /**
+   * Default region for new users
+   */
   readonly VITE_DEFAULT_REGION_ABBREVIATION: RegionAbbreviation
+
+  /**
+   * Application title, can be set to any preferred string as your wish.
+   */
+  readonly VITE_APP_TITLE: string
 }
 
 interface ImportMeta {
