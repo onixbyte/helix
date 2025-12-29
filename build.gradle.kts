@@ -32,6 +32,7 @@ dependencies {
     implementation(platform(libs.onixbyte.versionCatalogue))
     implementation(libs.onixbyte.tuple)
     implementation(libs.onixbyte.commonToolbox)
+    implementation(libs.onixbyte.mathToolbox)
     implementation(libs.onixbyte.identityGenerator)
     implementation(libs.onixbyte.captcha)
     implementation(libs.onixbyte.regions)
