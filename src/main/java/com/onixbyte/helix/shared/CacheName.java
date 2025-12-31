@@ -1,6 +1,6 @@
 package com.onixbyte.helix.shared;
 
-public class CacheName {
+public final class CacheName {
 
     public static final String USER = "user";
 
@@ -12,7 +12,6 @@ public class CacheName {
 
     public static final String CAPTCHA = "captcha";
 
-    public static final String CAPTCHA_SETTING = "captcha-setting";
-
-    public static final String AUTH_SETTING = "auth-setting";
+    private CacheName() {
+    }
 }
