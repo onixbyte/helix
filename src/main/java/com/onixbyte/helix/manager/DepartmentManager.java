@@ -8,8 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
-
 @Component
 public class DepartmentManager {
 
@@ -24,5 +22,9 @@ public class DepartmentManager {
 
     public Page<Department> selectAll(Pageable pageable) {
         return departmentRepository.findAll(pageable);
+    }
+
+    public Department selectById(Long id) {
+        return departmentRepository.findById(id).orElse(null);
     }
 }

@@ -23,4 +23,8 @@ public class PositionManager {
     public Page<Position> selectAll(Pageable pageable) {
         return positionRepository.findAll(pageable);
     }
+
+    public Position selectById(Long id) {
+        return positionRepository.findById(id).orElse(null);
+    }
 }

@@ -1,5 +1,6 @@
 package com.onixbyte.helix.domain.web.response;
 
+import com.onixbyte.helix.domain.entity.User;
 import com.onixbyte.helix.enumeration.UserStatus;
 
 import java.time.LocalDateTime;
@@ -173,6 +174,22 @@ public class UserDetailResponse {
         private LocalDateTime updatedAt;
 
         private UserDetailResponseBuilder() {
+        }
+
+        public UserDetailResponseBuilder user(User user) {
+            this.id = String.valueOf(user.getId());
+            this.username = user.getUsername();
+            this.fullName = user.getFullName();
+            this.email = user.getEmail();
+            this.regionAbbreviation = user.getRegionAbbreviation();
+            this.phoneNumber = user.getPhoneNumber();
+            this.avatarUrl = user.getAvatarUrl();
+            this.status = user.getStatus();
+            this.departmentId = user.getDepartmentId();
+            this.positionId = user.getPositionId();
+            this.createdAt = user.getCreatedAt();
+            this.updatedAt = user.getUpdatedAt();
+            return this;
         }
 
         public UserDetailResponseBuilder id(String id) {

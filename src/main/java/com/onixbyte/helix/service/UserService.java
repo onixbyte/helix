@@ -11,10 +11,7 @@ import com.onixbyte.helix.domain.web.request.QueryUserRequest;
 import com.onixbyte.helix.domain.web.request.ResetPasswordRequest;
 import com.onixbyte.helix.domain.web.request.EditUserRequest;
 import com.onixbyte.helix.domain.web.response.UserDetailResponse;
-import com.onixbyte.helix.manager.ApplicationManager;
-import com.onixbyte.helix.manager.RoleManager;
-import com.onixbyte.helix.manager.UserManager;
-import com.onixbyte.helix.manager.UserRoleManager;
+import com.onixbyte.helix.manager.*;
 import com.onixbyte.identitygenerator.IdentityGenerator;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +33,8 @@ public class UserService {
     private final UserRoleManager userRoleManager;
     private final PasswordEncoder passwordEncoder;
     private final ApplicationManager applicationManager;
+    private final DepartmentManager departmentManager;
+    private final PositionManager positionManager;
 
     @Autowired
     public UserService(
@@ -44,14 +43,16 @@ public class UserService {
             RoleManager roleManager,
             UserRoleManager userRoleManager,
             PasswordEncoder passwordEncoder,
-            ApplicationManager applicationManager
-    ) {
+            ApplicationManager applicationManager,
+            DepartmentManager departmentManager, PositionManager positionManager) {
         this.userManager = userManager;
         this.userIdentityGenerator = userIdentityGenerator;
         this.roleManager = roleManager;
         this.userRoleManager = userRoleManager;
         this.passwordEncoder = passwordEncoder;
         this.applicationManager = applicationManager;
+        this.departmentManager = departmentManager;
+        this.positionManager = positionManager;
     }
 
     public Page<UserDetailResponse> queryUserDetailsPage(Pageable pageable, QueryUserRequest request) {
@@ -71,7 +72,7 @@ public class UserService {
     }
 
     @Transactional(rollbackFor = Throwable.class)
-    public void addUser(AddUserRequest request) {
+    public UserDetailResponse addUser(AddUserRequest request) {
         var createTime = LocalDateTime.now();
 
         // validate all roles are existed
@@ -131,6 +132,17 @@ public class UserService {
 
         // Save user and role bindings
         userRoleManager.saveBatch(userRoleBindings);
+
+        // Get department and position
+        var department = departmentManager.selectById(user.getDepartmentId());
+        var position = positionManager.selectById(user.getPositionId());
+
+        // Build response and return
+        return UserDetailResponse.builder()
+                .user(user)
+                .departmentName(department.getName())
+                .positionName(position.getName())
+                .build();
     }
 
     @Transactional(rollbackFor = Throwable.class)

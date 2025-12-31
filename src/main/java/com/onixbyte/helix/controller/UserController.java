@@ -58,9 +58,8 @@ public class UserController {
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('system:user:write')")
-    public ResponseEntity<Void> addUser(@Validated @RequestBody AddUserRequest request) {
-        userService.addUser(request);
-        return ResponseEntity.ok(null);
+    public UserDetailResponse addUser(@Validated @RequestBody AddUserRequest request) {
+        return userService.addUser(request);
     }
 
     @PutMapping
