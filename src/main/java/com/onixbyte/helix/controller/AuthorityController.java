@@ -1,6 +1,7 @@
 package com.onixbyte.helix.controller;
 
 import com.onixbyte.helix.domain.entity.Authority;
+import com.onixbyte.helix.domain.web.request.AddAuthorityRequest;
 import com.onixbyte.helix.domain.web.request.QueryAuthorityRequest;
 import com.onixbyte.helix.service.AuthorityService;
 import org.springframework.data.domain.Page;
@@ -29,5 +30,10 @@ public class AuthorityController {
     ) {
         var pageRequest = PageRequest.of(pageNum - 1, pageSize);
         return authorityService.getAuthorities(pageRequest, request);
+    }
+
+    @PostMapping
+    public Authority addAuthority(@Validated @RequestBody AddAuthorityRequest request) {
+        return authorityService.addAuthority(request);
     }
 }
