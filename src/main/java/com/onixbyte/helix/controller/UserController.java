@@ -3,7 +3,7 @@ package com.onixbyte.helix.controller;
 import com.onixbyte.helix.domain.web.request.AddUserRequest;
 import com.onixbyte.helix.domain.web.request.QueryUserRequest;
 import com.onixbyte.helix.domain.web.request.ResetPasswordRequest;
-import com.onixbyte.helix.domain.web.request.UpdateUserRequest;
+import com.onixbyte.helix.domain.web.request.EditUserRequest;
 import com.onixbyte.helix.domain.web.response.UserDetailResponse;
 import com.onixbyte.helix.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +64,7 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<Void> editUser(@Validated @RequestBody UpdateUserRequest request) {
+    public ResponseEntity<Void> editUser(@Validated @RequestBody EditUserRequest request) {
         userService.updateUser(request);
         return ResponseEntity.ok(null);
     }

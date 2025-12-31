@@ -2,6 +2,7 @@ package com.onixbyte.helix.controller;
 
 import com.onixbyte.helix.domain.entity.Authority;
 import com.onixbyte.helix.domain.web.request.AddAuthorityRequest;
+import com.onixbyte.helix.domain.web.request.EditAuthorityRequest;
 import com.onixbyte.helix.domain.web.request.QueryAuthorityRequest;
 import com.onixbyte.helix.service.AuthorityService;
 import org.springframework.data.domain.Page;
@@ -35,5 +36,10 @@ public class AuthorityController {
     @PostMapping
     public Authority addAuthority(@Validated @RequestBody AddAuthorityRequest request) {
         return authorityService.addAuthority(request);
+    }
+
+    @PutMapping
+    public Authority editAuthority(@Validated @RequestBody EditAuthorityRequest request) {
+        return authorityService.editAuthority(request);
     }
 }

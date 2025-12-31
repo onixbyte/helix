@@ -3,7 +3,7 @@ package com.onixbyte.helix.service;
 import com.onixbyte.helix.client.TokenClient;
 import com.onixbyte.helix.shared.SettingName;
 import com.onixbyte.helix.domain.entity.Setting;
-import com.onixbyte.helix.domain.web.request.UsernamePasswordLoginRequest;
+import com.onixbyte.helix.domain.web.request.LoginRequest;
 import com.onixbyte.helix.domain.web.response.LoginSuccessResponse;
 import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.manager.CaptchaManager;
@@ -49,7 +49,7 @@ public class AuthService {
      * @return user information and user identity token
      * @throws BizException if the user does not exist, or the username and password are incorrect
      */
-    public LoginSuccessResponse login(UsernamePasswordLoginRequest request) {
+    public LoginSuccessResponse login(LoginRequest request) {
         var captchaEnabled = Optional.ofNullable(settingManager.getSettingByName(SettingName.CAPTCHA_ENABLED))
                 .map(Setting::asBoolean)
                 .orElse(false);

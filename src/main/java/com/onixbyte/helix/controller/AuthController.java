@@ -1,6 +1,6 @@
 package com.onixbyte.helix.controller;
 
-import com.onixbyte.helix.domain.web.request.UsernamePasswordLoginRequest;
+import com.onixbyte.helix.domain.web.request.LoginRequest;
 import com.onixbyte.helix.domain.web.response.LoginSuccessResponse;
 import com.onixbyte.helix.service.AuthService;
 import org.slf4j.Logger;
@@ -29,7 +29,7 @@ public class AuthController {
      */
     @PostMapping("/login")
     public LoginSuccessResponse loginWithUsernameAndPassword(
-            @Validated @RequestBody UsernamePasswordLoginRequest request
+            @Validated @RequestBody LoginRequest request
     ) {
         return authService.login(request);
     }

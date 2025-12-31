@@ -3,6 +3,7 @@ package com.onixbyte.helix.service;
 import com.onixbyte.helix.domain.database.query.wrapper.QueryAuthorityWrapper;
 import com.onixbyte.helix.domain.entity.Authority;
 import com.onixbyte.helix.domain.web.request.AddAuthorityRequest;
+import com.onixbyte.helix.domain.web.request.EditAuthorityRequest;
 import com.onixbyte.helix.domain.web.request.QueryAuthorityRequest;
 import com.onixbyte.helix.enumeration.Status;
 import com.onixbyte.helix.exception.BizException;
@@ -44,5 +45,9 @@ public class AuthorityService {
         }
 
         return authorityManager.save(authority);
+    }
+
+    public Authority editAuthority(EditAuthorityRequest request) {
+        return authorityManager.update(request);
     }
 }

@@ -9,7 +9,7 @@ import com.onixbyte.helix.domain.entity.UserRole;
 import com.onixbyte.helix.domain.web.request.AddUserRequest;
 import com.onixbyte.helix.domain.web.request.QueryUserRequest;
 import com.onixbyte.helix.domain.web.request.ResetPasswordRequest;
-import com.onixbyte.helix.domain.web.request.UpdateUserRequest;
+import com.onixbyte.helix.domain.web.request.EditUserRequest;
 import com.onixbyte.helix.domain.web.response.UserDetailResponse;
 import com.onixbyte.helix.manager.ApplicationManager;
 import com.onixbyte.helix.manager.RoleManager;
@@ -134,7 +134,7 @@ public class UserService {
     }
 
     @Transactional(rollbackFor = Throwable.class)
-    public void updateUser(UpdateUserRequest request) {
+    public void updateUser(EditUserRequest request) {
         userManager.updateUser(User.builder()
                 .id(request.id())
                 .fullName(request.fullName())
