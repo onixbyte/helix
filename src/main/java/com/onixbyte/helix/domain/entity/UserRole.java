@@ -37,17 +37,6 @@ public class UserRole {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    // --- JPA Lifecycle Callbacks for Auditing ---
-
-    @PrePersist
-    protected void onCreate() {
-        if (this.createdAt == null) {
-            this.createdAt = LocalDateTime.now();
-        }
-    }
-
-    // --- Getters and Setters (Delegating to EmbeddedId and fields) ---
-
     /**
      * Gets the identifier of the role from the composite primary key.
      *
@@ -172,5 +161,10 @@ public class UserRole {
         public UserRole build() {
             return new UserRole(roleId, userId, createdAt);
         }
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
     }
 }

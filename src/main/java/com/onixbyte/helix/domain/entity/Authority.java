@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 import org.springframework.security.core.GrantedAuthority;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -260,5 +261,17 @@ public class Authority {
 
     public GrantedAuthority asGrantedAuthority() {
         return this::getCode;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        var createTime = LocalDateTime.now();
+        this.createdAt = createTime;
+        this.updatedAt = createTime;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 }

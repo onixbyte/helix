@@ -121,30 +121,6 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    // --- JPA Lifecycle Callbacks for Auditing ---
-
-    @PrePersist
-    protected void onCreate() {
-        if (this.createdAt == null) {
-            this.createdAt = LocalDateTime.now();
-        }
-        if (this.updatedAt == null) {
-            this.updatedAt = LocalDateTime.now();
-        }
-
-        // Ensure status default is applied if not set
-        if (this.status == null) {
-            this.status = UserStatus.ACTIVE;
-        }
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    // --- Constructors, Getters, Setters, and Builder (omitted for brevity) ---
-
     public User() {
     }
 
@@ -449,5 +425,17 @@ public class User {
         public User build() {
             return new User(id, username, password, fullName, email, regionAbbreviation, phoneNumber, avatarUrl, status, departmentId, positionId, createdAt, updatedAt);
         }
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        var createTime = LocalDateTime.now();
+        this.createdAt = createTime;
+        this.updatedAt = createTime;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 }

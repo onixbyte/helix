@@ -122,4 +122,9 @@ public class RoleAuthority {
             return new RoleAuthority(roleId, authorityId, createdAt);
         }
     }
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }

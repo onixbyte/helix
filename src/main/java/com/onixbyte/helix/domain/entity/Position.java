@@ -281,4 +281,16 @@ public class Position {
             return new Position(id, name, code, description, sort, status, createdAt, updatedAt);
         }
     }
+
+    @PrePersist
+    protected void onCreate() {
+        var createTime = LocalDateTime.now();
+        this.createdAt = createTime;
+        this.updatedAt = createTime;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }

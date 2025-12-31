@@ -40,26 +40,6 @@ public class UserIdentity {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    // --- JPA Lifecycle Callbacks for Auditing ---
-
-    @PrePersist
-    protected void onCreate() {
-        if (this.createdAt == null) {
-            this.createdAt = LocalDateTime.now();
-        }
-        if (this.updatedAt == null) {
-            this.updatedAt = LocalDateTime.now();
-        }
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
-
-
-    // --- Getters and Setters (Delegating to EmbeddedId) ---
-
     /**
      * Gets the identifier of the internal user account from the composite primary key.
      * @return the user ID
@@ -223,5 +203,17 @@ public class UserIdentity {
         public UserIdentity build() {
             return new UserIdentity(userId, provider, externalId, createdAt, updatedAt);
         }
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        var createTime = LocalDateTime.now();
+        this.createdAt = createTime;
+        this.updatedAt = createTime;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 }

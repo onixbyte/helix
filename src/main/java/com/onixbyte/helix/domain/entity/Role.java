@@ -307,10 +307,10 @@ public class Role {
     }
 
     @PrePersist
-    private void onInsert() {
-        var currentTime = LocalDateTime.now();
-        this.createdAt = currentTime;
-        this.updatedAt = currentTime;
+    private void onCreate() {
+        var createTime = LocalDateTime.now();
+        this.createdAt = createTime;
+        this.updatedAt = createTime;
     }
 
     @PreUpdate

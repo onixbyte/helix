@@ -224,4 +224,16 @@ public class Menu implements Treeable<Long> {
                 ", updatedAt=" + updatedAt +
                 '}';
     }
+
+    @PrePersist
+    protected void onCreate() {
+        var createTime = LocalDateTime.now();
+        this.createdAt = createTime;
+        this.updatedAt = createTime;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }

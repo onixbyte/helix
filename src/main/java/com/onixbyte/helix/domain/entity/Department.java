@@ -287,4 +287,16 @@ public class Department implements Treeable<Long> {
             return new Department(id, name, parentId, sort, status, createdAt, updatedAt);
         }
     }
+
+    @PrePersist
+    protected void onCreate() {
+        var createTime = LocalDateTime.now();
+        this.createdAt = createTime;
+        this.updatedAt = createTime;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }
