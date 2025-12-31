@@ -1,5 +1,7 @@
 package com.onixbyte.helix.config;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.onixbyte.helix.filter.TokenAuthenticationFilter;
 import com.onixbyte.helix.properties.CorsProperties;
@@ -205,5 +207,12 @@ public class SecurityConfig {
     @Bean
     public Algorithm algorithm(TokenProperties properties) {
         return Algorithm.HMAC256(properties.secret());
+    }
+
+    @Bean
+    public JWTVerifier verifier(Algorithm algorithm, TokenProperties tokenProperties) {
+        return JWT.require(algorithm)
+                .withIssuer(tokenProperties.issuer())
+                .build();
     }
 }

@@ -3,6 +3,7 @@ package com.onixbyte.helix.filter;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.onixbyte.helix.client.TokenClient;
 import com.onixbyte.helix.manager.AuthorityManager;
 import com.onixbyte.helix.manager.UserManager;
 import com.onixbyte.helix.security.authentication.UsernamePasswordAuthentication;
@@ -26,14 +27,18 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private final static Logger log = LoggerFactory.getLogger(TokenAuthenticationFilter.class);
 
-    private final Algorithm algorithm;
     private final UserManager userManager;
     private final AuthorityManager authorityManager;
+    private final TokenClient tokenClient;
 
-    public TokenAuthenticationFilter(Algorithm algorithm, UserManager userManager, AuthorityManager authorityManager) {
-        this.algorithm = algorithm;
+    public TokenAuthenticationFilter(
+            UserManager userManager,
+            AuthorityManager authorityManager,
+            TokenClient tokenClient
+    ) {
         this.userManager = userManager;
         this.authorityManager = authorityManager;
+        this.tokenClient = tokenClient;
     }
 
     @Override
@@ -54,12 +59,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         }
 
         token = token.substring(7);
-        var verifier = JWT.require(algorithm)
-                .withIssuer("Helix Server")
-                .build();
-
         try {
-            var decodedToken = verifier.verify(token);
+            var decodedToken = tokenClient.verifyToken(token);
             var username = decodedToken.getSubject();
 
             var user = userManager.selectByUsername(username);
