@@ -1,7 +1,7 @@
 package com.onixbyte.helix.controller;
 
 import com.onixbyte.helix.domain.entity.Menu;
-import com.onixbyte.helix.domain.model.TreeNode;
+import com.onixbyte.helix.domain.common.TreeNode;
 import com.onixbyte.helix.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

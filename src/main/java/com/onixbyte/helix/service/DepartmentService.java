@@ -1,7 +1,7 @@
 package com.onixbyte.helix.service;
 
 import com.onixbyte.helix.domain.entity.Department;
-import com.onixbyte.helix.domain.model.TreeNode;
+import com.onixbyte.helix.domain.common.TreeNode;
 import com.onixbyte.helix.manager.DepartmentManager;
 import com.onixbyte.helix.utils.TreeUtil;
 import org.springframework.beans.factory.annotation.Autowired;

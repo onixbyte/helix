@@ -1,7 +1,7 @@
 package com.onixbyte.helix.service;
 
 import com.onixbyte.helix.domain.entity.Menu;
-import com.onixbyte.helix.domain.model.TreeNode;
+import com.onixbyte.helix.domain.common.TreeNode;
 import com.onixbyte.helix.manager.MenuManager;
 import com.onixbyte.helix.utils.SecurityUtil;
 import com.onixbyte.helix.utils.TreeUtil;

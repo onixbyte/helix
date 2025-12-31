@@ -1,7 +1,7 @@
 package com.onixbyte.helix.utils;
 
 import com.onixbyte.helix.domain.common.Treeable;
-import com.onixbyte.helix.domain.model.TreeNode;
+import com.onixbyte.helix.domain.common.TreeNode;
 import com.onixbyte.helix.exception.BizException;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.http.HttpStatus;

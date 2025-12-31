@@ -1,4 +1,4 @@
-package com.onixbyte.helix.domain.model;
+package com.onixbyte.helix.domain.common;
 
 import java.util.ArrayList;
 import java.util.List;
