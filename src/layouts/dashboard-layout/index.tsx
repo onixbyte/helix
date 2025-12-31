@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react"
 import { useNavigate } from "react-router"
-import { App, Avatar, Breadcrumb, Dropdown, Layout, Menu, type MenuProps, Modal, Space } from "antd"
+import { App, Avatar, Breadcrumb, Dropdown, Layout, Menu, type MenuProps, Space } from "antd"
 import { DownOutlined } from "@ant-design/icons"
 import { ApplicationLogo } from "@/components/icon"
 import { useAppDispatch, useAppSelector } from "@/store"
@@ -41,6 +41,7 @@ function transformMenuData(nodes: TreeNode<MenuItem>[]): AntMenuItem[] {
 }
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const { modal } = App.useApp()
   const user = useAppSelector((store) => store.auth.user!)
   const dispatch = useAppDispatch()
   const breadcrumbItems = useAntBreadcrumbs()
@@ -48,7 +49,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   const onLogout = ({ key }: { key: string }) => {
     if (key == "logout") {
-      Modal.confirm({
+      modal.confirm({
         title: "确定要注销吗？",
         okText: "确定",
         cancelText: "取消",
