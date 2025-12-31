@@ -1,9 +1,8 @@
 package com.onixbyte.helix.filter;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.onixbyte.helix.client.TokenClient;
+import com.onixbyte.helix.constant.SecurityConstant;
 import com.onixbyte.helix.manager.AuthorityManager;
 import com.onixbyte.helix.manager.UserManager;
 import com.onixbyte.helix.security.authentication.UsernamePasswordAuthentication;
@@ -47,18 +46,18 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        var token = request.getHeader("Authorization");
+        var token = request.getHeader(SecurityConstant.TOKEN_HEADER_NAME);
         if (Objects.isNull(token) || token.isBlank()) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        if (!token.startsWith("Bearer ")) {
+        if (!token.startsWith(SecurityConstant.TOKEN_PREFIX)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        token = token.substring(7);
+        token = token.substring(SecurityConstant.TOKEN_PREFIX_LENGTH);
         try {
             var decodedToken = tokenClient.verifyToken(token);
             var username = decodedToken.getSubject();
