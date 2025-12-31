@@ -1,6 +1,6 @@
 package com.onixbyte.helix.manager;
 
-import com.onixbyte.helix.constant.CacheName;
+import com.onixbyte.helix.shared.CacheName;
 import com.onixbyte.helix.domain.entity.Asset;
 import com.onixbyte.helix.mapper.AssetMapper;
 import com.onixbyte.helix.repository.AssetRepository;

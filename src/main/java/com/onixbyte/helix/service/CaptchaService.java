@@ -1,8 +1,8 @@
 package com.onixbyte.helix.service;
 
 import com.onixbyte.captcha.Producer;
-import com.onixbyte.helix.constant.FileType;
-import com.onixbyte.helix.constant.SettingName;
+import com.onixbyte.helix.shared.FileType;
+import com.onixbyte.helix.shared.SettingName;
 import com.onixbyte.helix.domain.entity.Setting;
 import com.onixbyte.helix.domain.web.response.CaptchaResponse;
 import com.onixbyte.helix.exception.BizException;

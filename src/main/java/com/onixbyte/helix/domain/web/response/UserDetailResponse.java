@@ -1,6 +1,6 @@
 package com.onixbyte.helix.domain.web.response;
 
-import com.onixbyte.helix.constant.UserStatus;
+import com.onixbyte.helix.enumeration.UserStatus;
 
 import java.time.LocalDateTime;
 

@@ -2,10 +2,10 @@ package com.onixbyte.helix.filter;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.onixbyte.helix.client.TokenClient;
-import com.onixbyte.helix.constant.SecurityConstant;
 import com.onixbyte.helix.manager.AuthorityManager;
 import com.onixbyte.helix.manager.UserManager;
 import com.onixbyte.helix.security.authentication.UsernamePasswordAuthentication;
+import com.onixbyte.helix.shared.TokenConstant;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -46,18 +46,18 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        var token = request.getHeader(SecurityConstant.TOKEN_HEADER_NAME);
+        var token = request.getHeader(TokenConstant.TOKEN_HEADER_NAME);
         if (Objects.isNull(token) || token.isBlank()) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        if (!token.startsWith(SecurityConstant.TOKEN_PREFIX)) {
+        if (!token.startsWith(TokenConstant.TOKEN_PREFIX)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        token = token.substring(SecurityConstant.TOKEN_PREFIX_LENGTH);
+        token = token.substring(TokenConstant.TOKEN_PREFIX_LENGTH);
         try {
             var decodedToken = tokenClient.verifyToken(token);
             var username = decodedToken.getSubject();

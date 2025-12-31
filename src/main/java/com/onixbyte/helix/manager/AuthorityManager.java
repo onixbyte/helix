@@ -1,6 +1,6 @@
 package com.onixbyte.helix.manager;
 
-import com.onixbyte.helix.constant.CacheName;
+import com.onixbyte.helix.shared.CacheName;
 import com.onixbyte.helix.domain.entity.Authority;
 import com.onixbyte.helix.mapper.AuthorityMapper;
 import org.springframework.beans.factory.annotation.Autowired;

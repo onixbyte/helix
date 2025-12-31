@@ -1,9 +1,8 @@
 package com.onixbyte.helix.domain.entity.embeddable;
 
-import com.onixbyte.helix.constant.IdentityProvider;
+import com.onixbyte.helix.enumeration.IdentityProvider;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.PostgreSQLEnumJdbcType;

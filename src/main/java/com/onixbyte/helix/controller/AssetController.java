@@ -1,6 +1,6 @@
 package com.onixbyte.helix.controller;
 
-import com.onixbyte.helix.constant.AssetPrefix;
+import com.onixbyte.helix.shared.AssetPrefix;
 import com.onixbyte.helix.domain.web.response.FileUploadResponse;
 import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.service.AssetService;

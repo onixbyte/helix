@@ -1,6 +1,6 @@
 package com.onixbyte.helix.service;
 
-import com.onixbyte.helix.constant.Status;
+import com.onixbyte.helix.enumeration.Status;
 import com.onixbyte.helix.domain.database.query.wrapper.QueryRoleWrapper;
 import com.onixbyte.helix.domain.entity.Role;
 import com.onixbyte.helix.domain.web.request.AddRoleRequest;
@@ -9,7 +9,6 @@ import com.onixbyte.helix.domain.web.request.QueryRoleRequest;
 import com.onixbyte.helix.manager.RoleAuthorityManager;
 import com.onixbyte.helix.manager.RoleManager;
 import com.onixbyte.helix.manager.UserRoleManager;
-import com.onixbyte.helix.repository.UserRoleRepository;
 import jakarta.transaction.Transactional;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

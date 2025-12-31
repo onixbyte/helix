@@ -1,6 +1,6 @@
 package com.onixbyte.helix.domain.web.request;
 
-import com.onixbyte.helix.constant.UserStatus;
+import com.onixbyte.helix.enumeration.UserStatus;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;

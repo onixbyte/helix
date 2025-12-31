@@ -1,4 +1,4 @@
-package com.onixbyte.helix.constant;
+package com.onixbyte.helix.shared;
 
 public class SettingName {
 

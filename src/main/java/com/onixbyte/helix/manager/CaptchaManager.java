@@ -1,16 +1,10 @@
 package com.onixbyte.helix.manager;
 
 import com.onixbyte.helix.client.RedisClient;
-import com.onixbyte.helix.constant.CacheName;
-import com.onixbyte.helix.properties.CaptchaProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.Cache;
-import org.springframework.data.redis.cache.RedisCacheManager;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
-import java.util.Objects;
 
 @Component
 public class CaptchaManager {

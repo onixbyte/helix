@@ -1,4 +1,4 @@
-package com.onixbyte.helix.constant;
+package com.onixbyte.helix.enumeration;
 
 /**
  * Constants for external host configurations and endpoints.

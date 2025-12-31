@@ -1,7 +1,7 @@
 package com.onixbyte.helix.manager;
 
 import com.onixbyte.helix.common.regex.Patterns;
-import com.onixbyte.helix.constant.CacheName;
+import com.onixbyte.helix.shared.CacheName;
 import com.onixbyte.helix.domain.database.query.wrapper.QueryUserWrapper;
 import com.onixbyte.helix.domain.entity.User;
 import com.onixbyte.helix.domain.web.response.UserDetailResponse;

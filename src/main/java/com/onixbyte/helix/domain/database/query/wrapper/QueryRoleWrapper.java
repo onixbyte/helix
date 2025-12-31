@@ -1,6 +1,6 @@
 package com.onixbyte.helix.domain.database.query.wrapper;
 
-import com.onixbyte.helix.constant.Status;
+import com.onixbyte.helix.enumeration.Status;
 
 public class QueryRoleWrapper {
     private String name;

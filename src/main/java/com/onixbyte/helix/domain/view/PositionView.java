@@ -1,6 +1,6 @@
 package com.onixbyte.helix.domain.view;
 
-import com.onixbyte.helix.constant.Status;
+import com.onixbyte.helix.enumeration.Status;
 import com.onixbyte.helix.domain.entity.Position;
 
 import java.time.LocalDateTime;

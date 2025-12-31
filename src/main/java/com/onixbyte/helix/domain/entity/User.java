@@ -1,6 +1,6 @@
 package com.onixbyte.helix.domain.entity;
 
-import com.onixbyte.helix.constant.UserStatus;
+import com.onixbyte.helix.enumeration.UserStatus;
 import jakarta.persistence.*; // 导入 Jakarta Persistence API
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.PostgreSQLEnumJdbcType;

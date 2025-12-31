@@ -1,4 +1,4 @@
-package com.onixbyte.helix.constant;
+package com.onixbyte.helix.enumeration;
 
 /**
  * Enumeration representing general status states for system entities.

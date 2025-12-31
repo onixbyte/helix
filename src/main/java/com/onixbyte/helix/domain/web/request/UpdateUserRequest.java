@@ -1,10 +1,8 @@
 package com.onixbyte.helix.domain.web.request;
 
-import com.onixbyte.helix.constant.UserStatus;
+import com.onixbyte.helix.enumeration.UserStatus;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-
-import java.util.List;
 
 public record UpdateUserRequest(
         @NotNull(message = "User ID cannot be null")

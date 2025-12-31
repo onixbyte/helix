@@ -1,7 +1,7 @@
 package com.onixbyte.helix.service;
 
 import com.onixbyte.helix.client.TokenClient;
-import com.onixbyte.helix.constant.SettingName;
+import com.onixbyte.helix.shared.SettingName;
 import com.onixbyte.helix.domain.entity.Setting;
 import com.onixbyte.helix.domain.web.request.UsernamePasswordLoginRequest;
 import com.onixbyte.helix.domain.web.response.LoginSuccessResponse;

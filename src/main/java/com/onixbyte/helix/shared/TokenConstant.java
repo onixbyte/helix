@@ -1,6 +1,6 @@
-package com.onixbyte.helix.constant;
+package com.onixbyte.helix.shared;
 
-public class SecurityConstant {
+public class TokenConstant {
 
     public static final String TOKEN_HEADER_NAME = "Authorization";
 

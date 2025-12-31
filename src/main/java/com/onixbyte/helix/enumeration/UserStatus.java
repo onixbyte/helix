@@ -1,4 +1,4 @@
-package com.onixbyte.helix.constant;
+package com.onixbyte.helix.enumeration;
 
 /**
  * Enumeration representing the various states of user accounts within the system.

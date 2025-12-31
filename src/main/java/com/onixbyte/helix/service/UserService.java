@@ -1,7 +1,7 @@
 package com.onixbyte.helix.service;
 
 import com.onixbyte.common.util.HashUtil;
-import com.onixbyte.helix.constant.UserStatus;
+import com.onixbyte.helix.enumeration.UserStatus;
 import com.onixbyte.helix.domain.database.query.wrapper.QueryUserWrapper;
 import com.onixbyte.helix.domain.entity.Role;
 import com.onixbyte.helix.domain.entity.User;

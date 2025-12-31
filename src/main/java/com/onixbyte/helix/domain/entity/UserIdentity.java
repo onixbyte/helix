@@ -1,6 +1,6 @@
 package com.onixbyte.helix.domain.entity;
 
-import com.onixbyte.helix.constant.IdentityProvider;
+import com.onixbyte.helix.enumeration.IdentityProvider;
 import com.onixbyte.helix.domain.entity.embeddable.UserIdentityId;
 import jakarta.persistence.*; // 导入 Jakarta Persistence API
 import java.time.LocalDateTime;

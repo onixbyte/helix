@@ -1,6 +1,6 @@
 package com.onixbyte.helix.domain.view;
 
-import com.onixbyte.helix.constant.IdentityProvider;
+import com.onixbyte.helix.enumeration.IdentityProvider;
 import com.onixbyte.helix.domain.entity.UserIdentity;
 
 import java.time.LocalDateTime;
