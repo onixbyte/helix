@@ -44,7 +44,9 @@ public class UserService {
             UserRoleManager userRoleManager,
             PasswordEncoder passwordEncoder,
             ApplicationManager applicationManager,
-            DepartmentManager departmentManager, PositionManager positionManager) {
+            DepartmentManager departmentManager,
+            PositionManager positionManager
+    ) {
         this.userManager = userManager;
         this.userIdentityGenerator = userIdentityGenerator;
         this.roleManager = roleManager;
