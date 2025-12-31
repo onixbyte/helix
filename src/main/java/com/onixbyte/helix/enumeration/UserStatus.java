@@ -14,7 +14,6 @@ package com.onixbyte.helix.enumeration;
  *
  * @author zihluwang
  * @since 1.0.0
- * @see com.onixbyte.helix.config.SecurityConfiguration
  */
 public enum UserStatus {
 
