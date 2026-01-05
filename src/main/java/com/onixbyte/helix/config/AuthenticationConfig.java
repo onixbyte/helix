@@ -1,6 +1,7 @@
 package com.onixbyte.helix.config;
 
 import com.onixbyte.helix.properties.ApplicationProperties;
+import com.onixbyte.helix.properties.AuthenticationProperties;
 import com.onixbyte.helix.properties.MsalProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -18,11 +19,15 @@ import org.springframework.context.annotation.Configuration;
  * application context.
  *
  * @author zihluwang
- * @since 1.0.0
  * @see MsalProperties
  * @see EnableConfigurationProperties
+ * @since 1.0.0
  */
 @Configuration
-@EnableConfigurationProperties({MsalProperties.class, ApplicationProperties.class})
+@EnableConfigurationProperties({
+        MsalProperties.class,
+        AuthenticationProperties.class,
+        ApplicationProperties.class
+})
 public class AuthenticationConfig {
 }

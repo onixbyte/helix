@@ -179,4 +179,15 @@ public class UserService {
         userRoleManager.deleteByUserId(userId);
         userManager.deleteById(userId);
     }
+
+    public UserDetailResponse getDetail(User user) {
+        var department = departmentManager.selectById(user.getDepartmentId());
+        var position = positionManager.selectById(user.getPositionId());
+
+        return UserDetailResponse.builder()
+                .user(user)
+                .departmentName(department.getName())
+                .positionName(position.getName())
+                .build();
+    }
 }

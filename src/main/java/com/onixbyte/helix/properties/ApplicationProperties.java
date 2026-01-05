@@ -5,6 +5,7 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 
 @ConfigurationProperties(prefix = "app.common")
 public record ApplicationProperties(
-        @DefaultValue("default@helix.onixbyte.dev") String defaultEmail
+        @DefaultValue("default@helix.onixbyte.dev") String defaultEmail,
+        @DefaultValue("helix.onixbyte.dev") String externalHost
 ) {
 }

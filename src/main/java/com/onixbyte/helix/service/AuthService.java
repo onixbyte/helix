@@ -1,18 +1,17 @@
 package com.onixbyte.helix.service;
 
-import com.onixbyte.helix.client.TokenClient;
-import com.onixbyte.helix.shared.SettingName;
 import com.onixbyte.helix.domain.entity.Setting;
+import com.onixbyte.helix.domain.entity.User;
 import com.onixbyte.helix.domain.web.request.LoginRequest;
-import com.onixbyte.helix.domain.web.response.LoginSuccessResponse;
 import com.onixbyte.helix.exception.BizException;
-import com.onixbyte.helix.manager.CaptchaManager;
-import com.onixbyte.helix.manager.SettingManager;
+import com.onixbyte.helix.manager.*;
 import com.onixbyte.helix.security.authentication.UsernamePasswordAuthentication;
+import com.onixbyte.helix.shared.SettingName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;
 
@@ -26,20 +25,20 @@ public class AuthService {
 
     private final CaptchaManager captchaManager;
     private final AuthenticationManager authenticationManager;
-    private final TokenClient tokenClient;
     private final SettingManager settingManager;
+    private final ApplicationManager applicationManager;
 
     @Autowired
     public AuthService(
             CaptchaManager captchaManager,
             AuthenticationManager authenticationManager,
-            TokenClient tokenClient,
-            SettingManager settingManager
+            SettingManager settingManager,
+            ApplicationManager applicationManager
     ) {
         this.captchaManager = captchaManager;
         this.authenticationManager = authenticationManager;
-        this.tokenClient = tokenClient;
         this.settingManager = settingManager;
+        this.applicationManager = applicationManager;
     }
 
     /**
@@ -49,7 +48,7 @@ public class AuthService {
      * @return user information and user identity token
      * @throws BizException if the user does not exist, or the username and password are incorrect
      */
-    public LoginSuccessResponse login(LoginRequest request) {
+    public User login(LoginRequest request) {
         var captchaEnabled = Optional.ofNullable(settingManager.getSettingByName(SettingName.CAPTCHA_ENABLED))
                 .map(Setting::asBoolean)
                 .orElse(false);
@@ -76,9 +75,7 @@ public class AuthService {
                     "Cannot perform login due to server crashes.");
         }
 
-        var token = tokenClient.generateToken(authentication.getDetails());
-
-        return new LoginSuccessResponse(token, authentication.getDetails());
+        return authentication.getDetails();
     }
 
     /**
@@ -90,5 +87,18 @@ public class AuthService {
         return Optional.ofNullable(settingManager.getSettingByName(SettingName.REGISTER_ENABLED))
                 .map(Setting::asBoolean)
                 .orElse(false);
+    }
+
+    public ResponseCookie buildCookie(String cookieName, String token) {
+        var cookieBuilder = ResponseCookie.from(cookieName, token)
+                .httpOnly(true)
+                .secure(applicationManager.isSslEnabled())
+                .path("/");
+
+        if (applicationManager.isSecureCookieEnabled()) {
+            cookieBuilder.domain(applicationManager.getExternalHost());
+        }
+
+        return cookieBuilder.build();
     }
 }
