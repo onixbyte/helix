@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -58,5 +60,13 @@ public class AuthController {
     @GetMapping("/register-enabled")
     public boolean getRegisterEnabled() {
         return authService.getRegisterEnabled();
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<Void> logout() {
+        var cookie = authService.buildCookie(TokenConstant.TOKEN_NAME, "", Duration.ZERO);
+        return ResponseEntity.status(HttpStatus.OK)
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(null);
     }
 }
