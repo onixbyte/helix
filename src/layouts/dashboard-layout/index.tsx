@@ -1,16 +1,27 @@
 import React, { useEffect, useMemo, useState } from "react"
 import { useNavigate } from "react-router"
-import { App, Avatar, Breadcrumb, Dropdown, Layout, Menu, type MenuProps, Space } from "antd"
+import {
+  App,
+  Avatar,
+  Breadcrumb,
+  Dropdown,
+  Layout,
+  Menu,
+  type MenuProps,
+  message,
+  Space,
+} from "antd"
 import { DownOutlined } from "@ant-design/icons"
 import { ApplicationLogo } from "@/components/icon"
 import { useAppDispatch, useAppSelector } from "@/store"
 import { useAntBreadcrumbs } from "@/hooks"
 import { logout } from "@/store/auth-slice"
 import { MenuApi } from "@/api"
-import type { AxiosError } from "axios"
+import axios, { type AxiosError } from "axios"
 import type { TreeNode } from "@/types/tree"
 import type { MenuItem } from "@/types/entity"
 import { AppUtils } from "@/utils"
+import type { GeneralErrorResponse } from "@/types/web/response"
 
 const { Header, Footer, Sider, Content } = Layout
 type AntMenuItem = Required<MenuProps>["items"][number]
@@ -41,7 +52,7 @@ function transformMenuData(nodes: TreeNode<MenuItem>[]): AntMenuItem[] {
 }
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { modal } = App.useApp()
+  const { modal, message } = App.useApp()
   const user = useAppSelector((store) => store.auth.user!)
   const dispatch = useAppDispatch()
   const breadcrumbItems = useAntBreadcrumbs()
@@ -71,8 +82,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         setMenuItems(transformMenuData(response))
       })
       .catch((error: unknown) => {
-        const err = error as AxiosError
-        console.log(err)
+        console.log(error)
+        const errorMessage =
+          axios.isAxiosError<GeneralErrorResponse>(error) && error.response?.data.message
+            ? error.response?.data.message
+            : "无法读取菜单数据"
+        void message.error({
+          content: errorMessage,
+        })
       })
   }, [])
 
