@@ -92,12 +92,7 @@ public class AuthService {
     public ResponseCookie buildCookie(String cookieName, String token) {
         var cookieBuilder = ResponseCookie.from(cookieName, token)
                 .httpOnly(true)
-                .secure(applicationManager.isSslEnabled())
                 .path("/");
-
-        if (applicationManager.isSecureCookieEnabled()) {
-            cookieBuilder.domain(applicationManager.getExternalHost());
-        }
 
         return cookieBuilder.build();
     }
