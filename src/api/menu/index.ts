@@ -1,4 +1,4 @@
-import webClient from "@/service/web-client"
+import webClient from "@/client/web-client"
 import type { TreeNode } from "@/types/tree"
 import type { MenuItem } from "@/types/entity"
 

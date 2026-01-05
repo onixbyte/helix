@@ -1,5 +1,5 @@
 import type { QueryRoleRequest } from "@/types/web/request"
-import webClient from "@/service/web-client"
+import webClient from "@/client/web-client"
 import type { PageResponse, RoleResponse } from "@/types/web/response"
 import type { RoleFormValues } from "@/components/role-display-form"
 

@@ -8,6 +8,8 @@ import type { GeneralErrorResponse } from "@/types/web/response"
 const webClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: dayjs.duration({ seconds: 10 }).asMilliseconds(),
+  withCredentials: true,
+  withXSRFToken: true
 })
 
 webClient.interceptors.request.use(

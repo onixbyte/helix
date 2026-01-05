@@ -1,4 +1,4 @@
-import webClient from "@/service/web-client"
+import webClient from "@/client/web-client"
 import { getCountryCallingCode } from "libphonenumber-js"
 import { getDefaultCountryCode } from "@/utils/phone-number-utils"
 import type { AddUserRequest, EditUserRequest, QueryUserRequest } from "@/types/web/request"

@@ -1,4 +1,4 @@
-import webClient from "@/service/web-client"
+import webClient from "@/client/web-client"
 import { HttpStatus } from "@/constant"
 import type { CaptchaResponse, UserAuthResponse } from "@/types/web/response"
 import type { UsernamePasswordLoginRequest } from "@/types/web/request"

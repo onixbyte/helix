@@ -1,4 +1,4 @@
-import webClient from "@/service/web-client"
+import webClient from "@/client/web-client"
 import type { QueryPositionRequest } from "@/types/web/request"
 import type { PageResponse } from "@/types/web/response"
 import type { Position } from "@/types/entity"
