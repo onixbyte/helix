@@ -9,16 +9,11 @@ const webClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: dayjs.duration({ seconds: 10 }).asMilliseconds(),
   withCredentials: true,
-  withXSRFToken: true
+  withXSRFToken: true,
 })
 
 webClient.interceptors.request.use(
   (config) => {
-    const state = store.getState()
-    if (state.auth.isAuthenticated) {
-      config.headers["Authorization"] = `Bearer ${state.auth.token!}`
-    }
-
     return config
   },
   (error: unknown) => {
