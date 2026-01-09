@@ -17,6 +17,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
 
+/**
+ * This controller provides entry points making user authorised.
+ *
+ * @author zihluwang
+ * @author siujamo
+ */
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -57,11 +63,21 @@ public class AuthController {
                 .body(userService.getDetail(user));
     }
 
+    /**
+     * Get whether the registration function is enabled.
+     *
+     * @return {@code true} if registration function is enabled, otherwise {@code false}
+     */
     @GetMapping("/register-enabled")
     public boolean getRegisterEnabled() {
         return authService.getRegisterEnabled();
     }
 
+    /**
+     * Perform log out.
+     *
+     * @return a response that remove the authentication from cookie
+     */
     @GetMapping("/logout")
     public ResponseEntity<Void> logout() {
         var cookie = authService.buildCookie(TokenConstant.TOKEN_NAME, "", Duration.ZERO);

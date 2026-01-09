@@ -13,11 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * REST controller for file storage operations. Provides endpoints for uploading, downloading, and
- * deleting assets using the configured storage service.
+ * This controller provides entry points that manipulates assets.
  *
  * @author zihluwang
- * @since 1.0.0
+ * @author siujamo
  */
 @RestController
 @RequestMapping("/assets")

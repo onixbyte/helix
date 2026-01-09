@@ -11,6 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * This controller provides entry points to manipulate positions.
+ *
+ * @author zihluwang
+ * @author siujamo
+ */
 @RestController
 @RequestMapping("/positions")
 public class PositionController {
@@ -22,6 +28,13 @@ public class PositionController {
         this.positionService = positionService;
     }
 
+    /**
+     * Get position data paginated.
+     *
+     * @param pageNum  current page num
+     * @param pageSize page size
+     * @return paginated position data
+     */
     @GetMapping
     public Page<Position> getPositions(
             @RequestParam(required = false, defaultValue = "1") Integer pageNum,

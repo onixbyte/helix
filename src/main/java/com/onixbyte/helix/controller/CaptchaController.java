@@ -10,6 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
+/**
+ * This controller provides entry points to get captcha images.
+ *
+ * @author zihluwang
+ * @author siujamo
+ */
 @RestController
 @RequestMapping("/captcha")
 public class CaptchaController {
@@ -21,6 +27,11 @@ public class CaptchaController {
         this.captchaService = captchaService;
     }
 
+    /**
+     * Get captcha image and captcha uuid.
+     *
+     * @return captcha response, contains the uuid of the captcha and image BASE64
+     */
     @GetMapping
     public ResponseEntity<CaptchaResponse> getCaptcha() {
         var captchaTuple = captchaService.buildCaptcha();

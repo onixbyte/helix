@@ -1,9 +1,10 @@
 package com.onixbyte.helix.controller;
 
 import com.onixbyte.helix.domain.web.request.AddUserRequest;
+import com.onixbyte.helix.domain.web.request.EditUserRequest;
 import com.onixbyte.helix.domain.web.request.QueryUserRequest;
 import com.onixbyte.helix.domain.web.request.ResetPasswordRequest;
-import com.onixbyte.helix.domain.web.request.EditUserRequest;
+import com.onixbyte.helix.domain.web.response.ActionResponse;
 import com.onixbyte.helix.domain.web.response.UserDetailResponse;
 import com.onixbyte.helix.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * This controller provides entry points to manipulate users.
+ *
+ * @author zihluwang
+ * @author siujamo
+ */
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -56,29 +63,53 @@ public class UserController {
         return userService.getUserDetailByUserId(userId);
     }
 
+    /**
+     * Add a new user.
+     *
+     * @param request user to be added
+     * @return added user
+     */
     @PostMapping
     @PreAuthorize("hasAnyAuthority('system:user:write')")
     public UserDetailResponse addUser(@Validated @RequestBody AddUserRequest request) {
         return userService.addUser(request);
     }
 
+    /**
+     * Edit a user.
+     *
+     * @param request user to be edited
+     * @return edited user
+     */
     @PutMapping
     public ResponseEntity<Void> editUser(@Validated @RequestBody EditUserRequest request) {
         userService.updateUser(request);
         return ResponseEntity.ok(null);
     }
 
+    /**
+     * Reset user's password.
+     *
+     * @param request reset password request, contains ID of the user and new password
+     * @return action response
+     */
     @PreAuthorize("hasAnyAuthority('system:user:reset-password')")
     @PatchMapping("/reset-password")
-    public ResponseEntity<Void> resetPassword(@Validated @RequestBody ResetPasswordRequest request) {
+    public ActionResponse resetPassword(@Validated @RequestBody ResetPasswordRequest request) {
         userService.resetPassword(request);
-        return ResponseEntity.ok(null);
+        return ActionResponse.success("密码修改成功");
     }
 
+    /**
+     * Delete a user.
+     *
+     * @param userId ID of the user to be deleted
+     * @return action response
+     */
     @PreAuthorize("hasAnyAuthority('system:user:write')")
     @DeleteMapping("/{userId:\\d+}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
+    public ActionResponse deleteUser(@PathVariable Long userId) {
         userService.deleteUser(userId);
-        return ResponseEntity.ok(null);
+        return ActionResponse.success("删除成功");
     }
 }

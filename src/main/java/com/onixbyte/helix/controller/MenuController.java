@@ -10,6 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * This controller provides entry points to manipulate menus.
+ *
+ * @author zihluwang
+ * @author siujamo
+ */
 @RestController
 @RequestMapping("/menus")
 public class MenuController {
@@ -21,6 +27,11 @@ public class MenuController {
         this.menuService = menuService;
     }
 
+    /**
+     * Get menu tree.
+     *
+     * @return available menu tree for the current user
+     */
     @GetMapping
     public List<TreeNode<Menu>> getMenuTree() {
         return menuService.getMenuTree();

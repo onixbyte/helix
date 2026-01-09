@@ -13,22 +13,10 @@ import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 /**
- * Global exception handler for the Helix application.
- * <p>
- * This controller advice provides centralised exception handling across all controllers in
- * the application. It intercepts exceptions thrown during request processing and converts them into
- * appropriate HTTP responses with standardised error formats.
- * <p>
- * The controller handles various types of exceptions including:
- * <ul>
- *   <li>Business logic exceptions ({@link BizException})</li>
- *   <li>Bean validation constraint violations ({@link ConstraintViolationException})</li>
- * </ul>
- * <p>
- * All error responses are formatted consistently using {@link BizExceptionResponse} to provide a
- * uniform API error structure for client applications.
+ * This controller advise will catch some business exception which produced when performing actions.
  *
  * @author zihluwang
+ * @author siujamo
  * @see BizException
  * @see BizExceptionResponse
  * @see RestControllerAdvice

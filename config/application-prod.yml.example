@@ -26,9 +26,9 @@ app:
     # 是否开启 S3 文件存储服务
     enabled: true
     # S3 服务端点（若使用非 AWS 提供的 S3 兼容 API，请添加该配置）
-#    endpoint: https://endpoint.s3.service
+    # endpoint: https://endpoint.s3.service
     # S3 服务区域（详情请见 S3 服务提供商）
-#    region: apac
+    # region: apac
     # 公开域名
     public-host: https://s3.my.app
     # 是否开启 Path Style
@@ -64,8 +64,8 @@ app:
     # 允许的请求头列表
     allowed-headers: Content-Type
     # 允许的请求方法列表（Ref org.springframework.http.HttpMethod）
-    # 2025.11.6注
-    #   由于 Spring 解析问题，在此处使用小写的情况下会导致在请求头中存在 Origin 时出现 Invalid CORS Request 的问题，请务必使用大写
+    #   Spring HttpMethod 并非 enum class，因此在此处使用小写请求方式会导致在请求头中存在 Origin 时出现 Invalid
+    #   CORS Request 的问题，请务必使用大写
     allowed-methods:
       - GET
       - POST
