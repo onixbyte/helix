@@ -4,6 +4,14 @@ import com.onixbyte.helix.enumeration.UserStatus;
 
 import java.time.LocalDateTime;
 
+/**
+ * Wrapper class for user query criteria.
+ * <p>
+ * This class encapsulates query parameters used for filtering and searching user entities. It is
+ * used in conjunction with mapper methods to provide flexible querying capabilities.
+ *
+ * @author zihluwang
+ */
 public class QueryUserWrapper {
     private Long departmentId;
     private String username;
