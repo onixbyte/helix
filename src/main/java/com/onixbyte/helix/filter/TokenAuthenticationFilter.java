@@ -8,6 +8,7 @@ import com.onixbyte.helix.security.authentication.UsernamePasswordAuthentication
 import com.onixbyte.helix.shared.TokenConstant;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jspecify.annotations.NonNull;
@@ -17,9 +18,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.WebUtils;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
@@ -46,18 +49,14 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        var token = request.getHeader(TokenConstant.TOKEN_HEADER_NAME);
+        var token = Optional.ofNullable(WebUtils.getCookie(request, TokenConstant.TOKEN_NAME))
+                .map(Cookie::getValue)
+                .orElse(null);
         if (Objects.isNull(token) || token.isBlank()) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        if (!token.startsWith(TokenConstant.TOKEN_PREFIX)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        token = token.substring(TokenConstant.TOKEN_PREFIX_LENGTH);
         try {
             var decodedToken = tokenClient.verifyToken(token);
             var username = decodedToken.getSubject();
