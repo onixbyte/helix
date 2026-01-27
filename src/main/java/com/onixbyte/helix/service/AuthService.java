@@ -1,11 +1,9 @@
 package com.onixbyte.helix.service;
 
-import com.onixbyte.helix.client.TokenClient;
 import com.onixbyte.helix.domain.entity.Setting;
 import com.onixbyte.helix.domain.entity.User;
 import com.onixbyte.helix.domain.web.request.LoginRequest;
 import com.onixbyte.helix.exception.BizException;
-import com.onixbyte.helix.manager.ApplicationManager;
 import com.onixbyte.helix.manager.CaptchaManager;
 import com.onixbyte.helix.manager.SecurityManager;
 import com.onixbyte.helix.manager.SettingManager;
@@ -31,8 +29,6 @@ public class AuthService {
     private final CaptchaManager captchaManager;
     private final AuthenticationManager authenticationManager;
     private final SettingManager settingManager;
-    private final ApplicationManager applicationManager;
-    private final TokenClient tokenClient;
     private final SecurityManager securityManager;
 
     @Autowired
@@ -40,13 +36,11 @@ public class AuthService {
             CaptchaManager captchaManager,
             AuthenticationManager authenticationManager,
             SettingManager settingManager,
-            ApplicationManager applicationManager,
-            TokenClient tokenClient, SecurityManager securityManager) {
+            SecurityManager securityManager
+    ) {
         this.captchaManager = captchaManager;
         this.authenticationManager = authenticationManager;
         this.settingManager = settingManager;
-        this.applicationManager = applicationManager;
-        this.tokenClient = tokenClient;
         this.securityManager = securityManager;
     }
 
@@ -101,7 +95,7 @@ public class AuthService {
     public ResponseCookie buildCookie(String cookieName, String token) {
         var cookieBuilder = ResponseCookie.from(cookieName, token)
                 .httpOnly(true)
-                .maxAge(securityManager.getTokenValidity())
+                .maxAge(securityManager.getTokenValidDuration())
                 .path("/");
 
         return cookieBuilder.build();
