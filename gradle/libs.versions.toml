@@ -1,7 +1,7 @@
 [versions]
 jspecifyVersion = "1.0.0"
 javaJwtVersion = "4.5.0"
-postgresDriverVersion = "42.7.7"
+postgresDriverVersion = "42.7.9"
 h2Version = "2.2.224"
 springBootVersion = "3.5.4"
 springSecurityVersion = "6.5.2"
