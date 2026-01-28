@@ -12,7 +12,7 @@ COPY gradle/libs.versions.toml gradle/libs.versions.toml
 RUN chmod +x gradlew && ./gradlew dependencies --no-daemon
 
 COPY src src
-RUN ./gradlew -PartefactVersion=${ARTEFACT_VERSION} bootJar --no-daemon
+RUN ./gradlew bootJar --no-daemon -PartefactVersion=${ARTEFACT_VERSION}
 
 FROM amazoncorretto:21-alpine
 
