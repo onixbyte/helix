@@ -5,6 +5,14 @@ spring:
     type: redis
     redis:
       time-to-live: PT2H
+  data:
+    redis:
+      repositories:
+        # Disable redis repositories
+        enabled: false
+  jta:
+    # Disable JTA support
+    enabled: false
   jpa:
     properties:
       hibernate:
@@ -19,11 +27,7 @@ spring:
     hikari:
       minimum-idle: 1
       maximum-pool-size: 10
-  data:
-    redis:
-      repositories:
-        # Disable redis repositories
-        enabled: false
+
 
 mybatis:
   configuration:
