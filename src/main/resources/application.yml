@@ -4,7 +4,7 @@ spring:
   cache:
     type: redis
     redis:
-      time-to-live: PT1H30M
+      time-to-live: PT2H
   jpa:
     properties:
       hibernate:
@@ -19,6 +19,11 @@ spring:
     hikari:
       minimum-idle: 1
       maximum-pool-size: 10
+  data:
+    redis:
+      repositories:
+        # Disable redis repositories
+        enabled: false
 
 mybatis:
   configuration:
@@ -27,3 +32,8 @@ mybatis:
   type-aliases-package: com.onixbyte.helix.domain.entity
   type-handlers-package: com.onixbyte.helix.extension.mybatis.handler
   mapper-locations: classpath:/mapper/*.xml
+
+logging:
+  level:
+    org.hibernate:
+      orm.connections.pooling: off

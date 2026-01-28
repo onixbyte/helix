@@ -1,20 +1,16 @@
 package com.onixbyte.helix;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cache.annotation.EnableCaching;
 
 /**
  * Application entrance.
  *
  * @author zihluwang
  * @see SpringBootApplication
- * @see EnableCaching
  * @see SpringApplication
  * @since 1.0.0
  */
-@EnableCaching
 @SpringBootApplication
 public class HelixApplication {
 
