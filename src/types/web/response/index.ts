@@ -14,9 +14,11 @@ export interface PageResponse<T> {
   pageable: Pageable
 }
 
-export interface UserAuthResponse {
-  user: User
-  accessToken: string
+export interface UserAuthResponse extends User {
+}
+
+export interface MfaAuthResponse {
+  mfaToken: string
 }
 
 export interface UserDetailResponse extends User {

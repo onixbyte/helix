@@ -1,6 +1,6 @@
 import webClient from "@/client/web-client"
 import { HttpStatus } from "@/constant"
-import type { CaptchaResponse, UserAuthResponse } from "@/types/web/response"
+import type { CaptchaResponse, MfaAuthResponse, UserAuthResponse } from "@/types/web/response"
 import type { UsernamePasswordLoginRequest } from "@/types/web/request"
 
 /**
@@ -21,8 +21,8 @@ async function getCaptcha(): Promise<CaptchaResponse | null> {
  */
 async function usernamePasswordLogin(
   request: UsernamePasswordLoginRequest
-): Promise<UserAuthResponse | null> {
-  const { data } = await webClient.post<UserAuthResponse>("/auth/login", request)
+): Promise<UserAuthResponse | MfaAuthResponse | null> {
+  const { data } = await webClient.post<UserAuthResponse | MfaAuthResponse>("/auth/login", request)
   return data
 }
 

@@ -30,6 +30,7 @@ export interface MenuItem {
   parentId: number | null
   code: string
   sort: number
+  path: string | null
   isExternalLink: boolean
   isVisible: boolean
   status: Status

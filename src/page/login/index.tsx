@@ -1,9 +1,10 @@
 import { type MouseEvent, useCallback, useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router"
-import { Form, Input, Button, Card, message, Divider } from "antd"
+import { Form, Input, Button, Card, message, Divider, App } from "antd"
 import dayjs from "dayjs"
 import type { AxiosError } from "axios"
-// import { useMsal } from "@azure/msal-react"
+import { GithubFilled } from "@ant-design/icons"
+import { useMsal } from "@azure/msal-react"
 import { AuthApi } from "@/api"
 import { useAppDispatch, useAppSelector } from "@/store"
 import { loginSuccess, updateRegistrationEnabled } from "@/store/auth-slice"
@@ -18,8 +19,6 @@ import {
   DiscordFilled,
   EmailFilled,
 } from "@/components/icon"
-
-import { GithubFilled } from "@ant-design/icons"
 import { fetchRegisterEnabled } from "@/api/auth"
 import type { UsernamePasswordLoginRequest } from "@/types/web/request"
 import type { CaptchaResponse, GeneralErrorResponse } from "@/types/web/response"
@@ -29,9 +28,7 @@ export default function LoginPage() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  // const msalContext = useMsal()
-
-  const [messageApi, contextHolder] = message.useMessage()
+  const { message } = App.useApp()
   const [form] = Form.useForm<UsernamePasswordLoginRequest>()
 
   // const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -77,28 +74,33 @@ export default function LoginPage() {
         console.log("Login values:", values)
 
         const loginResponse = await AuthApi.usernamePasswordLogin(values)
-        if (loginResponse) {
+
+        if (loginResponse == null) {
+          message.error("登录失败：服务器响应异常。")
+          return
+        }
+
+        if ('mfaToken' in loginResponse) {
+
+        } else {
           dispatch(
             loginSuccess({
-              user: loginResponse.user,
-              token: loginResponse.accessToken,
+              user: loginResponse
             })
           )
-          messageApi.success("登录成功", dayjs.duration({ seconds: 3 }).asSeconds())
+          message.success("登录成功", dayjs.duration({ seconds: 3 }).asSeconds())
           await navigate("/")
-        } else {
-          messageApi.error("登录失败：服务器响应异常。")
         }
       } catch (errorInfo: unknown) {
         const error = errorInfo as AxiosError<GeneralErrorResponse>
         console.log(error)
-        messageApi.error(
+        message.error(
           error.response?.data.message ?? "登录失败，请稍后再试",
           dayjs.duration({ seconds: 3 }).asSeconds()
         )
       }
     },
-    [dispatch, navigate, messageApi]
+    [dispatch, navigate]
   )
 
   /**
@@ -190,9 +192,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      {contextHolder}
-
+    <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       {/* 背景装饰元素 */}
       <div className="absolute top-0 left-0 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70"></div>
       <div className="absolute top-0 right-0 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-70"></div>
@@ -275,7 +275,7 @@ export default function LoginPage() {
               htmlType="submit"
               block
               size="large"
-              className="h-12 rounded-lg font-semibold text-base bg-gradient-to-r from-blue-500 to-purple-600 border-0 hover:from-blue-600 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl">
+              className="h-12 rounded-lg font-semibold text-base bg-linear-to-r from-blue-500 to-purple-600 border-0 hover:from-blue-600 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl">
               登录
             </Button>
           </Form.Item>
