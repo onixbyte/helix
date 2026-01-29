@@ -335,9 +335,30 @@ CREATE TABLE menus
 
 CREATE UNIQUE INDEX menus_code_uindex ON menus (code);
 
-INSERT INTO menus(id, name, parent_id, code, sort, path, is_external_link, is_visible, status,
-                  authority_code, icon, created_at, updated_at)
-VALUES (1, '系统管理', NULL, 'system-manage', 99, NULL, FALSE, TRUE, 'ACTIVE'::STATUS, NULL, NULL,
-        NOW(), NOW()),
-       (2, '用户管理', 1, 'user-manage', 1, '/users', FALSE, TRUE, 'ACTIVE'::STATUS,
-        'system:user:write', NULL, NOW(), NOW());
+WITH system_menu AS (
+    INSERT INTO menus (name, parent_id, code, sort, path, is_external_link, is_visible, status,
+                       authority_code, icon, created_at, updated_at)
+        VALUES ('系统管理', NULL, 'system-mgmt', 99, NULL, FALSE, TRUE, 'ACTIVE'::STATUS, NULL,
+                NULL, NOW(), NOW())
+        RETURNING id)
+INSERT
+INTO menus(name, parent_id, code, sort, path, is_external_link, is_visible, status,
+           authority_code, icon, created_at, updated_at)
+SELECT '用户管理',
+       system_menu.id,
+       'user-mgmt',
+       1,
+       '/users',
+       FALSE,
+       TRUE,
+       'ACTIVE'::STATUS,
+       'system:user:write',
+       NULL,
+       NOW(),
+       NOW()
+FROM system_menu;
+
+INSERT INTO menus (name, parent_id, code, sort, path, is_external_link, is_visible, status,
+                   authority_code, icon, created_at, updated_at)
+VALUES ('Helix 官网', null, 'helix-official-site', 100, 'https://helix.onixbyte.com', true, true,
+        'ACTIVE'::STATUS, null, null, NOW(), NOW());
