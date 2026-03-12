@@ -1,6 +1,6 @@
 [versions]
 jspecifyVersion = "1.0.0"
-javaJwtVersion = "4.5.0"
+javaJwtVersion = "4.5.1"
 postgresDriverVersion = "42.7.9"
 h2Version = "2.2.224"
 springBootVersion = "3.5.4"
@@ -50,6 +50,7 @@ spring-boot-starter-webFlux = { group = "org.springframework.boot", name = "spri
 spring-boot-starter-validation = { group = "org.springframework.boot", name = "spring-boot-starter-validation" }
 spring-boot-starter-cache = { group = "org.springframework.boot", name = "spring-boot-starter-cache" }
 spring-boot-configurationProcessor = { group = "org.springframework.boot", name = "spring-boot-configuration-processor" }
+spring-boot-actuator = { group = "org.springframework.boot", name = "spring-boot-starter-actuator" }
 
 # Security & Auth
 spring-boot-starter-security = { group = "org.springframework.boot", name = "spring-boot-starter-security", version.ref = "springBootVersion" }

@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.onixbyte.regions)
     implementation(libs.jwt.core)
     implementation(libs.spring.boot.configurationProcessor)
+    implementation(libs.spring.boot.actuator)
     implementation(libs.spring.boot.starter.web)
     implementation(libs.spring.boot.starter.webFlux)
     implementation(libs.spring.boot.starter.validation)
