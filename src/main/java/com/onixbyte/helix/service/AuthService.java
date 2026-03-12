@@ -105,10 +105,22 @@ public class AuthService {
                 .build();
     }
 
-    protected ResponseCookie.ResponseCookieBuilder buildCookieInternal(String cookieName, String value, Duration validDuration) {
+    /**
+     * Creates a response cookie builder with specified name, value and valid duration.
+     *
+     * @param name          name of the cookie
+     * @param value         value of the cookie
+     * @param validDuration valid duration of the cookie
+     * @return cookie builder
+     */
+    protected ResponseCookie.ResponseCookieBuilder buildCookieInternal(
+            String name,
+            String value,
+            Duration validDuration
+    ) {
         var applicationMode = applicationManager.getApplicationMode();
 
-        var cookieBuilder = ResponseCookie.from(cookieName, value)
+        var cookieBuilder = ResponseCookie.from(name, value)
                 .maxAge(securityManager.getTokenValidDuration())
                 .secure(true)
                 .maxAge(validDuration)
