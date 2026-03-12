@@ -3,7 +3,6 @@ package com.onixbyte.helix.service;
 import com.onixbyte.helix.domain.entity.Setting;
 import com.onixbyte.helix.domain.entity.User;
 import com.onixbyte.helix.domain.web.request.LoginRequest;
-import com.onixbyte.helix.enumeration.ApplicationMode;
 import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.manager.ApplicationManager;
 import com.onixbyte.helix.manager.CaptchaManager;
@@ -104,12 +103,8 @@ public class AuthService {
 
         var applicationMode = applicationManager.getApplicationMode();
         switch (applicationMode) {
-            case PRODUCTION -> {
-                cookieBuilder.httpOnly(true);
-            }
-            case DEVELOPMENT -> {
-                cookieBuilder.sameSite("NONE");
-            }
+            case PRODUCTION -> cookieBuilder.httpOnly(true);
+            case DEVELOPMENT -> cookieBuilder.sameSite("NONE");
             case null, default -> {
             }
         }

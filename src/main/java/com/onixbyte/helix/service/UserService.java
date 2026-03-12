@@ -12,14 +12,11 @@ import com.onixbyte.helix.domain.web.request.ResetPasswordRequest;
 import com.onixbyte.helix.domain.web.request.EditUserRequest;
 import com.onixbyte.helix.domain.web.response.UserDetailResponse;
 import com.onixbyte.helix.manager.*;
-import com.onixbyte.helix.mapper.UserCredentialMapper;
-import com.onixbyte.helix.repository.UserCredentialRepository;
 import com.onixbyte.identitygenerator.IdentityGenerator;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,12 +30,9 @@ public class UserService {
     private final IdentityGenerator<Long> userIdentityGenerator;
     private final RoleManager roleManager;
     private final UserRoleManager userRoleManager;
-    private final PasswordEncoder passwordEncoder;
     private final ApplicationManager applicationManager;
     private final DepartmentManager departmentManager;
     private final PositionManager positionManager;
-    private final UserCredentialRepository userCredentialRepository;
-    private final UserCredentialMapper userCredentialMapper;
 
     @Autowired
     public UserService(
@@ -46,21 +40,17 @@ public class UserService {
             IdentityGenerator<Long> userIdentityGenerator,
             RoleManager roleManager,
             UserRoleManager userRoleManager,
-            PasswordEncoder passwordEncoder,
             ApplicationManager applicationManager,
             DepartmentManager departmentManager,
-            PositionManager positionManager,
-            UserCredentialRepository userCredentialRepository, UserCredentialMapper userCredentialMapper) {
+            PositionManager positionManager
+    ) {
         this.userManager = userManager;
         this.userIdentityGenerator = userIdentityGenerator;
         this.roleManager = roleManager;
         this.userRoleManager = userRoleManager;
-        this.passwordEncoder = passwordEncoder;
         this.applicationManager = applicationManager;
         this.departmentManager = departmentManager;
         this.positionManager = positionManager;
-        this.userCredentialRepository = userCredentialRepository;
-        this.userCredentialMapper = userCredentialMapper;
     }
 
     public Page<UserDetailResponse> queryUserDetailsPage(Pageable pageable, QueryUserRequest request) {

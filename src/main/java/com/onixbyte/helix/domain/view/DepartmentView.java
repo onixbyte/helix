@@ -209,7 +209,6 @@ public class DepartmentView {
         private Long id;
         private String name;
         private Long parentId;
-        private String treePath;
         private Integer sort;
         private Status status;
         private LocalDateTime createdAt;
@@ -230,11 +229,6 @@ public class DepartmentView {
 
         public DepartmentViewBuilder parentId(Long parentId) {
             this.parentId = parentId;
-            return this;
-        }
-
-        public DepartmentViewBuilder treePath(String treePath) {
-            this.treePath = treePath;
             return this;
         }
 

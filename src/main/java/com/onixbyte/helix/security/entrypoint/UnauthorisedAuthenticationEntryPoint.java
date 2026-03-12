@@ -2,7 +2,6 @@ package com.onixbyte.helix.security.entrypoint;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onixbyte.helix.domain.web.response.BizExceptionResponse;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
