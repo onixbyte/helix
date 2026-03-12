@@ -127,8 +127,11 @@ public class AuthService {
                 .path("/");
 
         return switch (applicationMode) {
-            case PRODUCTION -> cookieBuilder.httpOnly(true);
-            case DEVELOPMENT -> cookieBuilder.sameSite("NONE");
+            case PRODUCTION -> cookieBuilder
+                    .httpOnly(true)
+                    .sameSite("LAX");
+            case DEVELOPMENT -> cookieBuilder
+                    .sameSite("NONE");
             case null -> cookieBuilder;
         };
     }
