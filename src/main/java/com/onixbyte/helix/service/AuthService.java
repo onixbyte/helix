@@ -95,29 +95,29 @@ public class AuthService {
                 .orElse(false);
     }
 
-    public ResponseCookie buildCookie(String cookieName, String token) {
-        var cookieBuilder = ResponseCookie.from(cookieName, token)
-                .maxAge(securityManager.getTokenValidDuration())
-                .secure(true)
-                .path("/");
-
-        var applicationMode = applicationManager.getApplicationMode();
-        switch (applicationMode) {
-            case PRODUCTION -> cookieBuilder.httpOnly(true);
-            case DEVELOPMENT -> cookieBuilder.sameSite("NONE");
-            case null, default -> {
-            }
-        }
-
-        return cookieBuilder.build();
+    public ResponseCookie buildCookie(String cookieName, String value) {
+        return buildCookieInternal(cookieName, value, securityManager.getTokenValidDuration())
+                .build();
     }
 
-    public ResponseCookie buildCookie(String cookieName, String token, Duration validDuration) {
-        var cookieBuilder = ResponseCookie.from(cookieName, token)
-                .httpOnly(true)
+    public ResponseCookie buildCookie(String cookieName, String value, Duration validDuration) {
+        return buildCookieInternal(cookieName, value, validDuration)
+                .build();
+    }
+
+    protected ResponseCookie.ResponseCookieBuilder buildCookieInternal(String cookieName, String value, Duration validDuration) {
+        var applicationMode = applicationManager.getApplicationMode();
+
+        var cookieBuilder = ResponseCookie.from(cookieName, value)
+                .maxAge(securityManager.getTokenValidDuration())
+                .secure(true)
                 .maxAge(validDuration)
                 .path("/");
 
-        return cookieBuilder.build();
+        return switch (applicationMode) {
+            case PRODUCTION -> cookieBuilder.httpOnly(true);
+            case DEVELOPMENT -> cookieBuilder.sameSite("NONE");
+            case null -> cookieBuilder;
+        };
     }
 }
