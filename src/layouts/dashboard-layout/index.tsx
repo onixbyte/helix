@@ -38,7 +38,7 @@ function transformMenuData(nodes: TreeNode<MenuItem>[]): AntMenuItem[] {
 
         if (item.path) {
           if (item.isExternalLink) {
-            menuItem.extra = <a href={item.path} target="_blank"/>
+            menuItem.extra = <a href={item.path} target="_blank" rel="noopener noreferrer" />
           } else {
             menuItem.extra = <Link to={item.path} />
           }
