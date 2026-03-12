@@ -3,7 +3,9 @@ package com.onixbyte.helix.service;
 import com.onixbyte.helix.domain.entity.Setting;
 import com.onixbyte.helix.domain.entity.User;
 import com.onixbyte.helix.domain.web.request.LoginRequest;
+import com.onixbyte.helix.enumeration.ApplicationMode;
 import com.onixbyte.helix.exception.BizException;
+import com.onixbyte.helix.manager.ApplicationManager;
 import com.onixbyte.helix.manager.CaptchaManager;
 import com.onixbyte.helix.manager.SecurityManager;
 import com.onixbyte.helix.manager.SettingManager;
@@ -30,18 +32,20 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final SettingManager settingManager;
     private final SecurityManager securityManager;
+    private final ApplicationManager applicationManager;
 
     @Autowired
     public AuthService(
             CaptchaManager captchaManager,
             AuthenticationManager authenticationManager,
             SettingManager settingManager,
-            SecurityManager securityManager
-    ) {
+            SecurityManager securityManager,
+            ApplicationManager applicationManager) {
         this.captchaManager = captchaManager;
         this.authenticationManager = authenticationManager;
         this.settingManager = settingManager;
         this.securityManager = securityManager;
+        this.applicationManager = applicationManager;
     }
 
     /**
@@ -94,9 +98,21 @@ public class AuthService {
 
     public ResponseCookie buildCookie(String cookieName, String token) {
         var cookieBuilder = ResponseCookie.from(cookieName, token)
-                .httpOnly(true)
                 .maxAge(securityManager.getTokenValidDuration())
+                .secure(true)
                 .path("/");
+
+        var applicationMode = applicationManager.getApplicationMode();
+        switch (applicationMode) {
+            case PRODUCTION -> {
+                cookieBuilder.httpOnly(true);
+            }
+            case DEVELOPMENT -> {
+                cookieBuilder.sameSite("NONE");
+            }
+            case null, default -> {
+            }
+        }
 
         return cookieBuilder.build();
     }

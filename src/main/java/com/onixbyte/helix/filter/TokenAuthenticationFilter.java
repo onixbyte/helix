@@ -67,8 +67,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                     .map((authority) -> (GrantedAuthority) authority::getCode)
                     .toList();
 
-            user.setPassword(null);
-
             var authentication = UsernamePasswordAuthentication.authenticated(user, authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             filterChain.doFilter(request, response);

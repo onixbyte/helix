@@ -1,7 +1,7 @@
 package com.onixbyte.helix.domain.entity;
 
-import com.onixbyte.helix.enumeration.IdentityProvider;
-import com.onixbyte.helix.domain.entity.embeddable.UserIdentityId;
+import com.onixbyte.helix.enumeration.CredentialProvider;
+import com.onixbyte.helix.domain.entity.embeddable.UserCredentialId;
 import jakarta.persistence.*; // 导入 Jakarta Persistence API
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -19,14 +19,14 @@ import java.util.Objects;
  * @since 1.0
  */
 @Entity
-@Table(name = "user_identities")
-public class UserIdentity {
+@Table(name = "user_credentials")
+public class UserCredential {
 
     /**
      * The composite primary key for the entity, composed of userId, provider, and externalId.
      */
     @EmbeddedId
-    private UserIdentityId id;
+    private UserCredentialId id;
 
     /**
      * The timestamp when this identity mapping was created.
@@ -53,7 +53,7 @@ public class UserIdentity {
      * @param userId the user ID
      */
     public void setUserId(Long userId) {
-        if (this.id == null) this.id = new UserIdentityId();
+        if (this.id == null) this.id = new UserCredentialId();
         this.id.setUserId(userId);
     }
 
@@ -61,7 +61,7 @@ public class UserIdentity {
      * Gets the external identity provider from the composite primary key.
      * @return the provider
      */
-    public IdentityProvider getProvider() {
+    public CredentialProvider getProvider() {
         return this.id != null ? this.id.getProvider() : null;
     }
 
@@ -69,8 +69,8 @@ public class UserIdentity {
      * Sets the external identity provider within the composite primary key.
      * @param provider the provider
      */
-    public void setProvider(IdentityProvider provider) {
-        if (this.id == null) this.id = new UserIdentityId();
+    public void setProvider(CredentialProvider provider) {
+        if (this.id == null) this.id = new UserCredentialId();
         this.id.setProvider(provider);
     }
 
@@ -78,17 +78,17 @@ public class UserIdentity {
      * Gets the unique identifier from the external provider from the composite primary key.
      * @return the external ID
      */
-    public String getExternalId() {
-        return this.id != null ? this.id.getExternalId() : null;
+    public String getCredential() {
+        return this.id != null ? this.id.getCredential() : null;
     }
 
     /**
      * Sets the unique identifier from the external provider within the composite primary key.
-     * @param externalId the external ID
+     * @param credential the external ID
      */
-    public void setExternalId(String externalId) {
-        if (this.id == null) this.id = new UserIdentityId();
-        this.id.setExternalId(externalId);
+    public void setCredential(String credential) {
+        if (this.id == null) this.id = new UserCredentialId();
+        this.id.setCredential(credential);
     }
 
     public LocalDateTime getCreatedAt() {
@@ -109,12 +109,12 @@ public class UserIdentity {
 
     // --- Constructors (Adjusted for EmbeddedId) ---
 
-    public UserIdentity() {
-        this.id = new UserIdentityId(); // Initialize ID object for safety
+    public UserCredential() {
+        this.id = new UserCredentialId(); // Initialize ID object for safety
     }
 
-    public UserIdentity(Long userId, IdentityProvider provider, String externalId, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = new UserIdentityId(userId, provider, externalId);
+    public UserCredential(Long userId, CredentialProvider provider, String externalId, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = new UserCredentialId(userId, provider, externalId);
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -125,7 +125,7 @@ public class UserIdentity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserIdentity that = (UserIdentity) o;
+        UserCredential that = (UserCredential) o;
         return Objects.equals(id, that.id); // Entity equality based on primary key
     }
 
@@ -139,7 +139,7 @@ public class UserIdentity {
         return "UserIdentity{" +
                 "userId=" + getUserId() +
                 ", provider=" + getProvider() +
-                ", externalId='" + getExternalId() + '\'' +
+                ", externalId='" + getCredential() + '\'' +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
@@ -162,7 +162,7 @@ public class UserIdentity {
      */
     public static class UserIdentityBuilder {
         private Long userId;
-        private IdentityProvider provider;
+        private CredentialProvider provider;
         private String externalId;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
@@ -175,7 +175,7 @@ public class UserIdentity {
             return this;
         }
 
-        public UserIdentityBuilder provider(IdentityProvider provider) {
+        public UserIdentityBuilder provider(CredentialProvider provider) {
             this.provider = provider;
             return this;
         }
@@ -200,8 +200,8 @@ public class UserIdentity {
          *
          * @return a new UserIdentity instance
          */
-        public UserIdentity build() {
-            return new UserIdentity(userId, provider, externalId, createdAt, updatedAt);
+        public UserCredential build() {
+            return new UserCredential(userId, provider, externalId, createdAt, updatedAt);
         }
     }
 

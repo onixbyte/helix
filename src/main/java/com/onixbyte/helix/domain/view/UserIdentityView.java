@@ -1,7 +1,7 @@
 package com.onixbyte.helix.domain.view;
 
-import com.onixbyte.helix.enumeration.IdentityProvider;
-import com.onixbyte.helix.domain.entity.UserIdentity;
+import com.onixbyte.helix.enumeration.CredentialProvider;
+import com.onixbyte.helix.domain.entity.UserCredential;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -26,7 +26,7 @@ public class UserIdentityView {
     /**
      * The external identity provider.
      */
-    private IdentityProvider provider;
+    private CredentialProvider provider;
 
     /**
      * The unique identifier from the external provider.
@@ -52,8 +52,8 @@ public class UserIdentityView {
     /**
      * Constructor with all fields.
      */
-    public UserIdentityView(Long userId, IdentityProvider provider, String externalId,
-                           LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public UserIdentityView(Long userId, CredentialProvider provider, String externalId,
+                            LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.userId = userId;
         this.provider = provider;
         this.externalId = externalId;
@@ -64,19 +64,19 @@ public class UserIdentityView {
     /**
      * Creates a UserIdentityView from a UserIdentity entity.
      *
-     * @param userIdentity the UserIdentity entity
+     * @param userCredential the UserIdentity entity
      * @return the UserIdentityView object
      */
-    public static UserIdentityView fromEntity(UserIdentity userIdentity) {
-        if (userIdentity == null) {
+    public static UserIdentityView fromEntity(UserCredential userCredential) {
+        if (userCredential == null) {
             return null;
         }
         return new UserIdentityView(
-                userIdentity.getUserId(),
-                userIdentity.getProvider(),
-                userIdentity.getExternalId(),
-                userIdentity.getCreatedAt(),
-                userIdentity.getUpdatedAt()
+                userCredential.getUserId(),
+                userCredential.getProvider(),
+                userCredential.getCredential(),
+                userCredential.getCreatedAt(),
+                userCredential.getUpdatedAt()
         );
     }
 
@@ -88,11 +88,11 @@ public class UserIdentityView {
         this.userId = userId;
     }
 
-    public IdentityProvider getProvider() {
+    public CredentialProvider getProvider() {
         return provider;
     }
 
-    public void setProvider(IdentityProvider provider) {
+    public void setProvider(CredentialProvider provider) {
         this.provider = provider;
     }
 
@@ -162,7 +162,7 @@ public class UserIdentityView {
      */
     public static class UserIdentityViewBuilder {
         private Long userId;
-        private IdentityProvider provider;
+        private CredentialProvider provider;
         private String externalId;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
@@ -175,7 +175,7 @@ public class UserIdentityView {
             return this;
         }
 
-        public UserIdentityViewBuilder provider(IdentityProvider provider) {
+        public UserIdentityViewBuilder provider(CredentialProvider provider) {
             this.provider = provider;
             return this;
         }

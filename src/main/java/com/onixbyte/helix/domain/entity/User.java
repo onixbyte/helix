@@ -49,12 +49,6 @@ public class User {
     private String username;
 
     /**
-     * The encrypted password for user authentication.
-     */
-    @Column
-    private String password;
-
-    /**
      * The user's complete full name.
      */
     @Column(nullable = false, length = 128)
@@ -124,10 +118,9 @@ public class User {
     public User() {
     }
 
-    public User(Long id, String username, String password, String fullName, String email, String regionAbbreviation, String phoneNumber, String avatarUrl, UserStatus status, Long departmentId, Long positionId, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public User(Long id, String username, String fullName, String email, String regionAbbreviation, String phoneNumber, String avatarUrl, UserStatus status, Long departmentId, Long positionId, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.username = username;
-        this.password = password;
         this.fullName = fullName;
         this.email = email;
         this.regionAbbreviation = regionAbbreviation;
@@ -174,24 +167,6 @@ public class User {
      */
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    /**
-     * Gets the encrypted password.
-     *
-     * @return the encrypted password
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * Sets the encrypted password.
-     *
-     * @param password the encrypted password (never plain text)
-     */
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getFullName() {
@@ -337,7 +312,6 @@ public class User {
     public static class UserBuilder {
         private Long id;
         private String username;
-        private String password;
         private String fullName;
         private String email;
         private String regionAbbreviation;
@@ -359,11 +333,6 @@ public class User {
 
         public UserBuilder username(String username) {
             this.username = username;
-            return this;
-        }
-
-        public UserBuilder password(String password) {
-            this.password = password;
             return this;
         }
 
@@ -423,7 +392,7 @@ public class User {
          * @return a new User instance
          */
         public User build() {
-            return new User(id, username, password, fullName, email, regionAbbreviation, phoneNumber, avatarUrl, status, departmentId, positionId, createdAt, updatedAt);
+            return new User(id, username, fullName, email, regionAbbreviation, phoneNumber, avatarUrl, status, departmentId, positionId, createdAt, updatedAt);
         }
     }
 

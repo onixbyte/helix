@@ -1,13 +1,17 @@
 package com.onixbyte.helix.security.provider;
 
 import com.onixbyte.helix.domain.entity.Authority;
+import com.onixbyte.helix.domain.entity.UserCredential;
+import com.onixbyte.helix.enumeration.CredentialProvider;
 import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.manager.AuthorityManager;
 import com.onixbyte.helix.manager.UserManager;
+import com.onixbyte.helix.repository.UserCredentialRepository;
 import com.onixbyte.helix.security.authentication.UsernamePasswordAuthentication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -24,16 +28,19 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
     private final UserManager userManager;
     private final PasswordEncoder passwordEncoder;
     private final AuthorityManager authorityManager;
+    private final UserCredentialRepository userCredentialRepository;
 
     @Autowired
     public UsernamePasswordAuthenticationProvider(
             UserManager userManager,
             PasswordEncoder passwordEncoder,
-            AuthorityManager authorityManager
+            AuthorityManager authorityManager,
+            UserCredentialRepository userCredentialRepository
     ) {
         this.userManager = userManager;
         this.passwordEncoder = passwordEncoder;
         this.authorityManager = authorityManager;
+        this.userCredentialRepository = userCredentialRepository;
     }
 
     @Override
@@ -49,14 +56,20 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
             throw new BizException(HttpStatus.UNAUTHORIZED, "用户名或密码错误。");
         }
 
+        // get user credentials from database
+        var userCredentials = userCredentialRepository.findOne(Example.of(UserCredential.builder()
+                        .provider(CredentialProvider.LOCAL)
+                        .userId(user.getId())
+                        .build()))
+                .orElseThrow(() -> new BizException(HttpStatus.UNAUTHORIZED, "您还没有配置密码，请使用第三方账号登录"));
+
         // validate password
-        if (!passwordEncoder.matches(usernamePasswordAuthentication.getCredentials(), user.getPassword())) {
+        if (!passwordEncoder.matches(usernamePasswordAuthentication.getCredentials(), userCredentials.getCredential())) {
             log.error("User {} is trying to authenticate but password is incorrect.", usernamePasswordAuthentication.getPrincipal());
             throw new BizException(HttpStatus.UNAUTHORIZED, "用户名或密码错误。");
         }
 
         // erase credentials
-        user.setPassword(null);
         usernamePasswordAuthentication.eraseCredentials();
 
         // get authorities

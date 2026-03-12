@@ -1,6 +1,8 @@
 package com.onixbyte.helix.manager;
 
 import com.onixbyte.helix.common.regex.Patterns;
+import com.onixbyte.helix.domain.web.request.ResetPasswordRequest;
+import com.onixbyte.helix.mapper.UserCredentialMapper;
 import com.onixbyte.helix.shared.CacheName;
 import com.onixbyte.helix.domain.database.query.wrapper.QueryUserWrapper;
 import com.onixbyte.helix.domain.entity.User;
@@ -30,16 +32,19 @@ public class UserManager {
     private final UserMapper userMapper;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserCredentialMapper userCredentialMapper;
 
     @Autowired
     public UserManager(
             UserMapper userMapper,
             UserRepository userRepository,
-            PasswordEncoder passwordEncoder
+            PasswordEncoder passwordEncoder,
+            UserCredentialMapper userCredentialMapper
     ) {
         this.userMapper = userMapper;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.userCredentialMapper = userCredentialMapper;
     }
 
     /**
@@ -87,11 +92,6 @@ public class UserManager {
         var userToUpdate = userRepository.findById(user.getId())
                 .orElseThrow(() -> new BizException(HttpStatus.BAD_REQUEST, "找不到 ID 为" + user.getId() + "的用户信息"));
 
-        Optional.ofNullable(user.getPassword())
-                .filter(StringUtils::isNotBlank)
-                .map(passwordEncoder::encode)
-                .ifPresent(userToUpdate::setPassword);
-
         Optional.ofNullable(user.getFullName())
                 .filter(StringUtils::isNotBlank)
                 .ifPresent(userToUpdate::setFullName);
@@ -125,5 +125,13 @@ public class UserManager {
                 .ifPresent(userToUpdate::setPositionId);
 
         return userToUpdate;
+    }
+
+    @Transactional(rollbackFor = Throwable.class)
+    public void updateUserPassword(ResetPasswordRequest request) {
+        userCredentialMapper.updateUserCredential(
+                request.id(),
+                passwordEncoder.encode(request.password())
+        );
     }
 }

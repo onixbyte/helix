@@ -1,6 +1,6 @@
 package com.onixbyte.helix.domain.entity.embeddable;
 
-import com.onixbyte.helix.enumeration.IdentityProvider;
+import com.onixbyte.helix.enumeration.CredentialProvider;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Enumerated;
@@ -18,7 +18,7 @@ import java.util.Objects;
  * from that provider.
  */
 @Embeddable
-public class UserIdentityId implements Serializable {
+public class UserCredentialId implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -37,23 +37,23 @@ public class UserIdentityId implements Serializable {
     @Column(nullable = false)
     @Enumerated
     @JdbcType(PostgreSQLEnumJdbcType.class)
-    private IdentityProvider provider;
+    private CredentialProvider provider;
 
     /**
      * The unique identifier from the external provider, corresponding to the 'external_id' column.
      */
     @Column(nullable = false)
-    private String externalId;
+    private String credential;
 
     // --- Constructors ---
 
-    public UserIdentityId() {
+    public UserCredentialId() {
     }
 
-    public UserIdentityId(Long userId, IdentityProvider provider, String externalId) {
+    public UserCredentialId(Long userId, CredentialProvider provider, String credential) {
         this.userId = userId;
         this.provider = provider;
-        this.externalId = externalId;
+        this.credential = credential;
     }
 
     // --- Getters and Setters (Omitted for brevity, but should exist) ---
@@ -65,32 +65,32 @@ public class UserIdentityId implements Serializable {
         this.userId = userId;
     }
 
-    public IdentityProvider getProvider() {
+    public CredentialProvider getProvider() {
         return provider;
     }
 
-    public void setProvider(IdentityProvider provider) {
+    public void setProvider(CredentialProvider provider) {
         this.provider = provider;
     }
 
-    public String getExternalId() {
-        return externalId;
+    public String getCredential() {
+        return credential;
     }
 
-    public void setExternalId(String externalId) {
-        this.externalId = externalId;
+    public void setCredential(String credential) {
+        this.credential = credential;
     }
 
     // --- equals and hashCode (REQUIRED for composite keys) ---
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        UserIdentityId that = (UserIdentityId) o;
-        return Objects.equals(userId, that.userId) && provider == that.provider && Objects.equals(externalId, that.externalId);
+        UserCredentialId that = (UserCredentialId) o;
+        return Objects.equals(userId, that.userId) && provider == that.provider && Objects.equals(credential, that.credential);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, provider, externalId);
+        return Objects.hash(userId, provider, credential);
     }
 }

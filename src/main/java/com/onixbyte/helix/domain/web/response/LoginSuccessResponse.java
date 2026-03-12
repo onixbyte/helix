@@ -6,8 +6,4 @@ public record LoginSuccessResponse(
         String accessToken,
         User user
 ) {
-
-    public LoginSuccessResponse {
-        user.setPassword(null);
-    }
 }

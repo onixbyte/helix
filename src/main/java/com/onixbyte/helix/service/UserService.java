@@ -12,6 +12,8 @@ import com.onixbyte.helix.domain.web.request.ResetPasswordRequest;
 import com.onixbyte.helix.domain.web.request.EditUserRequest;
 import com.onixbyte.helix.domain.web.response.UserDetailResponse;
 import com.onixbyte.helix.manager.*;
+import com.onixbyte.helix.mapper.UserCredentialMapper;
+import com.onixbyte.helix.repository.UserCredentialRepository;
 import com.onixbyte.identitygenerator.IdentityGenerator;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,8 @@ public class UserService {
     private final ApplicationManager applicationManager;
     private final DepartmentManager departmentManager;
     private final PositionManager positionManager;
+    private final UserCredentialRepository userCredentialRepository;
+    private final UserCredentialMapper userCredentialMapper;
 
     @Autowired
     public UserService(
@@ -45,8 +49,8 @@ public class UserService {
             PasswordEncoder passwordEncoder,
             ApplicationManager applicationManager,
             DepartmentManager departmentManager,
-            PositionManager positionManager
-    ) {
+            PositionManager positionManager,
+            UserCredentialRepository userCredentialRepository, UserCredentialMapper userCredentialMapper) {
         this.userManager = userManager;
         this.userIdentityGenerator = userIdentityGenerator;
         this.roleManager = roleManager;
@@ -55,6 +59,8 @@ public class UserService {
         this.applicationManager = applicationManager;
         this.departmentManager = departmentManager;
         this.positionManager = positionManager;
+        this.userCredentialRepository = userCredentialRepository;
+        this.userCredentialMapper = userCredentialMapper;
     }
 
     public Page<UserDetailResponse> queryUserDetailsPage(Pageable pageable, QueryUserRequest request) {
@@ -98,7 +104,6 @@ public class UserService {
         var user = userManager.save(User.builder()
                 .id(userIdentityGenerator.nextId())
                 .username(request.username())
-                .password(passwordEncoder.encode(request.password()))
                 .fullName(request.fullName())
                 .email(request.email())
                 .regionAbbreviation(request.regionAbbreviation())
@@ -168,10 +173,7 @@ public class UserService {
 
     @Transactional(rollbackFor = Throwable.class)
     public void resetPassword(ResetPasswordRequest request) {
-        userManager.updateUser(User.builder()
-                .id(request.id())
-                .password(request.password())
-                .build());
+        userManager.updateUserPassword(request);
     }
 
     @Transactional(rollbackFor = Throwable.class)
