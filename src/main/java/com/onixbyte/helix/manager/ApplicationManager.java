@@ -1,5 +1,6 @@
 package com.onixbyte.helix.manager;
 
+import com.onixbyte.helix.enumeration.ApplicationMode;
 import com.onixbyte.helix.properties.ApplicationProperties;
 import com.onixbyte.helix.properties.AuthenticationProperties;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +36,9 @@ public class ApplicationManager {
     public boolean isSecureCookieEnabled() {
         return Optional.ofNullable(authenticationProperties.secureCookieEnabled())
                 .orElse(false);
+    }
+
+    public ApplicationMode getApplicationMode() {
+        return applicationProperties.mode();
     }
 }
