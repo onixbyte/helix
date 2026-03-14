@@ -361,9 +361,9 @@ COMMENT ON COLUMN settings.value IS 'Setting current value.';
 COMMENT ON COLUMN settings.default_value IS 'Setting default value.';
 
 INSERT INTO settings(name, description, type, value, default_value)
-VALUES ('captcha-setting::enabled', 'Whether captcha is enabled.', 'BOOLEAN'::SETTING_TYPE, 'true',
+VALUES ('captcha-enabled', 'Whether captcha is enabled.', 'BOOLEAN'::SETTING_TYPE, 'true',
         'false'),
-       ('auth-setting::register-enabled', 'Whether register is enabled', 'BOOLEAN'::SETTING_TYPE,
+       ('register-enabled', 'Whether register is enabled', 'BOOLEAN'::SETTING_TYPE,
         'true', 'false');
 
 DROP TABLE IF EXISTS menus;
