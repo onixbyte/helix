@@ -15,7 +15,7 @@
         ) AS input_roles_temp
         WHERE NOT EXISTS (
         SELECT 1
-        FROM roles r
+        FROM role r
         WHERE r.id = input_roles_temp.id
         )
         )
@@ -31,7 +31,7 @@
                status,
                created_at,
                updated_at
-        FROM roles
+        FROM role
         <where>
             <if test="wrapper.name != null and wrapper.name != ''">
                 AND name LIKE '%' || #{wrapper.name} || '%'
@@ -54,7 +54,7 @@
 
     <select id="count" parameterType="com.onixbyte.helix.domain.database.query.wrapper.QueryRoleWrapper">
         SELECT COUNT(*)
-        FROM roles
+        FROM role
         <where>
             <if test="wrapper.name != null and wrapper.name != ''">
                 AND name LIKE '%' || #{wrapper.name} || '%'

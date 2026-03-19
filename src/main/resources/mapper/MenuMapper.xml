@@ -5,10 +5,10 @@
     <select id="selectActiveMenusByUserId" parameterType="long" resultType="com.onixbyte.helix.domain.entity.Menu">
         WITH RECURSIVE
             UserGrantedMenus AS (SELECT DISTINCT m.*
-                                 FROM menus m
-                                          JOIN authorities a ON m.authority_code = a.code
-                                          JOIN role_authorities ra ON ra.authority_id = a.id
-                                          JOIN user_roles ur ON ur.role_id = ra.role_id
+                                 FROM menu m
+                                          JOIN authority a ON m.authority_code = a.code
+                                          JOIN role_authority ra ON ra.authority_id = a.id
+                                          JOIN user_role ur ON ur.role_id = ra.role_id
                                  WHERE ur.user_id = #{userId}
                                    AND m.status = 'ACTIVE'::status),
             Ancestors AS (SELECT ugm.*,
@@ -17,7 +17,7 @@
                           UNION ALL
                           SELECT m.*,
                               FALSE AS is_granted
-                          FROM menus m
+                          FROM menu m
                               JOIN Ancestors a ON m.id = a.parent_id)
         SELECT DISTINCT id,
                         name,

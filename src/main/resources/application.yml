@@ -21,12 +21,17 @@ spring:
             # No need to use distributed transaction manager for 1 datasource.
             platform: org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform
     hibernate:
-      ddl-auto: validate
+      ddl-auto: none
     open-in-view: false
   datasource:
     hikari:
       minimum-idle: 1
       maximum-pool-size: 10
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migrations
+    baseline-version: 0
 
 
 mybatis:

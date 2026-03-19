@@ -43,6 +43,8 @@ hypersistence-core = { group = "io.hypersistence", name = "hypersistence-utils-h
 postgres-driver = { group = "org.postgresql", name = "postgresql", version.ref = "postgresDriverVersion" }
 h2-database = { group = "com.h2database", name = "h2", version.ref = "h2Version" }
 spring-boot-starter-redis = { group = "org.springframework.boot", name = "spring-boot-starter-data-redis", version.ref = "springBootVersion" }
+flyway-core = { group = "org.flywaydb", name = "flyway-core" }
+flyway-postgresql = { group = "org.flywaydb", name = "flyway-database-postgresql" }
 
 # Spring Boot Core & Web
 spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web" }

@@ -4,7 +4,7 @@
 <mapper namespace="com.onixbyte.helix.mapper.RoleAuthorityMapper">
     <delete id="deleteByRoleId" parameterType="long">
         DELETE
-        FROM role_authorities
+        FROM role_authority
         WHERE role_id = #{roleId}
     </delete>
 </mapper>

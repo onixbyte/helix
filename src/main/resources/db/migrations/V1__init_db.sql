@@ -27,7 +27,7 @@
  * please ensure this SQL file is executed by the **corresponding database user**.
  * * This is crucial for correctly setting up ownership and default privileges.
  * * Example: CREATE DATABASE my_database OWNER app_user;
- * * Ensure all necessary user roles and permissions are in place **prior** to
+ * * Ensure all necessary user role and permissions are in place **prior** to
  * running this initialisation script.
  */
 
@@ -43,61 +43,61 @@ CREATE TYPE CREDENTIAL_PROVIDER AS ENUM ('LOCAL', 'OIDC', 'MICROSOFT_ENTRA_ID', 
 CREATE TYPE SETTING_TYPE AS ENUM ('STRING', 'BOOLEAN', 'INT');
 
 --- Departments Table ---
-DROP TABLE IF EXISTS departments CASCADE;
-CREATE TABLE departments
+DROP TABLE IF EXISTS department CASCADE;
+CREATE TABLE department
 (
     id         BIGSERIAL PRIMARY KEY,
     name       VARCHAR(128) NOT NULL UNIQUE,
-    parent_id  BIGINT       NULL REFERENCES departments (id),
+    parent_id  BIGINT       NULL REFERENCES department (id),
     sort       INT          NOT NULL DEFAULT NULL,
     status     STATUS       NOT NULL DEFAULT 'ACTIVE'::STATUS,
     created_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX departments_name_index ON departments (name);
-CREATE INDEX departments_parent_id_index ON departments (parent_id);
+CREATE INDEX department_name_index ON department (name);
+CREATE INDEX department_parent_id_index ON department (parent_id);
 
 --- Departments Data Insertion ---
 WITH company_hq AS (
-    INSERT INTO departments (name, parent_id, sort, status)
+    INSERT INTO department (name, parent_id, sort, status)
         VALUES ('Company HQ', NULL, 1, 'ACTIVE'::STATUS)
         RETURNING id),
      human_resources AS (
-         INSERT INTO departments (name, parent_id, sort, status)
+         INSERT INTO department (name, parent_id, sort, status)
              SELECT 'Human Resources', company_hq.id, 1, 'ACTIVE'::STATUS
              FROM company_hq
              RETURNING id),
      finance AS (
-         INSERT INTO departments (name, parent_id, sort, status)
+         INSERT INTO department (name, parent_id, sort, status)
              SELECT 'Finance', company_hq.id, 2, 'ACTIVE'::STATUS
              FROM company_hq
              RETURNING id),
      technology AS (
-         INSERT INTO departments (name, parent_id, sort, status)
+         INSERT INTO department (name, parent_id, sort, status)
              SELECT 'Technology', company_hq.id, 3, 'ACTIVE'::STATUS
              FROM company_hq
              RETURNING id),
      it_support AS (
-         INSERT INTO departments (name, parent_id, sort, status)
+         INSERT INTO department (name, parent_id, sort, status)
              SELECT 'IT Support', technology.id, 1, 'ACTIVE'::STATUS
              FROM technology
              RETURNING id),
      software_development AS (
-         INSERT INTO departments (name, parent_id, sort, status)
+         INSERT INTO department (name, parent_id, sort, status)
              SELECT 'Software Development', technology.id, 2, 'ACTIVE'::STATUS
              FROM technology
              RETURNING id),
      operations AS (
-         INSERT INTO departments (name, parent_id, sort, status)
+         INSERT INTO department (name, parent_id, sort, status)
              SELECT 'Operations', company_hq.id, 4, 'INACTIVE'::STATUS
              FROM company_hq
              RETURNING id)
 SELECT NULL;
 
 --- Positions Table ---
-DROP TABLE IF EXISTS positions CASCADE;
-CREATE TABLE positions
+DROP TABLE IF EXISTS position CASCADE;
+CREATE TABLE position
 (
     id          BIGSERIAL PRIMARY KEY,
     name        VARCHAR(128) NOT NULL UNIQUE,
@@ -109,12 +109,12 @@ CREATE TABLE positions
     updated_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX positions_name_index ON positions (name);
-CREATE INDEX positions_code_index ON positions (code);
-CREATE INDEX positions_name_code_index ON positions (name, code);
+CREATE INDEX position_name_index ON position (name);
+CREATE INDEX position_code_index ON position (code);
+CREATE INDEX position_name_code_index ON position (name, code);
 
 --- Positions Data Insertion ---
-INSERT INTO positions (name, code, description, sort, status)
+INSERT INTO position (name, code, description, sort, status)
 VALUES ('HR Manager', 'HR-MGR',
         'Responsible for overseeing recruitment, employee relations, and staff wellbeing.', 1,
         'ACTIVE'),
@@ -131,65 +131,62 @@ VALUES ('HR Manager', 'HR-MGR',
         'Assists with day-to-day logistics, procurement, and office organisation.', 5, 'INACTIVE');
 
 --- Users Table ---
-DROP TABLE IF EXISTS users CASCADE;
-DROP SEQUENCE IF EXISTS users_id_seq CASCADE;
-CREATE SEQUENCE users_id_seq START WITH 1;
+DROP TABLE IF EXISTS "user" CASCADE;
+DROP SEQUENCE IF EXISTS user_id_seq CASCADE;
+CREATE SEQUENCE user_id_seq START WITH 1;
 
-CREATE TABLE users
+CREATE TABLE "user"
 (
-    id                  BIGINT PRIMARY KEY          DEFAULT nextval('users_id_seq'),
+    id                  BIGSERIAL PRIMARY KEY,
     username            VARCHAR(64) UNIQUE NOT NULL,
-    password            VARCHAR(255),
     full_name           VARCHAR(128)       NOT NULL,
     email               VARCHAR(128)       NULL UNIQUE,
     region_abbreviation VARCHAR(10)        NULL,
     phone_number        VARCHAR(32)        NULL,
     avatar_url          TEXT,
     status              USER_STATUS        NOT NULL DEFAULT 'ACTIVE',
-    department_id       BIGINT REFERENCES departments (id),
-    position_id         BIGINT REFERENCES positions (id),
+    department_id       BIGINT REFERENCES department (id),
+    position_id         BIGINT REFERENCES position (id),
     created_at          TIMESTAMP          NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at          TIMESTAMP          NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE (region_abbreviation, phone_number)
 );
 
-CREATE INDEX users_username_index ON users (username);
+CREATE INDEX user_username_index ON "user" (username);
 
 --- Users Data Insertion ---
 -- NOTE: All phone numbers are generated by ChatGPT, they should not be connected any real person.
-INSERT INTO users(username, password, full_name, email, region_abbreviation, phone_number,
-                  avatar_url, department_id, position_id, created_at, updated_at)
+INSERT INTO "user"(username, full_name, email, region_abbreviation, phone_number,
+                   avatar_url, department_id, position_id, created_at, updated_at)
 SELECT 'helix',
-       null,
        'Helix Admin',
        'admin@helix.onixbyte.dev',
        'GB',
        '7000000000',
        'https://gravatar.com/avatar/6ef4c4033f6aa8e43d06bd5e462a6173cc2a960633473721a6f1289cd1b5146f',
-       (SELECT id FROM departments WHERE name = 'Company HQ'),
-       (SELECT id FROM positions WHERE code = 'HR-MGR'),
+       (SELECT id FROM department WHERE name = 'Company HQ'),
+       (SELECT id FROM position WHERE code = 'HR-MGR'),
        CURRENT_TIMESTAMP,
        CURRENT_TIMESTAMP;
 
-INSERT INTO users(username, password, full_name, email, region_abbreviation, phone_number,
-                  avatar_url, department_id, position_id, created_at, updated_at)
+INSERT INTO "user"(username, full_name, email, region_abbreviation, phone_number,
+                   avatar_url, department_id, position_id, created_at, updated_at)
 SELECT 'johndoe',
-       null,
        'John Doe',
        'johndoe@helix.onixbyte.dev',
        'GB',
        '7000000001',
        'https://gravatar.com/avatar/41bcebddd573747d1bd35ef7fae72ebefd6b47f077d42442a2510d35b0c2db92',
-       (SELECT id FROM departments WHERE name = 'Software Development'),
-       (SELECT id FROM positions WHERE code = 'SWE-ENG'),
+       (SELECT id FROM department WHERE name = 'Software Development'),
+       (SELECT id FROM position WHERE code = 'SWE-ENG'),
        CURRENT_TIMESTAMP,
        CURRENT_TIMESTAMP;
 
 --- User Identities Table ---
-DROP TABLE IF EXISTS user_credentials CASCADE;
-CREATE TABLE user_credentials
+DROP TABLE IF EXISTS user_credential CASCADE;
+CREATE TABLE user_credential
 (
-    user_id    BIGINT              NOT NULL REFERENCES users (id),
+    user_id    BIGINT              NOT NULL REFERENCES "user" (id),
     provider   CREDENTIAL_PROVIDER NOT NULL,
     credential VARCHAR(255)        NOT NULL,
     created_at TIMESTAMP           NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -198,8 +195,8 @@ CREATE TABLE user_credentials
 );
 
 --- Roles Table ---
-DROP TABLE IF EXISTS roles CASCADE;
-CREATE TABLE roles
+DROP TABLE IF EXISTS role CASCADE;
+CREATE TABLE role
 (
     id            BIGSERIAL PRIMARY KEY,
     name          VARCHAR(128) NOT NULL UNIQUE,
@@ -212,40 +209,40 @@ CREATE TABLE roles
     updated_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX roles_name_index ON roles (name);
-CREATE INDEX roles_code_index ON roles (code);
-CREATE INDEX roles_name_code_index ON roles (name, code);
+CREATE INDEX role_name_index ON role (name);
+CREATE INDEX role_code_index ON role (code);
+CREATE INDEX role_name_code_index ON role (name, code);
 
 --- Roles Data Insertion ---
-INSERT INTO roles (name, code, sort, default_value, description, status, created_at, updated_at)
+INSERT INTO role (name, code, sort, default_value, description, status, created_at, updated_at)
 VALUES ('Admin', 'admin', 1, FALSE, 'Administrator of this system.', 'ACTIVE'::STATUS,
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
        ('Normal User', 'user', 2, TRUE, 'Normal user of this system.', 'ACTIVE'::STATUS,
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 --- User Roles Table ---
-DROP TABLE IF EXISTS user_roles CASCADE;
-CREATE TABLE user_roles
+DROP TABLE IF EXISTS user_role CASCADE;
+CREATE TABLE user_role
 (
     user_id    BIGINT                              NOT NULL
-        CONSTRAINT user_roles_users_id_fk REFERENCES users,
+        CONSTRAINT user_role_user_id_fk REFERENCES "user",
     role_id    BIGINT                              NOT NULL
-        CONSTRAINT user_roles_roles_id_fk REFERENCES roles,
+        CONSTRAINT user_role_role_id_fk REFERENCES role,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    CONSTRAINT user_roles_pk PRIMARY KEY (user_id, role_id)
+    CONSTRAINT user_role_pk PRIMARY KEY (user_id, role_id)
 );
 
 --- User Roles Data Insertion ---
-INSERT INTO user_roles (user_id, role_id)
+INSERT INTO user_role (user_id, role_id)
 SELECT u.id, r.id
-FROM users u
-         CROSS JOIN roles r
+FROM "user" u
+         CROSS JOIN role r
 WHERE (u.username = 'helix' AND r.code = 'admin')
    OR (u.username = 'johndoe' AND r.code = 'user');
 
 --- Authorities Table ---
-DROP TABLE IF EXISTS authorities CASCADE;
-CREATE TABLE authorities
+DROP TABLE IF EXISTS authority CASCADE;
+CREATE TABLE authority
 (
     id          BIGSERIAL PRIMARY KEY,
     code        VARCHAR(128) NOT NULL UNIQUE,
@@ -256,10 +253,10 @@ CREATE TABLE authorities
     updated_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX authorities_code_index ON authorities (code);
+CREATE INDEX authority_code_index ON authority (code);
 
 --- Authorities Data Insertion ---
-INSERT INTO authorities(code, name, description, status, created_at, updated_at)
+INSERT INTO authority(code, name, description, status, created_at, updated_at)
 VALUES ('system:dashboard:read', 'Read Dashboard', 'Read dashboard.', 'ACTIVE'::STATUS,
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
        ('system:user:read', 'Read User', 'Read user.', 'ACTIVE'::STATUS, CURRENT_TIMESTAMP,
@@ -268,49 +265,49 @@ VALUES ('system:dashboard:read', 'Read Dashboard', 'Read dashboard.', 'ACTIVE'::
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
        ('system:user:write', 'Write User', 'Write user, such as add, edit or delete.',
         'ACTIVE'::STATUS, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       ('system:department:read', 'Read Department', 'Read departments', 'ACTIVE'::STATUS,
+       ('system:department:read', 'Read Department', 'Read department', 'ACTIVE'::STATUS,
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       ('system:department:write', 'Write Department', 'Write departments.', 'ACTIVE'::STATUS,
+       ('system:department:write', 'Write Department', 'Write department.', 'ACTIVE'::STATUS,
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       ('system:role:read', 'Read Roles', 'Read roles.', 'ACTIVE'::STATUS, CURRENT_TIMESTAMP,
+       ('system:role:read', 'Read Roles', 'Read role.', 'ACTIVE'::STATUS, CURRENT_TIMESTAMP,
         CURRENT_TIMESTAMP),
-       ('system:role:write', 'Write Roles', 'Write roles.', 'ACTIVE'::STATUS,
+       ('system:role:write', 'Write Roles', 'Write role.', 'ACTIVE'::STATUS,
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       ('system:authority:read', 'Read Authorities', 'Read authorities.', 'ACTIVE'::STATUS,
+       ('system:authority:read', 'Read Authorities', 'Read authority.', 'ACTIVE'::STATUS,
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       ('system:authority:write', 'Write Authorities', 'Write authorities.',
+       ('system:authority:write', 'Write Authorities', 'Write authority.',
         'ACTIVE'::STATUS, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
        ('system:audit_log:read', 'Read Audit Logs', 'Read audit logs.', 'ACTIVE'::STATUS,
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
        ('system:sso:write', 'Manage SSO',
         'Manage SSO configurations (such as Microsoft Entra ID, etc.).', 'ACTIVE'::STATUS,
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       ('system:setting:write', 'Write System Settings', 'Write system settings.',
+       ('system:setting:write', 'Write System Settings', 'Write system setting.',
         'ACTIVE'::STATUS, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 --- Role Authorities Table ---
-DROP TABLE IF EXISTS role_authorities CASCADE;
-CREATE TABLE role_authorities
+DROP TABLE IF EXISTS role_authority CASCADE;
+CREATE TABLE role_authority
 (
-    role_id      BIGINT    NOT NULL REFERENCES roles (id),
-    authority_id BIGINT    NOT NULL REFERENCES authorities (id),
+    role_id      BIGINT    NOT NULL REFERENCES role (id),
+    authority_id BIGINT    NOT NULL REFERENCES authority (id),
     created_at   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (role_id, authority_id)
 );
 
 --- Role Authorities Data Insertion ---
--- Admin role gets all authorities
-INSERT INTO role_authorities (role_id, authority_id, created_at)
+-- Admin role gets all authority
+INSERT INTO role_authority (role_id, authority_id, created_at)
 SELECT r.id, a.id, CURRENT_TIMESTAMP
-FROM roles r
-         CROSS JOIN authorities a
+FROM role r
+         CROSS JOIN authority a
 WHERE r.code = 'admin';
 
--- Normal user role gets specific authorities
-INSERT INTO role_authorities (role_id, authority_id, created_at)
+-- Normal user role gets specific authority
+INSERT INTO role_authority (role_id, authority_id, created_at)
 SELECT r.id, a.id, CURRENT_TIMESTAMP
-FROM roles r
-         CROSS JOIN authorities a
+FROM role r
+         CROSS JOIN authority a
 WHERE r.code = 'user'
   AND a.code IN ('system:dashboard:read',
                  'system:user:read',
@@ -320,25 +317,25 @@ WHERE r.code = 'user'
                  'system:authority:read',
                  'system:audit_log:read');
 
-DROP TABLE IF EXISTS assets;
-CREATE TABLE assets
+DROP TABLE IF EXISTS asset;
+CREATE TABLE asset
 (
     id          BIGSERIAL    NOT NULL PRIMARY KEY,
     key         VARCHAR(255) NOT NULL UNIQUE,
-    upload_by   BIGINT       NOT NULL REFERENCES users (id),
+    upload_by   BIGINT       NOT NULL REFERENCES "user" (id),
     upload_time TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX assets_key_index ON assets (key);
+CREATE INDEX asset_key_index ON asset (key);
 
-COMMENT ON TABLE assets IS 'Stores metadata for files or other digital assets within the system.';
-COMMENT ON COLUMN assets.id IS 'The unique identifier for the asset, automatically generated by the database.';
-COMMENT ON COLUMN assets.key IS 'The unique key or path of the asset within the storage system.';
-COMMENT ON COLUMN assets.upload_by IS 'The unique ID of the user who uploaded this asset, referencing the ID in the users table.';
-COMMENT ON COLUMN assets.upload_time IS 'The timestamp indicating when the asset was uploaded to the system.';
+COMMENT ON TABLE asset IS 'Stores metadata for files or other digital asset within the system.';
+COMMENT ON COLUMN asset.id IS 'The unique identifier for the asset, automatically generated by the database.';
+COMMENT ON COLUMN asset.key IS 'The unique key or path of the asset within the storage system.';
+COMMENT ON COLUMN asset.upload_by IS 'The unique ID of the user who uploaded this asset, referencing the ID in the user table.';
+COMMENT ON COLUMN asset.upload_time IS 'The timestamp indicating when the asset was uploaded to the system.';
 
-DROP TABLE IF EXISTS settings;
-CREATE TABLE settings
+DROP TABLE IF EXISTS setting;
+CREATE TABLE setting
 (
     id            BIGSERIAL    NOT NULL PRIMARY KEY,
     name          VARCHAR(255) NOT NULL,
@@ -350,24 +347,24 @@ CREATE TABLE settings
     updated_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX settings_name_index ON settings (name);
+CREATE INDEX setting_name_index ON setting (name);
 
-COMMENT ON TABLE settings IS 'Hot-deployable application settings.';
-COMMENT ON COLUMN settings.id IS 'Setting unique identifier.';
-COMMENT ON COLUMN settings.name IS 'Setting name.';
-COMMENT ON COLUMN settings.description IS 'Setting description.';
-COMMENT ON COLUMN settings.type IS 'The type of the value.';
-COMMENT ON COLUMN settings.value IS 'Setting current value.';
-COMMENT ON COLUMN settings.default_value IS 'Setting default value.';
+COMMENT ON TABLE setting IS 'Hot-deployable application setting.';
+COMMENT ON COLUMN setting.id IS 'Setting unique identifier.';
+COMMENT ON COLUMN setting.name IS 'Setting name.';
+COMMENT ON COLUMN setting.description IS 'Setting description.';
+COMMENT ON COLUMN setting.type IS 'The type of the value.';
+COMMENT ON COLUMN setting.value IS 'Setting current value.';
+COMMENT ON COLUMN setting.default_value IS 'Setting default value.';
 
-INSERT INTO settings(name, description, type, value, default_value)
+INSERT INTO setting(name, description, type, value, default_value)
 VALUES ('captcha-enabled', 'Whether captcha is enabled.', 'BOOLEAN'::SETTING_TYPE, 'true',
         'false'),
        ('register-enabled', 'Whether register is enabled', 'BOOLEAN'::SETTING_TYPE,
         'true', 'false');
 
-DROP TABLE IF EXISTS menus;
-CREATE TABLE menus
+DROP TABLE IF EXISTS menu;
+CREATE TABLE menu
 (
     id               BIGSERIAL    NOT NULL PRIMARY KEY,
     name             VARCHAR(50)  NOT NULL,
@@ -384,22 +381,22 @@ CREATE TABLE menus
     updated_at       TIMESTAMP    NULL     DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE UNIQUE INDEX menus_code_uindex ON menus (code);
+CREATE UNIQUE INDEX menu_code_uindex ON menu (code);
 
 WITH system_menu AS (
-    INSERT INTO menus (name, parent_id, code, sort, path, is_external_link, is_visible, status,
-                       authority_code, icon, created_at, updated_at)
+    INSERT INTO menu (name, parent_id, code, sort, path, is_external_link, is_visible, status,
+                      authority_code, icon, created_at, updated_at)
         VALUES ('系统管理', NULL, 'system-mgmt', 99, NULL, FALSE, TRUE, 'ACTIVE'::STATUS, NULL,
                 NULL, NOW(), NOW())
         RETURNING id)
 INSERT
-INTO menus(name, parent_id, code, sort, path, is_external_link, is_visible, status,
-           authority_code, icon, created_at, updated_at)
+INTO menu(name, parent_id, code, sort, path, is_external_link, is_visible, status,
+          authority_code, icon, created_at, updated_at)
 SELECT '用户管理',
        system_menu.id,
        'user-mgmt',
        1,
-       '/users',
+       '/user',
        FALSE,
        TRUE,
        'ACTIVE'::STATUS,
@@ -409,7 +406,7 @@ SELECT '用户管理',
        NOW()
 FROM system_menu;
 
-INSERT INTO menus (name, parent_id, code, sort, path, is_external_link, is_visible, status,
-                   authority_code, icon, created_at, updated_at)
+INSERT INTO menu (name, parent_id, code, sort, path, is_external_link, is_visible, status,
+                  authority_code, icon, created_at, updated_at)
 VALUES ('Helix 官网', null, 'helix-official-site', 100, 'https://helix.onixbyte.com', true, true,
         'ACTIVE'::STATUS, null, null, NOW(), NOW());

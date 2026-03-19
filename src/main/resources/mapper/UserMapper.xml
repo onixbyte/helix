@@ -5,7 +5,6 @@
     <select id="selectByUsername" parameterType="string">
         SELECT id,
                username,
-               password,
                full_name,
                email,
                region_abbreviation,
@@ -16,7 +15,7 @@
                position_id,
                created_at,
                updated_at
-        FROM users
+        FROM "user"
         WHERE username = #{username}
     </select>
 
@@ -24,7 +23,6 @@
             resultType="user">
         SELECT id,
                username,
-               password,
                full_name,
                email,
                region_abbreviation,
@@ -35,7 +33,7 @@
                position_id,
                created_at,
                updated_at
-        FROM users
+        FROM "user"
         <if test="pageable != null and pageable.sort != null">
             ORDER BY
             <foreach collection="pageable.sort" item="order" separator=", ">
@@ -47,13 +45,12 @@
 
     <select id="countAll" resultType="int">
         SELECT COUNT(*)
-        FROM users
+        FROM "user"
     </select>
 
     <select id="selectList" resultType="user">
         SELECT id,
                username,
-               password,
                full_name,
                email,
                region_abbreviation,
@@ -64,16 +61,16 @@
                position_id,
                created_at,
                updated_at
-        FROM users
+        FROM "user"
         <where>
             <if test="wrapper.departmentId != null">
                 AND department_id IN (WITH RECURSIVE SubDepartments AS (
                 SELECT id
-                FROM departments
+                FROM department
                 WHERE id = #{wrapper.departmentId}
                 UNION ALL
                 SELECT d.id
-                FROM departments d
+                FROM department d
                 INNER JOIN SubDepartments sd
                 ON d.parent_id = sd.id)
                 SELECT id
@@ -109,16 +106,16 @@
 
     <select id="count" resultType="int">
         SELECT COUNT(*)
-        FROM users
+        FROM "user"
         <where>
             <if test="wrapper.departmentId != null">
                 AND department_id IN (WITH RECURSIVE SubDepartments AS (
                 SELECT id
-                FROM departments
+                FROM department
                 WHERE id = #{wrapper.departmentId}
                 UNION ALL
                 SELECT d.id
-                FROM departments d
+                FROM department d
                 INNER JOIN SubDepartments sd
                 ON d.parent_id = sd.id)
                 SELECT id
@@ -160,9 +157,9 @@
                p.name AS position_name,
                u.created_at,
                u.updated_at
-        FROM users u
-                 LEFT JOIN departments d ON u.department_id = d.id
-                 LEFT JOIN positions p ON u.position_id = p.id
+        FROM "user" u
+                 LEFT JOIN department d ON u.department_id = d.id
+                 LEFT JOIN position p ON u.position_id = p.id
         WHERE u.id = #{id}
     </select>
 
@@ -181,18 +178,18 @@
                p.name AS position_name,
                u.created_at,
                u.updated_at
-        FROM users u
-        LEFT JOIN departments d ON u.department_id = d.id
-        LEFT JOIN positions p ON u.position_id = p.id
+        FROM "user" u
+                LEFT JOIN department d ON u.department_id = d.id
+                LEFT JOIN position p ON u.position_id = p.id
         <where>
             <if test="wrapper.departmentId != null">
                 AND department_id IN (WITH RECURSIVE SubDepartments AS (
                 SELECT id
-                FROM departments
+                FROM department
                 WHERE id = #{wrapper.departmentId}
                 UNION ALL
                 SELECT d.id
-                FROM departments d
+                FROM department d
                 INNER JOIN SubDepartments sd
                 ON d.parent_id = sd.id)
                 SELECT id
