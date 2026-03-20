@@ -4,7 +4,7 @@ public final class CacheName {
 
     public static final String USER = "user";
 
-    public static final String AUTHORITIES_OF_USER = "user-authorities";
+    public static final String AUTHORITIES_OF_USER = "user-authority";
 
     public static final String ASSET = "asset";
 
