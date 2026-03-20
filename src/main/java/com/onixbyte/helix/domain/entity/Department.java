@@ -23,7 +23,7 @@ import java.util.Objects;
  * @since 1.0
  */
 @Entity
-@Table(name = "departments")
+@Table(name = "department")
 public class Department implements Treeable<Long> {
 
     /**

@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name = "menus")
+@Table(name = "menu")
 public class Menu implements Treeable<Long> {
 
     @Id

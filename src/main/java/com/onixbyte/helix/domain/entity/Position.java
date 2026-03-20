@@ -21,7 +21,7 @@ import java.util.Objects;
  * @since 1.0
  */
 @Entity
-@Table(name = "positions")
+@Table(name = "position")
 public class Position {
 
     /**

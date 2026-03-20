@@ -20,7 +20,7 @@ import java.util.Objects;
  * @since 1.0
  */
 @Entity
-@Table(name = "roles")
+@Table(name = "role")
 public class Role {
 
     /**

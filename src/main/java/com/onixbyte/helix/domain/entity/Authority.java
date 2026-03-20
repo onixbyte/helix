@@ -22,7 +22,7 @@ import java.util.Objects;
  * @since 1.0
  */
 @Entity
-@Table(name = "authorities")
+@Table(name = "authority")
 public class Authority {
 
     /**

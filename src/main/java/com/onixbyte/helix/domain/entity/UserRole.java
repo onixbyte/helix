@@ -18,7 +18,7 @@ import java.util.Objects;
  * @since 1.0
  */
 @Entity
-@Table(name = "user_roles")
+@Table(name = "user_role")
 public class UserRole {
 
     /**

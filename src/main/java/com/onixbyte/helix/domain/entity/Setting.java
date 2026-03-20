@@ -14,7 +14,7 @@ import java.util.Objects;
  * This entity allows for dynamic configuration changes without application restarts.
  */
 @Entity
-@Table(name = "settings")
+@Table(name = "setting")
 public class Setting {
 
     /**

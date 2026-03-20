@@ -19,7 +19,7 @@ import java.util.Objects;
  * @since 1.0
  */
 @Entity
-@Table(name = "user_credentials")
+@Table(name = "user_credential")
 public class UserCredential {
 
     /**

@@ -13,7 +13,7 @@ import java.util.Objects;
  * auditing field.
  */
 @Entity
-@Table(name = "role_authorities")
+@Table(name = "role_authority")
 public class RoleAuthority {
 
     /**
