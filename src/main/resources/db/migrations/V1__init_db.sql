@@ -410,3 +410,20 @@ INSERT INTO menu (name, parent_id, code, sort, path, is_external_link, is_visibl
                   authority_code, icon, created_at, updated_at)
 VALUES ('Helix 官网', null, 'helix-official-site', 100, 'https://helix.onixbyte.com', true, true,
         'ACTIVE'::STATUS, null, null, NOW(), NOW());
+
+DO
+$$
+    DECLARE
+        v_user_id BIGINT;
+        v_now     TIMESTAMP;
+    BEGIN
+        SELECT id INTO v_user_id FROM "user" WHERE username = 'helix';
+        v_now := CURRENT_TIMESTAMP;
+
+        RAISE NOTICE 'User ID: %, Timestamp: %', v_user_id, v_now;
+
+        -- Default password is '123456'
+        INSERT INTO "user_credential"
+        VALUES (v_user_id, 'LOCAL'::credential_provider, '$2a$10$1LoatLVvHL3LFK0pnNXcM.eiPK6.UdA9cl9IDwanWHBAAILn1xe0K', v_now, v_now);
+    END;
+$$;

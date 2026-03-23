@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class DepartmentManager {
 
@@ -26,5 +28,13 @@ public class DepartmentManager {
 
     public Department selectById(Long id) {
         return departmentRepository.findById(id).orElse(null);
+    }
+
+    public Integer getNextSort(Long parentId) {
+        return Optional.ofNullable(departmentRepository.findMaxSort(parentId)).orElse(0) + 1;
+    }
+
+    public Department save(Department department) {
+        return departmentRepository.save(department);
     }
 }

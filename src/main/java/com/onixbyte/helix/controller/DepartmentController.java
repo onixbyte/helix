@@ -2,11 +2,11 @@ package com.onixbyte.helix.controller;
 
 import com.onixbyte.helix.domain.entity.Department;
 import com.onixbyte.helix.domain.common.TreeNode;
+import com.onixbyte.helix.domain.web.request.AddDepartmentRequest;
 import com.onixbyte.helix.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,5 +35,10 @@ public class DepartmentController {
     @GetMapping
     public List<Department> getDepartments() {
         return departmentService.getDepartments();
+    }
+
+    @PostMapping
+    public Department addDepartment(@Validated @RequestBody AddDepartmentRequest request) {
+        return departmentService.addDepartment(request);
     }
 }
