@@ -1,7 +1,6 @@
 package com.onixbyte.helix.manager;
 
 import com.onixbyte.helix.domain.entity.Department;
-import com.onixbyte.helix.mapper.DepartmentMapper;
 import com.onixbyte.helix.repository.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,12 +12,10 @@ import java.util.Optional;
 @Component
 public class DepartmentManager {
 
-    private final DepartmentMapper departmentMapper;
     private final DepartmentRepository departmentRepository;
 
     @Autowired
-    public DepartmentManager(DepartmentMapper departmentMapper, DepartmentRepository departmentRepository) {
-        this.departmentMapper = departmentMapper;
+    public DepartmentManager(DepartmentRepository departmentRepository) {
         this.departmentRepository = departmentRepository;
     }
 

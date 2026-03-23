@@ -1,7 +1,6 @@
 package com.onixbyte.helix.manager;
 
 import com.onixbyte.helix.mapper.RoleAuthorityMapper;
-import com.onixbyte.helix.repository.RoleAuthorityRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -10,11 +9,9 @@ import org.springframework.stereotype.Component;
 public class RoleAuthorityManager {
 
     private static final Logger log = LoggerFactory.getLogger(RoleAuthorityManager.class);
-    private final RoleAuthorityRepository roleAuthorityRepository;
     private final RoleAuthorityMapper roleAuthorityMapper;
 
-    public RoleAuthorityManager(RoleAuthorityRepository roleAuthorityRepository, RoleAuthorityMapper roleAuthorityMapper) {
-        this.roleAuthorityRepository = roleAuthorityRepository;
+    public RoleAuthorityManager(RoleAuthorityMapper roleAuthorityMapper) {
         this.roleAuthorityMapper = roleAuthorityMapper;
     }
 

@@ -5,8 +5,6 @@ import com.onixbyte.helix.domain.common.TreeNode;
 import com.onixbyte.helix.manager.MenuManager;
 import com.onixbyte.helix.utils.SecurityUtil;
 import com.onixbyte.helix.utils.TreeUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +12,7 @@ import java.util.List;
 
 @Service
 public class MenuService {
-    private static final Logger log = LoggerFactory.getLogger(MenuService.class);
+
     private final MenuManager menuManager;
 
     @Autowired

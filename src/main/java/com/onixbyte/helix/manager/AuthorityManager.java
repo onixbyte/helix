@@ -8,8 +8,6 @@ import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.mapper.AuthorityMapper;
 import com.onixbyte.helix.repository.AuthorityRepository;
 import com.onixbyte.helix.shared.CacheName;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Example;
@@ -25,7 +23,6 @@ import java.util.Optional;
 @Component
 public class AuthorityManager {
 
-    private static final Logger log = LoggerFactory.getLogger(AuthorityManager.class);
     private final AuthorityMapper authorityMapper;
     private final AuthorityRepository authorityRepository;
 

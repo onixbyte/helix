@@ -2,7 +2,6 @@ package com.onixbyte.helix.manager;
 
 import com.onixbyte.helix.shared.CacheName;
 import com.onixbyte.helix.domain.entity.Asset;
-import com.onixbyte.helix.mapper.AssetMapper;
 import com.onixbyte.helix.repository.AssetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -13,12 +12,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class AssetManager {
 
-    private final AssetMapper assetMapper;
     private final AssetRepository assetRepository;
 
     @Autowired
-    public AssetManager(AssetMapper assetMapper, AssetRepository assetRepository) {
-        this.assetMapper = assetMapper;
+    public AssetManager(AssetRepository assetRepository) {
         this.assetRepository = assetRepository;
     }
 
