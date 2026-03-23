@@ -52,7 +52,7 @@
         </if>
     </select>
 
-    <select id="count" parameterType="com.onixbyte.helix.domain.database.query.wrapper.QueryRoleWrapper">
+    <select id="count" parameterType="com.onixbyte.helix.domain.database.query.wrapper.QueryRoleWrapper" resultType="int">
         SELECT COUNT(*)
         FROM role
         <where>

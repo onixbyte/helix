@@ -7,4 +7,6 @@ import org.apache.ibatis.annotations.Param;
 public interface RoleAuthorityMapper {
 
     int deleteByRoleId(@Param("roleId") Long roleId);
+
+    int deleteByAuthorityId(@Param("authorityId") Long authorityId);
 }

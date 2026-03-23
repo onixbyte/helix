@@ -72,4 +72,12 @@ public class AuthorityManager {
 
         return authority;
     }
+
+    public String findAuthorityNameById(Long authorityId) {
+        return authorityRepository.findAuthorityNameById(authorityId);
+    }
+
+    public void deleteById(Long authorityId) {
+        authorityRepository.deleteById(authorityId);
+    }
 }

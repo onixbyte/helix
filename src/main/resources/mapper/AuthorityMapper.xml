@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.onixbyte.helix.mapper.AuthorityMapper">
-    <select id="selectByUserId" parameterType="long">
+    <select id="selectByUserId" parameterType="long" resultType="com.onixbyte.helix.domain.entity.Authority">
         SELECT DISTINCT a.id, a.code, a.name, a.description, a.status, a.created_at, a.updated_at
         FROM authority a
                  JOIN role_authority ra ON a.id = ra.authority_id

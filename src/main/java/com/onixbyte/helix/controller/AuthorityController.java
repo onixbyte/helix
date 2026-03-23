@@ -4,6 +4,7 @@ import com.onixbyte.helix.domain.entity.Authority;
 import com.onixbyte.helix.domain.web.request.AddAuthorityRequest;
 import com.onixbyte.helix.domain.web.request.EditAuthorityRequest;
 import com.onixbyte.helix.domain.web.request.QueryAuthorityRequest;
+import com.onixbyte.helix.domain.web.response.ActionResponse;
 import com.onixbyte.helix.service.AuthorityService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -64,5 +65,11 @@ public class AuthorityController {
     @PutMapping
     public Authority editAuthority(@Validated @RequestBody EditAuthorityRequest request) {
         return authorityService.editAuthority(request);
+    }
+
+    @DeleteMapping("/{authorityId:\\d+}")
+    public ActionResponse deleteAuthority(@PathVariable Long authorityId) {
+        var name = authorityService.deleteAuthority(authorityId);
+        return ActionResponse.success("Authority [%s] deleted.".formatted(name));
     }
 }

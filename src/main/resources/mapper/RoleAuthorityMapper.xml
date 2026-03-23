@@ -7,4 +7,10 @@
         FROM role_authority
         WHERE role_id = #{roleId}
     </delete>
+
+    <delete id="deleteByAuthorityId" parameterType="long">
+        DELETE
+        FROM role_authority
+        WHERE authority_id = #{authorityId}
+    </delete>
 </mapper>

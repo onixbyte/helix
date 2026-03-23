@@ -8,10 +8,13 @@ import com.onixbyte.helix.domain.web.request.QueryAuthorityRequest;
 import com.onixbyte.helix.enumeration.Status;
 import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.manager.AuthorityManager;
+import com.onixbyte.helix.manager.RoleAuthorityManager;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -19,9 +22,11 @@ import java.util.Optional;
 public class AuthorityService {
 
     private final AuthorityManager authorityManager;
+    private final RoleAuthorityManager roleAuthorityManager;
 
-    public AuthorityService(AuthorityManager authorityManager) {
+    public AuthorityService(AuthorityManager authorityManager, RoleAuthorityManager roleAuthorityManager) {
         this.authorityManager = authorityManager;
+        this.roleAuthorityManager = roleAuthorityManager;
     }
 
     public Page<Authority> getAuthorities(Pageable pageable, QueryAuthorityRequest request) {
@@ -49,5 +54,19 @@ public class AuthorityService {
 
     public Authority editAuthority(EditAuthorityRequest request) {
         return authorityManager.update(request);
+    }
+
+    @Transactional(rollbackFor = Throwable.class)
+    public String deleteAuthority(Long authorityId) {
+        var authorityName = authorityManager.findAuthorityNameById(authorityId);
+
+        if (StringUtils.isBlank(authorityName)) {
+            throw new BizException(HttpStatus.NOT_FOUND, "Authority with ID '%d' not found.".formatted(authorityId));
+        }
+
+        roleAuthorityManager.deleteByAuthorityId(authorityId);
+        authorityManager.deleteById(authorityId);
+
+        return authorityName;
     }
 }
