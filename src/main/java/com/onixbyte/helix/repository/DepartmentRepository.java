@@ -15,4 +15,6 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
                or d.parentId = :parentId
             """)
     Integer findMaxSort(Long parentId);
+
+    boolean existsByName(String name);
 }

@@ -79,4 +79,6 @@ public class MessageName {
 
     public static final String REQUEST_QUERY_ROLE_STATUS_INVALID = "request.query-role.status.invalid";
     public static final String REQUEST_QUERY_USER_STATUS_INVALID = "request.query-user.status.invalid";
+
+    public static final String REQUEST_CREATE_DEPARTMENT_NAME_DUPLICATED = "request.create-department.name-duplicated";
 }

@@ -4,10 +4,13 @@ import com.onixbyte.helix.domain.common.TreeNode;
 import com.onixbyte.helix.domain.entity.Department;
 import com.onixbyte.helix.domain.web.request.DepartmentRequest;
 import com.onixbyte.helix.enumeration.Status;
+import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.manager.DepartmentManager;
+import com.onixbyte.helix.shared.MessageName;
 import com.onixbyte.helix.utils.TreeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +40,10 @@ public class DepartmentService {
     @Transactional(rollbackFor = Throwable.class)
     public Department addDepartment(DepartmentRequest request) {
         var createdAt = LocalDateTime.now();
+
+        if (departmentManager.existsByName(request.name())) {
+            throw new BizException(HttpStatus.CONFLICT, MessageName.REQUEST_CREATE_DEPARTMENT_NAME_DUPLICATED);
+        }
 
         var parentId = request.parentId();
         var sort = Optional.ofNullable(request.sort())

@@ -3,6 +3,8 @@ package com.onixbyte.helix.manager;
 import com.onixbyte.helix.domain.entity.Department;
 import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.repository.DepartmentRepository;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -67,5 +69,9 @@ public class DepartmentManager {
         departmentToEdit.setStatus(department.getStatus());
         departmentToEdit.setUpdatedAt(updatedAt);
         return departmentToEdit;
+    }
+
+    public boolean existsByName(String name) {
+        return departmentRepository.existsByName(name);
     }
 }
