@@ -60,7 +60,15 @@ public class DepartmentService {
     }
 
     public Department editDepartment(Long id, DepartmentRequest request) {
+        if (departmentManager.existsByName(request.name())) {
+            throw new BizException(HttpStatus.CONFLICT, MessageName.REQUEST_CREATE_DEPARTMENT_NAME_DUPLICATED);
+        }
+
         return departmentManager.fullUpdateById(id, Department.builder()
+                .name(request.name())
+                .parentId(request.parentId())
+                .sort(request.sort())
+                .status(request.status())
                 .build());
     }
 }
