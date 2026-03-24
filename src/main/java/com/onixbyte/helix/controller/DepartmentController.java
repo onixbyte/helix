@@ -2,7 +2,7 @@ package com.onixbyte.helix.controller;
 
 import com.onixbyte.helix.domain.entity.Department;
 import com.onixbyte.helix.domain.common.TreeNode;
-import com.onixbyte.helix.domain.web.request.AddDepartmentRequest;
+import com.onixbyte.helix.domain.web.request.DepartmentRequest;
 import com.onixbyte.helix.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -38,7 +38,15 @@ public class DepartmentController {
     }
 
     @PostMapping
-    public Department addDepartment(@Validated @RequestBody AddDepartmentRequest request) {
+    public Department addDepartment(@Validated @RequestBody DepartmentRequest request) {
         return departmentService.addDepartment(request);
+    }
+
+    @PutMapping("/{id:\\d+}")
+    public Department editDepartment(
+            @PathVariable Long id,
+            @Validated @RequestBody DepartmentRequest request
+    ) {
+        return departmentService.editDepartment(id, request);
     }
 }

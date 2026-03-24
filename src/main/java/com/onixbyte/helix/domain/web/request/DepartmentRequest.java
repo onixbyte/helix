@@ -26,7 +26,7 @@ import com.onixbyte.helix.enumeration.Status;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record AddDepartmentRequest(
+public record DepartmentRequest(
         @NotNull(message = "Name of the department should not be null")
         @NotBlank(message = "Name of the department should not be null")
         String name,

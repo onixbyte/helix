@@ -2,7 +2,7 @@ package com.onixbyte.helix.service;
 
 import com.onixbyte.helix.domain.common.TreeNode;
 import com.onixbyte.helix.domain.entity.Department;
-import com.onixbyte.helix.domain.web.request.AddDepartmentRequest;
+import com.onixbyte.helix.domain.web.request.DepartmentRequest;
 import com.onixbyte.helix.enumeration.Status;
 import com.onixbyte.helix.manager.DepartmentManager;
 import com.onixbyte.helix.utils.TreeUtil;
@@ -35,7 +35,7 @@ public class DepartmentService {
     }
 
     @Transactional(rollbackFor = Throwable.class)
-    public Department addDepartment(AddDepartmentRequest request) {
+    public Department addDepartment(DepartmentRequest request) {
         var createdAt = LocalDateTime.now();
 
         var parentId = request.parentId();
@@ -49,6 +49,11 @@ public class DepartmentService {
                 .status(Optional.ofNullable(request.status()).orElse(Status.ACTIVE))
                 .createdAt(createdAt)
                 .updatedAt(createdAt)
+                .build());
+    }
+
+    public Department editDepartment(Long id, DepartmentRequest request) {
+        return departmentManager.fullUpdateById(id, Department.builder()
                 .build());
     }
 }
