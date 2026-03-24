@@ -162,8 +162,8 @@ public class UserService {
     }
 
     @Transactional(rollbackFor = Throwable.class)
-    public void resetPassword(ResetPasswordRequest request) {
-        userManager.updateUserPassword(request);
+    public void resetPassword(Long id, ResetPasswordRequest request) {
+        userManager.updatePasswordById(id, request);
     }
 
     @Transactional(rollbackFor = Throwable.class)

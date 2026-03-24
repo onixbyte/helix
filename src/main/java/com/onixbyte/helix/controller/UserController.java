@@ -7,6 +7,8 @@ import com.onixbyte.helix.domain.web.request.ResetPasswordRequest;
 import com.onixbyte.helix.domain.web.response.ActionResponse;
 import com.onixbyte.helix.domain.web.response.UserDetailResponse;
 import com.onixbyte.helix.service.UserService;
+import com.onixbyte.helix.shared.Message;
+import com.onixbyte.helix.utils.MessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,10 +29,12 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final MessageUtil messageUtil;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, MessageUtil messageUtil) {
         this.userService = userService;
+        this.messageUtil = messageUtil;
     }
 
     /**
@@ -94,10 +98,13 @@ public class UserController {
      * @return action response
      */
     @PreAuthorize("hasAnyAuthority('system:user:reset-password')")
-    @PatchMapping("/reset-password")
-    public ActionResponse resetPassword(@Validated @RequestBody ResetPasswordRequest request) {
-        userService.resetPassword(request);
-        return ActionResponse.success("密码修改成功");
+    @PatchMapping("/reset-password/{id:\\d+}")
+    public ActionResponse resetPassword(
+            @PathVariable Long id,
+            @Validated @RequestBody ResetPasswordRequest request
+    ) {
+        userService.resetPassword(id, request);
+        return ActionResponse.success(messageUtil.getMessage(Message.USER_PASSWORD_RESET_SUCCESS));
     }
 
     /**
@@ -110,6 +117,6 @@ public class UserController {
     @DeleteMapping("/{userId:\\d+}")
     public ActionResponse deleteUser(@PathVariable Long userId) {
         userService.deleteUser(userId);
-        return ActionResponse.success("删除成功");
+        return ActionResponse.success(messageUtil.getMessage(Message.USER_DELETED));
     }
 }

@@ -5,6 +5,8 @@ import com.onixbyte.helix.domain.web.request.AuthorityRequest;
 import com.onixbyte.helix.domain.web.request.QueryAuthorityRequest;
 import com.onixbyte.helix.domain.web.response.ActionResponse;
 import com.onixbyte.helix.service.AuthorityService;
+import com.onixbyte.helix.shared.Message;
+import com.onixbyte.helix.utils.MessageUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.annotation.Validated;
@@ -21,9 +23,14 @@ import org.springframework.web.bind.annotation.*;
 public class AuthorityController {
 
     private final AuthorityService authorityService;
+    private final MessageUtil messageUtil;
 
-    public AuthorityController(AuthorityService authorityService) {
+    public AuthorityController(
+            AuthorityService authorityService,
+            MessageUtil messageUtil
+    ) {
         this.authorityService = authorityService;
+        this.messageUtil = messageUtil;
     }
 
     /**
@@ -72,6 +79,6 @@ public class AuthorityController {
     @DeleteMapping("/{authorityId:\\d+}")
     public ActionResponse deleteAuthority(@PathVariable Long authorityId) {
         var name = authorityService.deleteAuthority(authorityId);
-        return ActionResponse.success("Authority [%s] deleted.".formatted(name));
+        return ActionResponse.success(messageUtil.getMessage(Message.AUTHORITY_DELETED, name));
     }
 }

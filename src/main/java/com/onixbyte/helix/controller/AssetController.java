@@ -4,6 +4,8 @@ import com.onixbyte.helix.shared.AssetPrefix;
 import com.onixbyte.helix.domain.web.response.FileUploadResponse;
 import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.service.AssetService;
+import com.onixbyte.helix.shared.Message;
+import com.onixbyte.helix.utils.MessageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,15 +27,15 @@ public class AssetController {
     private static final Logger log = LoggerFactory.getLogger(AssetController.class);
 
     private final AssetService assetService;
+    private final MessageUtil messageUtil;
 
-    /**
-     * Constructs a new FileController with the specified file service.
-     *
-     * @param assetService the file service to use for file operations
-     */
     @Autowired
-    public AssetController(AssetService assetService) {
+    public AssetController(
+            AssetService assetService,
+            MessageUtil messageUtil
+    ) {
         this.assetService = assetService;
+        this.messageUtil = messageUtil;
     }
 
     /**
@@ -48,7 +50,7 @@ public class AssetController {
     ) {
         try {
             if (file.isEmpty()) {
-                throw new BizException(HttpStatus.BAD_REQUEST, "File cannot be empty.");
+                throw new BizException(HttpStatus.BAD_REQUEST, messageUtil.getMessage(Message.ASSET_NOT_EMPTY));
             }
 
             var fileUrl = assetService.uploadFile(AssetPrefix.UPLOADS, file);

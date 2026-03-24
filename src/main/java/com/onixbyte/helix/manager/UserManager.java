@@ -150,9 +150,9 @@ public class UserManager {
     }
 
     @Transactional(rollbackFor = Throwable.class)
-    public void updateUserPassword(ResetPasswordRequest request) {
+    public void updatePasswordById(Long id, ResetPasswordRequest request) {
         userCredentialMapper.updateUserCredential(
-                request.id(),
+                id,
                 passwordEncoder.encode(request.password())
         );
     }
