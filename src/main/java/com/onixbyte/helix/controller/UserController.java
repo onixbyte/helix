@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -82,13 +81,16 @@ public class UserController {
     /**
      * Edit a user.
      *
+     * @param id user ID
      * @param request user to be edited
      * @return edited user
      */
-    @PutMapping
-    public ResponseEntity<Void> editUser(@Validated @RequestBody EditUserRequest request) {
-        userService.updateUser(request);
-        return ResponseEntity.ok(null);
+    @PutMapping("/{id:\\d+}")
+    public UserDetailResponse editUser(
+            @PathVariable Long id,
+            @Validated @RequestBody EditUserRequest request
+    ) {
+        return userService.updateUser(id, request);
     }
 
     /**

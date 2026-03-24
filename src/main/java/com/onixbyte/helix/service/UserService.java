@@ -143,9 +143,9 @@ public class UserService {
     }
 
     @Transactional(rollbackFor = Throwable.class)
-    public void updateUser(EditUserRequest request) {
+    public UserDetailResponse updateUser(Long id, EditUserRequest request) {
         userManager.updateUser(User.builder()
-                .id(request.id())
+                .id(id)
                 .fullName(request.fullName())
                 .email(request.email())
                 .regionAbbreviation(request.regionAbbreviation())
@@ -155,6 +155,8 @@ public class UserService {
                 .departmentId(request.departmentId())
                 .positionId(request.positionId())
                 .build());
+        
+        return getUserDetailByUserId(id);
     }
 
     public UserDetailResponse getUserDetailByUserId(Long userId) {
