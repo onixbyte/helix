@@ -1,5 +1,6 @@
 package com.onixbyte.helix.domain.web.request;
 
+import com.onixbyte.helix.shared.MessageName;
 import jakarta.validation.constraints.Pattern;
 
 public record QueryRoleRequest(
@@ -7,7 +8,7 @@ public record QueryRoleRequest(
         String code,
         @Pattern(
                 regexp = "^(ACTIVE|INACTIVE)?$",
-                message = "状态仅可以是 ACTIVE、INACTIVE 其中之一")
+                message = "{" + MessageName.REQUEST_QUERY_ROLE_STATUS_INVALID + "}")
         String status
 ) {
 }

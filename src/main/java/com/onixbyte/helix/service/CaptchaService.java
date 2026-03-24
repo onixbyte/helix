@@ -1,13 +1,14 @@
 package com.onixbyte.helix.service;
 
 import com.onixbyte.captcha.Producer;
-import com.onixbyte.helix.shared.FileType;
-import com.onixbyte.helix.shared.SettingName;
 import com.onixbyte.helix.domain.entity.Setting;
 import com.onixbyte.helix.domain.web.response.CaptchaResponse;
 import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.manager.CaptchaManager;
 import com.onixbyte.helix.manager.SettingManager;
+import com.onixbyte.helix.shared.FileType;
+import com.onixbyte.helix.shared.MessageName;
+import com.onixbyte.helix.shared.SettingName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FastByteArrayOutputStream;
@@ -66,7 +67,7 @@ public class CaptchaService {
                     Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray());
             return new CaptchaResponse(captchaDataUrl, uuid);
         } catch (IOException e) {
-            throw new BizException("无法生成验证码图片。");
+            throw new BizException(MessageName.CAPTCHA_GENERATE_FAILED);
         }
     }
 }

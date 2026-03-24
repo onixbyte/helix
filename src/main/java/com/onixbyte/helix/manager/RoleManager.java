@@ -5,12 +5,15 @@ import com.onixbyte.helix.domain.entity.Role;
 import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.mapper.RoleMapper;
 import com.onixbyte.helix.repository.RoleRepository;
+import com.onixbyte.helix.shared.MessageName;
+import com.onixbyte.helix.utils.MessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,16 +22,18 @@ public class RoleManager {
 
     private final RoleMapper roleMapper;
     private final RoleRepository roleRepository;
+    private final MessageUtil messageUtil;
 
     @Autowired
-    public RoleManager(RoleMapper roleMapper, RoleRepository roleRepository) {
+    public RoleManager(RoleMapper roleMapper, RoleRepository roleRepository, MessageUtil messageUtil) {
         this.roleMapper = roleMapper;
         this.roleRepository = roleRepository;
+        this.messageUtil = messageUtil;
     }
 
     public void validateRoles(List<Long> roleIds) {
         if (!roleMapper.areRolesExisted(roleIds)) {
-            throw new BizException(HttpStatus.BAD_REQUEST, "Role does not exist in database.");
+            throw new BizException(HttpStatus.BAD_REQUEST, MessageName.ROLE_NOT_EXISTS);
         }
     }
 
@@ -52,23 +57,24 @@ public class RoleManager {
     }
 
     @Transactional
-    public void updateRole(Role role) {
-        var roleToUpdate = roleRepository.findById(role.getId())
-                .orElseThrow(() -> new BizException(HttpStatus.NOT_FOUND, "找不到指定的角色信息。"));
+    public Role fullUpdateById(Long id, Role role) {
+        var updatedAt = LocalDateTime.now();
 
-        Optional.ofNullable(role.getName())
-                .ifPresent(roleToUpdate::setName);
+        var roleToUpdate = roleRepository.findById(id)
+                .orElseThrow(() -> new BizException(
+                        HttpStatus.NOT_FOUND,
+                        messageUtil.getMessage(MessageName.ROLE_NOT_FOUND, id))
+                );
 
-        Optional.ofNullable(role.getCode())
-                .ifPresent(roleToUpdate::setCode);
-
-        Optional.ofNullable(role.getSort())
-                .ifPresent(roleToUpdate::setSort);
-
+        roleToUpdate.setName(role.getName());
+        roleToUpdate.setCode(role.getCode());
+        roleToUpdate.setSort(role.getSort());
+        roleToUpdate.setDefaultValue(role.getDefaultValue());
         roleToUpdate.setDescription(role.getDescription());
+        roleToUpdate.setStatus(role.getStatus());
+        roleToUpdate.setUpdatedAt(updatedAt);
 
-        Optional.ofNullable(role.getStatus())
-                .ifPresent(roleToUpdate::setStatus);
+        return role;
     }
 
     public void deleteRole(Long id) {

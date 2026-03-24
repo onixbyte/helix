@@ -4,6 +4,7 @@ import com.onixbyte.helix.domain.entity.Asset;
 import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.manager.AssetManager;
 import com.onixbyte.helix.properties.AssetProperties;
+import com.onixbyte.helix.shared.MessageName;
 import com.onixbyte.helix.utils.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -62,7 +63,7 @@ public class AssetService {
         if (Objects.isNull(prefix) || prefix.isBlank() || prefix.startsWith("/") || prefix.startsWith("..")) {
             throw new BizException(
                     HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Prefix must not be empty, and should not start with '/' or '..'."
+                    MessageName.ASSET_INVALID_PREFIX
             );
         }
 
@@ -108,7 +109,7 @@ public class AssetService {
         var asset = assetManager.queryByAssetId(assetId);
 
         if (!Objects.equals(currentUser.getId(), asset.getUploadBy())) {
-            throw new BizException(HttpStatus.FORBIDDEN, "You are not able to delete an asset that is not uploaded by you.");
+            throw new BizException(HttpStatus.FORBIDDEN, MessageName.ASSET_DELETE_FORBIDDEN);
         }
 
         assetManager.deleteById(assetId);

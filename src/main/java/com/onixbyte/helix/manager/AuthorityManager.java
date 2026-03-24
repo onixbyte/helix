@@ -8,6 +8,7 @@ import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.mapper.AuthorityMapper;
 import com.onixbyte.helix.repository.AuthorityRepository;
 import com.onixbyte.helix.shared.CacheName;
+import com.onixbyte.helix.shared.MessageName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Example;
@@ -71,7 +72,7 @@ public class AuthorityManager {
         var updatedAt = LocalDateTime.now();
 
         var authorityToUpdate = authorityRepository.findById(id)
-                .orElseThrow(() -> new BizException(HttpStatus.NOT_FOUND, "找不到指定的权限信息"));
+                .orElseThrow(() -> new BizException(HttpStatus.NOT_FOUND, MessageName.AUTHORITY_NOT_FOUND, id));
 
         authorityToUpdate.setName(authority.getName());
         authorityToUpdate.setDescription(authority.getDescription());

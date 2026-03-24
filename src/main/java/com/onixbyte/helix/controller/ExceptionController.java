@@ -2,6 +2,7 @@ package com.onixbyte.helix.controller;
 
 import com.onixbyte.helix.domain.web.response.BizExceptionResponse;
 import com.onixbyte.helix.exception.BizException;
+import com.onixbyte.helix.utils.MessageUtil;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -27,12 +28,22 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class ExceptionController {
 
+    private final MessageUtil messageUtil;
+
+    public ExceptionController(MessageUtil messageUtil) {
+        this.messageUtil = messageUtil;
+    }
+
     @ExceptionHandler(BizException.class)
     public ResponseEntity<BizExceptionResponse> handleBizException(BizException ex) {
+        var message = ex.getMessageCode() == null
+                ? ex.getMessage()
+                : messageUtil.getMessage(ex.getMessageCode(), ex.getMessageArgs());
+
         return ResponseEntity.status(ex.getStatus())
                 .body(new BizExceptionResponse(
                         LocalDateTime.now(),
-                        ex.getMessage())
+                        message)
                 );
     }
 

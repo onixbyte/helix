@@ -3,6 +3,7 @@ package com.onixbyte.helix.utils;
 import com.onixbyte.helix.domain.common.Treeable;
 import com.onixbyte.helix.domain.common.TreeNode;
 import com.onixbyte.helix.exception.BizException;
+import com.onixbyte.helix.shared.MessageName;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.http.HttpStatus;
 
@@ -43,7 +44,7 @@ public class TreeUtil {
 
         // Ensure only 1 root node is included
         if (rootItems.size() > 1) {
-            throw new BizException(HttpStatus.INTERNAL_SERVER_ERROR, "Multiple root items found in given values.");
+            throw new BizException(HttpStatus.INTERNAL_SERVER_ERROR, MessageName.TREE_MULTIPLE_ROOTS);
         }
 
         // Get root item and build root node

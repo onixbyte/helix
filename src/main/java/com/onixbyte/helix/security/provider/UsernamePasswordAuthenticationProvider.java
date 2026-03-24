@@ -8,6 +8,7 @@ import com.onixbyte.helix.manager.AuthorityManager;
 import com.onixbyte.helix.manager.UserManager;
 import com.onixbyte.helix.repository.UserCredentialRepository;
 import com.onixbyte.helix.security.authentication.UsernamePasswordAuthentication;
+import com.onixbyte.helix.shared.MessageName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,14 +47,14 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         if (!(authentication instanceof UsernamePasswordAuthentication usernamePasswordAuthentication)) {
-            throw new BizException(HttpStatus.INTERNAL_SERVER_ERROR, "用户认证失败，请稍后再试。");
+            throw new BizException(HttpStatus.INTERNAL_SERVER_ERROR, MessageName.AUTH_PROVIDER_FAILED);
         }
 
         // get user from database
         var user = userManager.selectByUsername(usernamePasswordAuthentication.getPrincipal());
         if (Objects.isNull(user)) {
             log.error("User {} is trying to authenticate but no user found.", usernamePasswordAuthentication.getPrincipal());
-            throw new BizException(HttpStatus.UNAUTHORIZED, "用户名或密码错误。");
+            throw new BizException(HttpStatus.UNAUTHORIZED, MessageName.AUTH_PROVIDER_BAD_CREDENTIALS);
         }
 
         // get user credentials from database
@@ -61,12 +62,12 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
                         .provider(CredentialProvider.LOCAL)
                         .userId(user.getId())
                         .build()))
-                .orElseThrow(() -> new BizException(HttpStatus.UNAUTHORIZED, "您还没有配置密码，请使用第三方账号登录"));
+                .orElseThrow(() -> new BizException(HttpStatus.UNAUTHORIZED, MessageName.AUTH_PROVIDER_PASSWORD_NOT_CONFIGURED));
 
         // validate password
         if (!passwordEncoder.matches(usernamePasswordAuthentication.getCredentials(), userCredentials.getCredential())) {
             log.error("User {} is trying to authenticate but password is incorrect.", usernamePasswordAuthentication.getPrincipal());
-            throw new BizException(HttpStatus.UNAUTHORIZED, "用户名或密码错误。");
+            throw new BizException(HttpStatus.UNAUTHORIZED, MessageName.AUTH_PROVIDER_BAD_CREDENTIALS);
         }
 
         // erase credentials

@@ -4,8 +4,7 @@ import com.onixbyte.helix.shared.AssetPrefix;
 import com.onixbyte.helix.domain.web.response.FileUploadResponse;
 import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.service.AssetService;
-import com.onixbyte.helix.shared.Message;
-import com.onixbyte.helix.utils.MessageUtil;
+import com.onixbyte.helix.shared.MessageName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,15 +26,10 @@ public class AssetController {
     private static final Logger log = LoggerFactory.getLogger(AssetController.class);
 
     private final AssetService assetService;
-    private final MessageUtil messageUtil;
 
     @Autowired
-    public AssetController(
-            AssetService assetService,
-            MessageUtil messageUtil
-    ) {
+    public AssetController(AssetService assetService) {
         this.assetService = assetService;
-        this.messageUtil = messageUtil;
     }
 
     /**
@@ -50,7 +44,7 @@ public class AssetController {
     ) {
         try {
             if (file.isEmpty()) {
-                throw new BizException(HttpStatus.BAD_REQUEST, messageUtil.getMessage(Message.ASSET_NOT_EMPTY));
+                throw new BizException(HttpStatus.BAD_REQUEST, MessageName.ASSET_NOT_EMPTY);
             }
 
             var fileUrl = assetService.uploadFile(AssetPrefix.UPLOADS, file);
@@ -63,10 +57,13 @@ public class AssetController {
                             file.getSize(),
                             fileUrl
                     ));
+        } catch (BizException ex) {
+            throw ex;
         } catch (Exception e) {
             log.error("File upload failed: {}", e.getMessage(), e);
             throw new BizException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Failed upload file: " + e.getMessage());
+                    MessageName.ASSET_UPLOAD_FAILED,
+                    e.getMessage());
         }
     }
 

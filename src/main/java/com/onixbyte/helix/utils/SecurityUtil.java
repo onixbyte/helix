@@ -2,6 +2,7 @@ package com.onixbyte.helix.utils;
 
 import com.onixbyte.helix.domain.entity.User;
 import com.onixbyte.helix.exception.BizException;
+import com.onixbyte.helix.shared.MessageName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -32,7 +33,7 @@ public class SecurityUtil {
 
         if (!(_details instanceof User user)) {
             log.error("Authentication details is {}", _details);
-            throw new BizException(HttpStatus.INTERNAL_SERVER_ERROR, "Cannot retrieve user information from context.");
+            throw new BizException(HttpStatus.INTERNAL_SERVER_ERROR, MessageName.SECURITY_CONTEXT_USER_NOT_FOUND);
         }
 
         return user;

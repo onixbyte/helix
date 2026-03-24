@@ -27,6 +27,8 @@ spring:
     hikari:
       minimum-idle: 1
       maximum-pool-size: 10
+  messages:
+    basename: i18n/messages
   flyway:
     enabled: true
     baseline-on-migrate: true

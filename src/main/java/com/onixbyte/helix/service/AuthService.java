@@ -9,6 +9,7 @@ import com.onixbyte.helix.manager.CaptchaManager;
 import com.onixbyte.helix.manager.SecurityManager;
 import com.onixbyte.helix.manager.SettingManager;
 import com.onixbyte.helix.security.authentication.UsernamePasswordAuthentication;
+import com.onixbyte.helix.shared.MessageName;
 import com.onixbyte.helix.shared.SettingName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,10 +64,10 @@ public class AuthService {
             var rawCaptcha = captchaManager.getCaptcha(uuid);
 
             if (Objects.isNull(rawCaptcha) || rawCaptcha.isBlank()) {
-                throw new BizException(HttpStatus.BAD_REQUEST, "未找到验证码");
+                throw new BizException(HttpStatus.BAD_REQUEST, MessageName.AUTH_LOGIN_CAPTCHA_NOT_FOUND);
             }
             if (!rawCaptcha.equalsIgnoreCase(request.captcha())) {
-                throw new BizException(HttpStatus.BAD_REQUEST, "验证码错误");
+                throw new BizException(HttpStatus.BAD_REQUEST, MessageName.AUTH_LOGIN_CAPTCHA_INCORRECT);
             }
         }
 
@@ -78,7 +79,7 @@ public class AuthService {
                     _authentication.getClass()
             );
             throw new BizException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Cannot perform login due to server crashes.");
+                    MessageName.AUTH_LOGIN_FAILED);
         }
 
         return authentication.getDetails();

@@ -1,5 +1,6 @@
 package com.onixbyte.helix.domain.web.request;
 
+import com.onixbyte.helix.shared.MessageName;
 import jakarta.validation.constraints.Pattern;
 
 import java.time.LocalDateTime;
@@ -11,7 +12,7 @@ public record QueryUserRequest(
         String phoneNumber,
         @Pattern(
                 regexp = "^(ACTIVE|INACTIVE|LOCKED)?$",
-                message = "状态仅可以是 ACTIVE、INACTIVE 或 LOCKED 其中之一")
+                message = "{" + MessageName.REQUEST_QUERY_USER_STATUS_INVALID + "}")
         String status,
         LocalDateTime createdAtStart,
         LocalDateTime createdAtEnd

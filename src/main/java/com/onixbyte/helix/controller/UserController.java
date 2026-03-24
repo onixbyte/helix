@@ -7,7 +7,7 @@ import com.onixbyte.helix.domain.web.request.ResetPasswordRequest;
 import com.onixbyte.helix.domain.web.response.ActionResponse;
 import com.onixbyte.helix.domain.web.response.UserDetailResponse;
 import com.onixbyte.helix.service.UserService;
-import com.onixbyte.helix.shared.Message;
+import com.onixbyte.helix.shared.MessageName;
 import com.onixbyte.helix.utils.MessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -104,7 +104,7 @@ public class UserController {
             @Validated @RequestBody ResetPasswordRequest request
     ) {
         userService.resetPassword(id, request);
-        return ActionResponse.success(messageUtil.getMessage(Message.USER_PASSWORD_RESET_SUCCESS));
+        return ActionResponse.success(messageUtil.getMessage(MessageName.USER_PASSWORD_RESET_SUCCESS));
     }
 
     /**
@@ -117,6 +117,6 @@ public class UserController {
     @DeleteMapping("/{userId:\\d+}")
     public ActionResponse deleteUser(@PathVariable Long userId) {
         userService.deleteUser(userId);
-        return ActionResponse.success(messageUtil.getMessage(Message.USER_DELETED));
+        return ActionResponse.success(messageUtil.getMessage(MessageName.USER_DELETED, userId));
     }
 }

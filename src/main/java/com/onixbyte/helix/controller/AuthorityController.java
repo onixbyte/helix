@@ -5,7 +5,7 @@ import com.onixbyte.helix.domain.web.request.AuthorityRequest;
 import com.onixbyte.helix.domain.web.request.QueryAuthorityRequest;
 import com.onixbyte.helix.domain.web.response.ActionResponse;
 import com.onixbyte.helix.service.AuthorityService;
-import com.onixbyte.helix.shared.Message;
+import com.onixbyte.helix.shared.MessageName;
 import com.onixbyte.helix.utils.MessageUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -79,6 +79,6 @@ public class AuthorityController {
     @DeleteMapping("/{authorityId:\\d+}")
     public ActionResponse deleteAuthority(@PathVariable Long authorityId) {
         var name = authorityService.deleteAuthority(authorityId);
-        return ActionResponse.success(messageUtil.getMessage(Message.AUTHORITY_DELETED, name));
+        return ActionResponse.success(messageUtil.getMessage(MessageName.AUTHORITY_DELETED, name));
     }
 }

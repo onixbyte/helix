@@ -7,6 +7,7 @@ import com.onixbyte.helix.domain.web.request.QueryAuthorityRequest;
 import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.manager.AuthorityManager;
 import com.onixbyte.helix.manager.RoleAuthorityManager;
+import com.onixbyte.helix.shared.MessageName;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,7 +41,7 @@ public class AuthorityService {
                 .build();
 
         if (authorityManager.existsByCode(authority)) {
-            throw new BizException(HttpStatus.CONFLICT, "权限编码 `" + authority.getCode() + "` 已被使用");
+            throw new BizException(HttpStatus.CONFLICT, MessageName.AUTHORITY_CODE_USED, authority.getCode());
         }
 
         return authorityManager.save(authority);
@@ -59,7 +60,7 @@ public class AuthorityService {
         var authorityName = authorityManager.findAuthorityNameById(authorityId);
 
         if (StringUtils.isBlank(authorityName)) {
-            throw new BizException(HttpStatus.NOT_FOUND, "Authority with ID '%d' not found.".formatted(authorityId));
+            throw new BizException(HttpStatus.NOT_FOUND, MessageName.AUTHORITY_NOT_FOUND, authorityId);
         }
 
         roleAuthorityManager.deleteByAuthorityId(authorityId);

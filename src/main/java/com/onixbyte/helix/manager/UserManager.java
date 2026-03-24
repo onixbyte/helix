@@ -33,6 +33,7 @@ import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.mapper.UserMapper;
 import com.onixbyte.helix.repository.UserRepository;
 import com.onixbyte.region.Region;
+import com.onixbyte.helix.shared.MessageName;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
@@ -112,7 +113,7 @@ public class UserManager {
     @Transactional(rollbackFor = Throwable.class)
     public User updateUser(User user) {
         var userToUpdate = userRepository.findById(user.getId())
-                .orElseThrow(() -> new BizException(HttpStatus.BAD_REQUEST, "找不到 ID 为" + user.getId() + "的用户信息"));
+                .orElseThrow(() -> new BizException(HttpStatus.BAD_REQUEST, MessageName.USER_NOT_FOUND, user.getId()));
 
         Optional.ofNullable(user.getFullName())
                 .filter(StringUtils::isNotBlank)

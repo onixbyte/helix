@@ -23,12 +23,13 @@
 package com.onixbyte.helix.domain.web.request;
 
 import com.onixbyte.helix.enumeration.Status;
+import com.onixbyte.helix.shared.MessageName;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record DepartmentRequest(
-        @NotNull(message = "Name of the department should not be null")
-        @NotBlank(message = "Name of the department should not be null")
+        @NotNull(message = "{" + MessageName.REQUEST_DEPARTMENT_NAME_NOT_NULL + "}")
+        @NotBlank(message = "{" + MessageName.REQUEST_DEPARTMENT_NAME_NOT_NULL + "}")
         String name,
         Long parentId,
         Integer sort,
