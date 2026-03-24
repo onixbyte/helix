@@ -2,7 +2,7 @@ package com.onixbyte.helix.manager;
 
 import com.onixbyte.helix.domain.database.query.wrapper.QueryAuthorityWrapper;
 import com.onixbyte.helix.domain.entity.Authority;
-import com.onixbyte.helix.domain.web.request.EditAuthorityRequest;
+import com.onixbyte.helix.domain.web.request.AuthorityRequest;
 import com.onixbyte.helix.enumeration.Status;
 import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.mapper.AuthorityMapper;
@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,19 +54,29 @@ public class AuthorityManager {
         return authorityRepository.save(authority);
     }
 
+    /**
+     * Fully updates an existing authority by ID.
+     * <p>
+     * The method loads the target authority, replaces mutable fields ({@code name},
+     * {@code description}, {@code status}), and refreshes {@code updatedAt} to the current time.
+     * The update runs within a transactional context.
+     *
+     * @param id        the ID of the authority to update
+     * @param authority the source data carrying new field values
+     * @return the supplied {@link Authority} object
+     * @throws BizException if the target authority does not exist
+     */
     @Transactional
-    public Authority update(EditAuthorityRequest request) {
-        var authority = authorityRepository.findById(request.id())
+    public Authority fullUpdateById(Long id, Authority authority) {
+        var updatedAt = LocalDateTime.now();
+
+        var authorityToUpdate = authorityRepository.findById(id)
                 .orElseThrow(() -> new BizException(HttpStatus.NOT_FOUND, "找不到指定的权限信息"));
 
-        Optional.ofNullable(request.name())
-                .ifPresent(authority::setName);
-
-        authority.setDescription(request.description());
-
-        Optional.ofNullable(request.status())
-                .map(Status::valueOf)
-                .ifPresent(authority::setStatus);
+        authorityToUpdate.setName(authority.getName());
+        authorityToUpdate.setDescription(authority.getDescription());
+        authorityToUpdate.setStatus(authority.getStatus());
+        authorityToUpdate.setUpdatedAt(updatedAt);
 
         return authority;
     }

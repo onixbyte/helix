@@ -1,8 +1,7 @@
 package com.onixbyte.helix.controller;
 
 import com.onixbyte.helix.domain.entity.Authority;
-import com.onixbyte.helix.domain.web.request.AddAuthorityRequest;
-import com.onixbyte.helix.domain.web.request.EditAuthorityRequest;
+import com.onixbyte.helix.domain.web.request.AuthorityRequest;
 import com.onixbyte.helix.domain.web.request.QueryAuthorityRequest;
 import com.onixbyte.helix.domain.web.response.ActionResponse;
 import com.onixbyte.helix.service.AuthorityService;
@@ -52,7 +51,7 @@ public class AuthorityController {
      * @return created authority
      */
     @PostMapping
-    public Authority addAuthority(@Validated @RequestBody AddAuthorityRequest request) {
+    public Authority addAuthority(@Validated @RequestBody AuthorityRequest request) {
         return authorityService.addAuthority(request);
     }
 
@@ -62,9 +61,12 @@ public class AuthorityController {
      * @param request authority specs
      * @return edited authority
      */
-    @PutMapping
-    public Authority editAuthority(@Validated @RequestBody EditAuthorityRequest request) {
-        return authorityService.editAuthority(request);
+    @PutMapping("/{id:\\d+}")
+    public Authority editAuthority(
+            @PathVariable Long id,
+            @Validated @RequestBody AuthorityRequest request
+    ) {
+        return authorityService.editAuthority(id, request);
     }
 
     @DeleteMapping("/{authorityId:\\d+}")

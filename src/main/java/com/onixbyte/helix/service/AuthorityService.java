@@ -2,10 +2,8 @@ package com.onixbyte.helix.service;
 
 import com.onixbyte.helix.domain.database.query.wrapper.QueryAuthorityWrapper;
 import com.onixbyte.helix.domain.entity.Authority;
-import com.onixbyte.helix.domain.web.request.AddAuthorityRequest;
-import com.onixbyte.helix.domain.web.request.EditAuthorityRequest;
+import com.onixbyte.helix.domain.web.request.AuthorityRequest;
 import com.onixbyte.helix.domain.web.request.QueryAuthorityRequest;
-import com.onixbyte.helix.enumeration.Status;
 import com.onixbyte.helix.exception.BizException;
 import com.onixbyte.helix.manager.AuthorityManager;
 import com.onixbyte.helix.manager.RoleAuthorityManager;
@@ -15,8 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 public class AuthorityService {
@@ -35,14 +31,12 @@ public class AuthorityService {
         return authorityManager.selectAll(pageable, wrapper);
     }
 
-    public Authority addAuthority(AddAuthorityRequest request) {
+    public Authority addAuthority(AuthorityRequest request) {
         var authority = Authority.builder()
                 .code(request.code())
                 .name(request.name())
                 .description(request.description())
-                .status(Optional.ofNullable(request.status())
-                        .map(Status::valueOf)
-                        .orElse(Status.ACTIVE))
+                .status(request.status())
                 .build();
 
         if (authorityManager.existsByCode(authority)) {
@@ -52,8 +46,12 @@ public class AuthorityService {
         return authorityManager.save(authority);
     }
 
-    public Authority editAuthority(EditAuthorityRequest request) {
-        return authorityManager.update(request);
+    public Authority editAuthority(Long id, AuthorityRequest request) {
+        return authorityManager.fullUpdateById(id, Authority.builder()
+                .name(request.name())
+                .description(request.description())
+                .status(request.status())
+                .build());
     }
 
     @Transactional(rollbackFor = Throwable.class)
