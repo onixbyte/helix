@@ -1,0 +1,6 @@
+export * as AuthApi from "./auth"
+export * as MenuApi from "./menu"
+export * as DeptApi from "./department"
+export * as UserApi from "./user"
+export * as PositionApi from "./position"
+export * as RoleApi from "./role"
