@@ -1,0 +1,6 @@
+name: Development
+variables:
+  - name: BaseURL
+    value: http://localhost:5000
+  - name: language
+    value: zh-CN
