@@ -1,21 +1,26 @@
 # Helix
 
-Helix is a self-hosted identity and access management (IAM) and organisation
-administration platform built by [OnixByte](https://onixbyte.com). It manages
-users, roles, departments, positions and navigation menus behind a single
-sign-on experience, with support for Microsoft Entra ID (Azure AD), WeCom
-(WeChat Work) and multi-factor authentication.
+Helix is a **quick-start boilerplate** for building custom identity and organisation
+management systems. It ships with a working full-stack baseline — authentication,
+role-based access control, and user/role/department/position/menu management — so
+you can start from a runnable application and customise it to your own
+requirements instead of starting from zero.
 
-The project is organised as a monorepo:
+The boilerplate is organised as a monorepo:
 
 - **`server/`** — Spring Boot 3 REST API (Java 21, PostgreSQL, Redis, Flyway)
 - **`web/`** — React 19 single-page application (Vite, Ant Design, Tailwind CSS, Redux Toolkit)
 - **`docker/`** — deployment support files used by Docker Compose
 
-## Features
+> Helix is a starting point, not a finished product. Every baseline module is
+> meant to be extended or replaced as part of your custom development.
+
+## Baseline capabilities
+
+Out of the box the boilerplate provides:
 
 - **Authentication & single sign-on** — username/password login with captcha,
-  Microsoft Entra ID (MSAL) sign-in, WeCom login and MFA
+  Microsoft Entra ID (MSAL) sign-in, WeCom (WeChat Work) login and MFA
 - **User management** — create, edit and deactivate users; assign roles, departments and positions
 - **Role-based access control** — roles with fine-grained authorities, enforced across all endpoints
 - **Organisation management** — departments, positions and custom navigation menus
@@ -62,6 +67,21 @@ The project is organised as a monorepo:
 ├── docker-compose.yaml         # full-stack: postgres + redis + server + web
 └── .env.example                # Compose environment template
 ```
+
+## Customising the boilerplate
+
+Helix is designed to be forked and extended. The recommended approach:
+
+1. **Fork (or copy) the repository** and rename the project to your own.
+2. **Change the branding** — application title (`VITE_APP_TITLE`), regions
+   (`VITE_DEFAULT_REGION_ABBREVIATION`), JWT issuer, S3 buckets and so on.
+3. **Build on the baseline modules.** The existing patterns — custom validation
+   framework, `BizException` + `MessageName` error handling, JWT authentication,
+   Redux slices and typed API clients — are the extension points for your own
+   features. Follow the conventions in [AGENTS.md](AGENTS.md).
+4. **Add schema changes as Flyway migrations** under
+   `server/src/main/resources/db/migrations/` and add new message keys to
+   **all** i18n bundles.
 
 ## Quick start
 
@@ -151,6 +171,6 @@ it, set `app.asset.enabled: true` there and provide the `S3_*` variables.
 - Database schema is managed with Flyway — add migrations under
   `server/src/main/resources/db/migrations/` rather than relying on JPA `ddl-auto`.
 
-## License
+## Licence
 
 [MIT](LICENCE) © OnixByte

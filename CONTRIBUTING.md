@@ -1,8 +1,21 @@
 # Contributing to Helix
 
-Thanks for your interest in contributing! Helix is open source under the
-[MIT licence](LICENCE). This guide explains how to set up your environment,
-make changes and get them merged.
+Thanks for your interest in contributing! Helix is a quick-start boilerplate for
+custom development, open source under the [MIT licence](LICENCE). This guide
+explains how to set up your environment, make changes and get them merged.
+
+## What to contribute
+
+Contributions should make the **boilerplate itself** more useful to everyone who
+forks it:
+
+- New or improved baseline capabilities (reusable, not business-specific)
+- Bug fixes and hardening
+- Documentation and tests
+
+Changes that encode one particular organisation's custom rules are usually
+better kept in your own fork. If you are not sure whether something belongs in
+the boilerplate, open an issue first and ask.
 
 ## Getting started
 

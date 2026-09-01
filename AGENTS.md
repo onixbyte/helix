@@ -3,6 +3,13 @@
 Guidance for AI coding agents and contributors working in this repository.
 It complements [README.md](README.md); read that first for the project overview.
 
+> **Scope — this is a quick-start boilerplate.** Helix is a starting point for
+> custom development, not a finished product. The baseline modules
+> (authentication, RBAC, user/role/department/position/menu management) are
+> intentionally kept minimal and exist to be extended. When adding features,
+> build on the existing patterns below; do not introduce parallel
+> conventions.
+
 ## Repository overview
 
 Helix is a monorepo containing a backend API and a frontend SPA:
@@ -82,6 +89,12 @@ pnpm lint            # ESLint
 
 ## General guidelines
 
+- **Custom development.** When extending the boilerplate, use the existing
+  extension points rather than parallel patterns: add Flyway migrations for
+  schema changes, register message keys in every i18n bundle, implement features
+  through the standard `Controller → Service → Manager → Repository` chain, and
+  expose typed API clients in `web/src/api`. Customise the baseline — do not
+  re-architect it.
 - **Commits.** Use Conventional Commits (`feat:`, `fix:`, `refactor:`, `chore:`,
   `docs:`, `perf:`, `style:`, `test:`). Match the language of the surrounding
   history (the log is a mix of English and Chinese).
