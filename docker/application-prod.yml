@@ -1,0 +1,77 @@
+# Server configuration used by docker-compose.yaml (mounted into the server
+# container at /app/config/application-prod.yml).
+#
+# All values resolve from environment variables set by the Compose services.
+# For a standalone deployment, base your own config on
+# server/config/application-prod.yml.example instead.
+
+spring:
+  data:
+    redis:
+      # Redis 主机
+      host: ${REDIS_HOST:-localhost}
+      # Redis 端口
+      port: ${REDIS_PORT:-6379}
+      # Redis 数据库索引
+      database: ${REDIS_DATABASE_INDEX:-0}
+      # Redis 数据库密码
+      password: ${REDIS_PASSWORD:-}
+  datasource:
+    # 数据库连接池类型
+    type: com.zaxxer.hikari.HikariDataSource
+    # 数据库驱动类
+    driver-class-name: org.postgresql.Driver
+    # 数据库 URL
+    url: jdbc:postgresql://${PG_HOST:-localhost}:${PG_PORT:-5432}/${PG_DATABASE:-helix}
+    # 数据库用户
+    username: ${PG_USER:-helix}
+    # 数据库密码
+    password: ${PG_PASSWORD:-helix}
+
+app:
+  asset:
+    # Disabled by default for a local full-stack run.
+    # Set `enabled: true` and provide S3_* environment variables to enable
+    # S3-compatible object storage.
+    enabled: false
+  # 鉴权配置
+  authentication:
+    # Microsoft Entra ID 鉴权配置
+    msal:
+      # Microsoft Entra ID 提供的客户端 ID
+      client-id: ${MSAL_CLIENT_ID:-}
+      # Microsoft Entra ID 提供的租户 ID
+      tenant-id: ${MSAL_TENANT_ID:-}
+  # 令牌配置
+  jwt:
+    # 令牌签发人
+    issuer: Helix Server
+    # 令牌机密
+    secret: ${TOKEN_SECRET:-please-change-this-secret}
+    # 令牌有效期（Ref java.time.Duration）
+    valid-time: PT2H
+  # 跨域配置
+  cors:
+    # 是否允许身份验证
+    allow-credentials: true
+    # 是否允许私有网络
+    allow-private-network: true
+    # 允许的请求头列表
+    allowed-headers: Content-Type
+    # 允许的请求方法列表（Ref org.springframework.http.HttpMethod）
+    allowed-methods:
+      - GET
+      - POST
+      - PUT
+      - PATCH
+      - DELETE
+    # 允许的来源域名
+    allowed-origins: '*'
+    # 要对外暴露的响应头列表
+    exposed-headers: X-Authorisation
+    # 跨域缓存时长
+    max-age: PT2H
+  # Captcha 配置
+  captcha:
+    # Captcha 长度
+    length: 6

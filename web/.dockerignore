@@ -1,0 +1,10 @@
+node_modules
+dist
+.git
+.idea
+*.log
+
+# Never send local env files into the build context (they may contain secrets)
+.env
+.env.*
+!.env.example
