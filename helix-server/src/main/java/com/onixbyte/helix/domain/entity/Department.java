@@ -1,0 +1,302 @@
+package com.onixbyte.helix.domain.entity;
+
+import com.onixbyte.helix.enumeration.Status;
+import com.onixbyte.helix.domain.common.Treeable;
+import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
+
+import java.time.LocalDateTime;
+import java.util.Objects;
+
+
+/**
+ * Represents a department entity within the organisational hierarchy.
+ * <p>
+ * This entity models departments as hierarchical structures where each department can have a
+ * parent department, creating a tree-like organisational structure. Departments are used to group
+ * users and define organisational boundaries within the Helix system.
+ * </p>
+ *
+ * @author zihluwang
+ * @version 1.0
+ * @since 1.0
+ */
+@Entity
+@Table(name = "department")
+public class Department implements Treeable<Long> {
+
+    /**
+     * The unique identifier for the department.
+     * <p>
+     * This serves as the primary key in the database and is used for all
+     * internal references to the department entity.
+     * </p>
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    /**
+     * The name of the department.
+     * <p>
+     * This field contains the human-readable name of the department as it
+     * should appear in the organisational chart and user interfaces.
+     * </p>
+     */
+    @Column(length = 128, nullable = false)
+    private String name;
+
+    /**
+     * The identifier of the parent department.
+     * <p>
+     * This field establishes the hierarchical relationship between departments.
+     * A null value indicates that this is a root-level department with no parent.
+     * </p>
+     */
+    @Column(nullable = false)
+    private Long parentId;
+
+    /**
+     * The sort order for displaying departments.
+     * <p>
+     * This field determines the order in which departments should be displayed
+     * when listed alongside their siblings in the hierarchy. Lower values
+     * indicate higher priority in sorting.
+     * </p>
+     */
+    @Column(nullable = false)
+    private Integer sort;
+
+    /**
+     * The current status of the department.
+     * <p>
+     * This field determines whether the department is active, inactive, or in any
+     * other state as defined by the {@link Status} enumeration.
+     * </p>
+     */
+    @Column(nullable = false)
+    @Enumerated
+    @JdbcType(PostgreSQLEnumJdbcType.class)
+    private Status status;
+
+    /**
+     * The timestamp when this department record was created.
+     * <p>
+     * This field is automatically set when the department entity is first persisted
+     * and provides audit information about when the department was established.
+     * </p>
+     */
+    @Column
+    private LocalDateTime createdAt;
+
+    /**
+     * The timestamp when this department record was last updated.
+     * <p>
+     * This field is automatically updated whenever any changes are made to the
+     * department entity and provides audit information about the most recent modification.
+     * </p>
+     */
+    @Column
+    private LocalDateTime updatedAt;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    /**
+     * Default constructor for Department.
+     * <p>
+     * Creates a new Department instance with all fields initialised to their default values.
+     * This constructor is typically used by JPA and other frameworks for entity instantiation.
+     * </p>
+     */
+    public Department() {
+    }
+
+    /**
+     * Constructs a new Department with all specified parameters.
+     * <p>
+     * This constructor allows for the creation of a fully initialised Department entity
+     * with all field values provided at instantiation time.
+     * </p>
+     *
+     * @param id        the unique identifier for the department
+     * @param name      the name of the department
+     * @param parentId  the identifier of the parent department (null for root departments)
+     * @param sort      the sort order for display purposes
+     * @param status    the current status of the department
+     * @param createdAt the timestamp when the department was created
+     * @param updatedAt the timestamp when the department was last updated
+     */
+    public Department(Long id, String name, Long parentId, Integer sort, Status status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.name = name;
+        this.parentId = parentId;
+        this.sort = sort;
+        this.status = status;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Department that = (Department) o;
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(parentId, that.parentId) && Objects.equals(sort, that.sort) && status == that.status && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, parentId, sort, status, createdAt, updatedAt);
+    }
+
+    @Override
+    public String toString() {
+        return "Department{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", parentId=" + parentId +
+                ", sort=" + sort +
+                ", status=" + status +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
+
+    /**
+     * Creates a new Builder instance for constructing Department objects.
+     *
+     * @return a new DepartmentBuilder instance
+     */
+    public static DepartmentBuilder builder() {
+        return new DepartmentBuilder();
+    }
+
+    /**
+     * Builder class for constructing Department instances with a fluent API.
+     * <p>
+     * This builder provides a convenient way to construct Department objects with optional parameters,
+     * following the Builder pattern for improved readability and maintainability.
+     */
+    public static class DepartmentBuilder {
+        private Long id;
+        private String name;
+        private Long parentId;
+        private Integer sort;
+        private Status status;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
+
+        private DepartmentBuilder() {
+        }
+
+        public DepartmentBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public DepartmentBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public DepartmentBuilder parentId(Long parentId) {
+            this.parentId = parentId;
+            return this;
+        }
+
+        public DepartmentBuilder sort(Integer sort) {
+            this.sort = sort;
+            return this;
+        }
+
+        public DepartmentBuilder status(Status status) {
+            this.status = status;
+            return this;
+        }
+
+        public DepartmentBuilder createdAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public DepartmentBuilder updatedAt(LocalDateTime updatedAt) {
+            this.updatedAt = updatedAt;
+            return this;
+        }
+
+        /**
+         * Builds and returns a new Department instance with the configured properties.
+         *
+         * @return a new Department instance
+         */
+        public Department build() {
+            return new Department(id, name, parentId, sort, status, createdAt, updatedAt);
+        }
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        var createTime = LocalDateTime.now();
+        this.createdAt = createTime;
+        this.updatedAt = createTime;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+}

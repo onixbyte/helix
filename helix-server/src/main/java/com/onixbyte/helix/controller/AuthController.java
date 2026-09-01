@@ -1,0 +1,85 @@
+package com.onixbyte.helix.controller;
+
+import com.onixbyte.helix.domain.web.request.LoginRequest;
+import com.onixbyte.helix.domain.web.response.UserDetailResponse;
+import com.onixbyte.helix.service.AuthService;
+import com.onixbyte.helix.service.TokenService;
+import com.onixbyte.helix.service.UserService;
+import com.onixbyte.helix.shared.TokenConstant;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.Duration;
+
+/**
+ * This controller provides entry points making user authorised.
+ *
+ * @author zihluwang
+ * @author siujamo
+ */
+@RestController
+@RequestMapping("/auth")
+public class AuthController {
+
+    private final AuthService authService;
+    private final TokenService tokenService;
+    private final UserService userService;
+
+    @Autowired
+    public AuthController(
+            AuthService authService,
+            TokenService tokenService,
+            UserService userService
+    ) {
+        this.authService = authService;
+        this.tokenService = tokenService;
+        this.userService = userService;
+    }
+
+    /**
+     * Perform login with username and password.
+     *
+     * @param request login request
+     * @return detailed user info and authentication token
+     */
+    @PostMapping("/login")
+    public ResponseEntity<UserDetailResponse> loginWithUsernameAndPassword(
+            @Validated @RequestBody LoginRequest request
+    ) {
+        var user = authService.login(request);
+        var token = tokenService.generateToken(user);
+
+        var cookie = authService.buildCookie(TokenConstant.TOKEN_NAME, token);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(userService.getDetail(user));
+    }
+
+    /**
+     * Get whether the registration function is enabled.
+     *
+     * @return {@code true} if registration function is enabled, otherwise {@code false}
+     */
+    @GetMapping("/register-enabled")
+    public boolean getRegisterEnabled() {
+        return authService.getRegisterEnabled();
+    }
+
+    /**
+     * Perform log out.
+     *
+     * @return a response that remove the authentication from cookie
+     */
+    @GetMapping("/logout")
+    public ResponseEntity<Void> logout() {
+        var cookie = authService.buildCookie(TokenConstant.TOKEN_NAME, "", Duration.ZERO);
+        return ResponseEntity.status(HttpStatus.OK)
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(null);
+    }
+}
